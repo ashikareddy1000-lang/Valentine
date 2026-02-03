@@ -144,17 +144,6 @@
       border:none; border-radius:10px; cursor:pointer;
     }
 
-    /* ---------- Music Button ---------- */
-    .music-btn{
-      position: fixed; right: 14px; bottom: 14px; z-index:60;
-      background: #fff; color:#b02a4a;
-      border: 2px solid #ffc2d1;
-      padding: 10px 14px; border-radius: 999px;
-      box-shadow: 0 8px 20px rgba(255, 105, 180, .25);
-      cursor: pointer;
-      font-size: 14px;
-    }
-
     /* ---------- Confetti Canvas ---------- */
     #confetti{
       position:fixed; inset:0; pointer-events:none; z-index:55;
@@ -164,3 +153,36 @@
     .note{
       margin-top:14px; font-size:12px; opacity:.7;
     }
+  </style>
+</head>
+<body>
+  <div class="card" id="card">
+    <div style="font-size: 38px" aria-hidden="true">💘</div>
+    <h1 class="title">Tharkesh, will you be my Valentine?</h1>
+    <p class="subtitle">I have a very strong feeling you’ll pick the right answer 😉</p>
+
+    <div class="buttons">
+      <button id="yes" class="btn">Yes 💖</button>
+      <button id="no" class="btn">No 😅</button>
+    </div>
+
+    <div class="note">Made with love by Ashika ✨</div>
+  </div>
+
+  <!-- Confetti -->
+  <canvas id="confetti"></canvas>
+
+  <!-- Success Overlay -->
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <div style="font-size: 44px" aria-hidden="true">🎉💖</div>
+      <h2>I knew you’d say yes, Tharkesh! 💗</h2>
+      <p>Now it’s a date. Get ready for something special! ✨</p>
+      <button class="close" id="closeModal">Aww, okay! 🥰</button>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       💞 Floating Hearts
+       ========================================================= */
