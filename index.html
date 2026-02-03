@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Valentine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #ffe6ea;
+            text-align: center;
+        }
+        h1 {
+            color: #d6336c;
+            font-size: 2.5rem;
+        }
+        button {
+            padding: 12px 20px;
+            font-size: 1.2rem;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #yes {
+            background-color: #ff4d79;
+            color: white;
+        }
+        #no {
+            background-color: #ffb3c6;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Tharkesh, will you be my Valentine? 💖</h1>
+
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+
+    <script>
+        document.getElementById("yes").onclick = () => {
+            alert("Yay! ❤️ Can't wait!");
+        };
+
+        document.getElementById("no").onclick = () => {
+            alert("No isn't an option 😌");
+        };
+    </script>
+
+</body>
+</html>
