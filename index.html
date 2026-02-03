@@ -1,166 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Piccolo, Will You Be Mine Forever? 💖</title>
-  <style>
-    :root{
-      --bg1:#ffe7ef;
-      --bg2:#ffd1e0;
-      --primary:#ff4d79;
-      --primary-dark:#e23f6a;
-      --text:#5a2a3b;
-      --white:#fff;
-    }
-    html,body{
-      height:100%;
-      margin:0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      color:var(--text);
-      overflow-x:hidden;
-      background: radial-gradient(1200px 1200px at 20% 10%, var(--bg1), transparent),
-                  radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
-                  linear-gradient(160deg, #fff, #ffeef4 60%, #ffe3ed);
-    }
-    .wrap{
-      min-height:100dvh;
-      display:flex; align-items:center; justify-content:center;
-      padding:24px;
-    }
-    .card{
-      position:relative;
-      width:min(720px, 92vw);
-      background:var(--white);
-      border-radius:24px;
-      box-shadow: 0 15px 40px rgba(255, 77, 121, 0.20),
-                  0 6px 18px rgba(0,0,0,0.08);
-      padding: clamp(22px, 4vw, 44px);
-      text-align:center;
-      overflow:hidden;
-    }
-    .title{
-      font-size: clamp(28px, 4.6vw, 44px);
-      line-height:1.15;
-      margin: 8px 0 14px;
-      color: var(--primary-dark);
-    }
-    .subtitle{
-      font-size: clamp(14px, 2.8vw, 18px);
-      opacity:0.85;
-      margin:0 0 22px;
-    }
-    .buttons{
-      display:flex; align-items:center; justify-content:center;
-      gap:16px; flex-wrap:wrap;
-      margin-top: 10px;
-    }
-    .btn{
-      padding:14px 22px;
-      font-size: clamp(15px, 2.8vw, 18px);
-      border:none; border-radius:12px;
-      cursor:pointer; user-select:none;
-      transition: transform .08s ease, box-shadow .2s ease;
-    }
-    #yes{ background: var(--primary); color:#fff; box-shadow: 0 8px 18px rgba(255,77,121,.35); }
-    #yes:hover{ transform: translateY(-1px) scale(1.02); }
-    #no{ background:#ffe1ea; color:#b02a4a; box-shadow: 0 6px 14px rgba(176,42,74,.20); }
-    #no:hover{ transform: translateY(-1px); }
-
-    /* Floating Hearts */
-    .heart{
-      position:fixed; bottom:-30px; left:0;
-      font-size:18px; opacity:0; z-index:0;
-      animation: floatUp 6.5s linear forwards;
-      pointer-events:none; filter: drop-shadow(0 4px 6px rgba(255,77,121,.3));
-    }
-    @keyframes floatUp{
-      0% { transform: translateY(0) translateX(0) rotate(0deg) scale(.8); opacity:0; }
-      10%{ opacity:.9; }
-      100%{ transform: translateY(-120vh) translateX(var(--drift, 0px)) rotate(18deg) scale(1.3); opacity:0; }
-    }
-
-    /* Overlay & Modal */
-    .overlay{
-      position:fixed; inset:0;
-      background: rgba(255, 224, 234, 0.85);
-      display:flex; align-items:center; justify-content:center;
-      opacity:0; visibility:hidden;
-      transition: opacity .25s ease, visibility .25s ease;
-      backdrop-filter: blur(4px);
-      z-index: 20;
-    }
-    .overlay.show{ opacity:1; visibility:visible; }
-    .modal{
-      background:#fff; border-radius:20px; padding:22px;
-      width:min(640px, 92vw); text-align:left;
-      box-shadow: 0 10px 30px rgba(0,0,0,.08); position:relative;
-    }
-    .modal h2{ margin:0 0 6px; font-size: clamp(22px, 4vw, 28px); color:var(--primary-dark); text-align:center; }
-    .desc{ margin:0 0 14px; opacity:.85; text-align:center; }
-
-    .steps{ display:flex; gap:8px; justify-content:center; margin:8px 0 16px; }
-    .dot{ width:10px; height:10px; border-radius:50%; background:#ffd2df; transition:.2s; }
-    .dot.active{ background: var(--primary); transform: scale(1.15); }
-
-    .q{ display:none; animation: fade .25s ease; }
-    .q.active{ display:block; }
-    @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
-
-    fieldset{ border:none; padding:0; margin:0 0 6px; }
-    .legend{ font-weight:600; margin-bottom:8px; display:block; }
-    .option{
-      display:block; margin:8px 0;
-      background:#fff6f9; border:1.5px solid #ffd2df; border-radius:12px;
-      padding:10px 12px; cursor:pointer;
-    }
-    .option:hover{ border-color: var(--primary); }
-
-    .nav{ display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:14px; }
-    .secondary{ background:#ffe1ea; color:#b02a4a; border:none; border-radius:10px; padding:10px 14px; cursor:pointer; }
-    .primary{ background: var(--primary); color:#fff; border:none; border-radius:10px; padding:10px 16px; cursor:pointer; }
-
-    /* Confetti */
-    #confetti{ position:fixed; inset:0; pointer-events:none; z-index:25; }
-
-    /* Footer note */
-    .note{ margin-top:14px; font-size:12px; opacity:.7; text-align:center; }
-  </style>
+<meta charset="utf-8">
+<title>Piccolo, Will You Be Mine Forever? 💖</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  /* Minimal, safe styling */
+  :root{
+    --pink:#ff4d79; --soft:#ffe9f0; --text:#5a2a3b; --light:#fff6f9; --border:#ffd2df;
+  }
+  html,body{margin:0;padding:0;font-family:system-ui, -apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(160deg,#fff,#ffeef4 60%,#ffe3ed)}
+  .wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
+  .card{width:min(720px,92vw);background:#fff;border-radius:18px;box-shadow:0 10px 28px rgba(0,0,0,.08);padding:22px;text-align:center;color:var(--text)}
+  h1{margin:.25rem 0 0.75rem;color:#e23f6a;font-size:clamp(26px,5vw,40px)}
+  p.sub{margin:.25rem 0 1rem;opacity:.85}
+  .btn{border:none;border-radius:10px;padding:12px 18px;cursor:pointer;font-size:16px}
+  .btn-yes{background:var(--pink);color:#fff;margin-right:8px}
+  .btn-no{background:#ffe1ea;color:#b02a4a}
+  .form{margin-top:16px;text-align:left;background:var(--light);border:1.5px solid var(--border);border-radius:14px;padding:14px;display:none}
+  fieldset{border:none;margin:0 0 10px;padding:0}
+  .legend{font-weight:600;margin-bottom:6px;display:block}
+  label.option{display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin:6px 0;cursor:pointer}
+  .row{display:flex;gap:10px;justify-content:space-between;align-items:center}
+  .row small{opacity:.7}
+  .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+  .secondary{background:#ffe1ea;color:#b02a4a}
+  .primary{background:var(--pink);color:#fff}
+  /* Tiny hearts (very light) */
+  .heart{position:fixed;bottom:-24px;opacity:0;animation:float 6s linear forwards;pointer-events:none}
+  @keyframes float{0%{transform:translateY(0);opacity:0}10%{opacity:1}100%{transform:translateY(-120vh);opacity:0}}
+</style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <div style="font-size:38px" aria-hidden="true">💘</div>
-      <h1 class="title">Will you be mine forever?</h1>
-      <p class="subtitle">I have a strong feeling you’ll pick the right answer 😉</p>
+<div class="wrap">
+  <div class="card">
+    <div style="font-size:36px" aria-hidden="true">💘</div>
+    <h1>Will you be mine forever?</h1>
+    <p class="sub">I have a strong feeling you’ll pick the right answer 😉</p>
 
-      <div class="buttons">
-        <button id="yes" class="btn">Yes 💖</button>
-        <button id="no" class="btn">No 😅</button>
-      </div>
-
-      <div class="note">Made with love by Ashika ✨</div>
+    <div>
+      <button class="btn btn-yes" id="yesBtn">Yes 💖</button>
+      <button class="btn btn-no" id="noBtn">No 😅</button>
     </div>
-  </div>
 
-  <!-- Confetti -->
-  <canvas id="confetti"></canvas>
-
-  <!-- Quiz Overlay -->
-  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
-    <div class="modal">
-      <h2 id="quizTitle">Yay! Quick (and funny) questions 😄</h2>
-      <p class="desc">Just to plan our perfect forever-date...</p>
-      <div class="steps" id="steps"></div>
-      <div id="quizContainer"></div>
-    </div>
-  </div>
-
-  <script>
-    /* =========================================================
-       💡 EDIT HERE ONLY: your 5 questions & options
-       Types supported: 
-       - 'single' (radio)
-       - 'scale'  (slider)
-    ========================================================= */
-    const quiz = [
+    <!-- Simple 5‑question form -->
+    <form class="form" id="quizForm">
+      <!-- Q1 -->
+      <fieldset>
+        <span class="legend">1) Pick our first date plan:</span>
+        <label class="option"><input type="radio" name="datePlan" value="Candlelight dinner 🍷"> Candlelight dinner 🍷</label>
+        <label class="option"><input type="radio" name="datePlan" value="Street food trail 🌮"> Street food trail 🌮</label>
