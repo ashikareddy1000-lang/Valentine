@@ -91,3 +91,76 @@
       z-index: 20;
     }
     .overlay.show{ opacity:1; visibility:visible; }
+    .modal{
+      background:#fff; border-radius:20px; padding:22px;
+      width:min(640px, 92vw); text-align:left;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08); position:relative;
+    }
+    .modal h2{ margin:0 0 6px; font-size: clamp(22px, 4vw, 28px); color:var(--primary-dark); text-align:center; }
+    .desc{ margin:0 0 14px; opacity:.85; text-align:center; }
+
+    .steps{ display:flex; gap:8px; justify-content:center; margin:8px 0 16px; }
+    .dot{ width:10px; height:10px; border-radius:50%; background:#ffd2df; transition:.2s; }
+    .dot.active{ background: var(--primary); transform: scale(1.15); }
+
+    .q{ display:none; animation: fade .25s ease; }
+    .q.active{ display:block; }
+    @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+
+    fieldset{ border:none; padding:0; margin:0 0 6px; }
+    .legend{ font-weight:600; margin-bottom:8px; display:block; }
+    .option{
+      display:block; margin:8px 0;
+      background:#fff6f9; border:1.5px solid #ffd2df; border-radius:12px;
+      padding:10px 12px; cursor:pointer;
+    }
+    .option:hover{ border-color: var(--primary); }
+
+    .nav{ display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:14px; }
+    .secondary{ background:#ffe1ea; color:#b02a4a; border:none; border-radius:10px; padding:10px 14px; cursor:pointer; }
+    .primary{ background: var(--primary); color:#fff; border:none; border-radius:10px; padding:10px 16px; cursor:pointer; }
+
+    /* Confetti */
+    #confetti{ position:fixed; inset:0; pointer-events:none; z-index:25; }
+
+    /* Footer note */
+    .note{ margin-top:14px; font-size:12px; opacity:.7; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div style="font-size:38px" aria-hidden="true">💘</div>
+      <h1 class="title">Will you be mine forever?</h1>
+      <p class="subtitle">I have a strong feeling you’ll pick the right answer 😉</p>
+
+      <div class="buttons">
+        <button id="yes" class="btn">Yes 💖</button>
+        <button id="no" class="btn">No 😅</button>
+      </div>
+
+      <div class="note">Made with love by Ashika ✨</div>
+    </div>
+  </div>
+
+  <!-- Confetti -->
+  <canvas id="confetti"></canvas>
+
+  <!-- Quiz Overlay -->
+  <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+    <div class="modal">
+      <h2 id="quizTitle">Yay! Quick (and funny) questions 😄</h2>
+      <p class="desc">Just to plan our perfect forever-date...</p>
+      <div class="steps" id="steps"></div>
+      <div id="quizContainer"></div>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================
+       💡 EDIT HERE ONLY: your 5 questions & options
+       Types supported: 
+       - 'single' (radio)
+       - 'scale'  (slider)
+    ========================================================= */
+    const quiz = [
