@@ -1,52 +1,29 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<title>Piccolo, Will You Be Mine Forever? 💖</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-  /* Minimal, safe styling */
-  :root{
-    --pink:#ff4d79; --soft:#ffe9f0; --text:#5a2a3b; --light:#fff6f9; --border:#ffd2df;
-  }
-  html,body{margin:0;padding:0;font-family:system-ui, -apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(160deg,#fff,#ffeef4 60%,#ffe3ed)}
-  .wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:20px}
-  .card{width:min(720px,92vw);background:#fff;border-radius:18px;box-shadow:0 10px 28px rgba(0,0,0,.08);padding:22px;text-align:center;color:var(--text)}
-  h1{margin:.25rem 0 0.75rem;color:#e23f6a;font-size:clamp(26px,5vw,40px)}
-  p.sub{margin:.25rem 0 1rem;opacity:.85}
-  .btn{border:none;border-radius:10px;padding:12px 18px;cursor:pointer;font-size:16px}
-  .btn-yes{background:var(--pink);color:#fff;margin-right:8px}
-  .btn-no{background:#ffe1ea;color:#b02a4a}
-  .form{margin-top:16px;text-align:left;background:var(--light);border:1.5px solid var(--border);border-radius:14px;padding:14px;display:none}
-  fieldset{border:none;margin:0 0 10px;padding:0}
-  .legend{font-weight:600;margin-bottom:6px;display:block}
-  label.option{display:block;background:#fff;border:1px solid var(--border);border-radius:10px;padding:8px 10px;margin:6px 0;cursor:pointer}
-  .row{display:flex;gap:10px;justify-content:space-between;align-items:center}
-  .row small{opacity:.7}
-  .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
-  .secondary{background:#ffe1ea;color:#b02a4a}
-  .primary{background:var(--pink);color:#fff}
-  /* Tiny hearts (very light) */
-  .heart{position:fixed;bottom:-24px;opacity:0;animation:float 6s linear forwards;pointer-events:none}
-  @keyframes float{0%{transform:translateY(0);opacity:0}10%{opacity:1}100%{transform:translateY(-120vh);opacity:0}}
-</style>
-</head>
-<body>
-<div class="wrap">
-  <div class="card">
-    <div style="font-size:36px" aria-hidden="true">💘</div>
-    <h1>Will you be mine forever?</h1>
-    <p class="sub">I have a strong feeling you’ll pick the right answer 😉</p>
-
-    <div>
-      <button class="btn btn-yes" id="yesBtn">Yes 💖</button>
-      <button class="btn btn-no" id="noBtn">No 😅</button>
-    </div>
-
-    <!-- Simple 5‑question form -->
-    <form class="form" id="quizForm">
-      <!-- Q1 -->
-      <fieldset>
-        <span class="legend">1) Pick our first date plan:</span>
-        <label class="option"><input type="radio" name="datePlan" value="Candlelight dinner 🍷"> Candlelight dinner 🍷</label>
-        <label class="option"><input type="radio" name="datePlan" value="Street food trail 🌮"> Street food trail 🌮</label>
+  <meta charset="utf-8">
+  <title>Will You Be Mine Forever? 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* Minimal styling only */
+    :root { --pink:#ff4d79; --rose:#ffe1ea; --text:#522836; --bg:#fff7fb; --box:#ffffff; --line:#ffd2df; }
+    html,body{margin:0;padding:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
+    .wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px}
+    .card{width:min(720px,92vw);background:var(--box);border-radius:16px;border:1px solid var(--line);box-shadow:0 8px 18px rgba(0,0,0,.06);padding:20px}
+    h1{margin:.25rem 0 .75rem;font-size:clamp(24px,4.8vw,36px);color:#e23f6a;text-align:center}
+    p.sub{text-align:center;opacity:.85;margin:.25rem 0 1rem}
+    .btn{border:none;border-radius:10px;padding:12px 18px;cursor:pointer;font-size:16px}
+    .btn-yes{background:var(--pink);color:#fff;margin-right:8px}
+    .btn-no{background:var(--rose);color:#a01e43}
+    .center{display:flex;justify-content:center;margin-bottom:8px}
+    /* form */
+    form{display:none;margin-top:12px;border:1.5px solid var(--line);border-radius:14px;padding:14px;background:#fff}
+    fieldset{border:none;margin:0 0 12px;padding:0}
+    .legend{font-weight:600;margin-bottom:8px;display:block}
+    label.option{display:block;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;cursor:pointer;background:#fff}
+    .row{display:flex;gap:10px;align-items:center}
+    .row small{opacity:.7}
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+    .secondary{background:#ffe1ea;color:#a01e43}
+    .primary{background:var(--pink);color:#fff}
+  </style>
