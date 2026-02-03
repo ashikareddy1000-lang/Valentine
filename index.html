@@ -1,56 +1,166 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Valentine</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #ffe6ea;
-            text-align: center;
-        }
-        h1 {
-            color: #d6336c;
-            font-size: 2.5rem;
-        }
-        button {
-            padding: 12px 20px;
-            font-size: 1.2rem;
-            margin: 10px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        #yes {
-            background-color: #ff4d79;
-            color: white;
-        }
-        #no {
-            background-color: #ffb3c6;
-        }
-    </style>
-</head>
-<body>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Be My Valentine 💖</title>
+  <style>
+    /* ---------- Base & Theme ---------- */
+    :root{
+      --bg1:#ffe7ef;
+      --bg2:#ffd1e0;
+      --primary:#ff4d79;
+      --primary-dark:#e23f6a;
+      --accent:#ff8fab;
+      --text:#5a2a3b;
+      --white:#fff;
+    }
 
-    <h1>Tharkesh, will you be my Valentine? 💖</h1>
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--text);
+      overflow-x:hidden;
+    }
 
-    <button id="yes">Yes</button>
-    <button id="no">No</button>
+    body{
+      background: radial-gradient(1200px 1200px at 20% 10%, var(--bg1), transparent),
+                  radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
+                  linear-gradient(160deg, #fff, #ffeef4 60%, #ffe3ed);
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
+    }
 
-    <script>
-        document.getElementById("yes").onclick = () => {
-            alert("Yay! ❤️ Can't wait!");
-        };
+    /* ---------- Card ---------- */
+    .card{
+      position:relative;
+      width:min(720px, 92vw);
+      background:var(--white);
+      border-radius:24px;
+      box-shadow: 0 15px 40px rgba(255, 77, 121, 0.20),
+                  0 6px 18px rgba(0,0,0,0.08);
+      padding: clamp(22px, 4vw, 44px);
+      text-align:center;
+      overflow:hidden;
+    }
 
-        document.getElementById("no").onclick = () => {
-            alert("No isn't an option 😌");
-        };
-    </script>
+    .title{
+      font-size: clamp(28px, 4.6vw, 44px);
+      line-height:1.15;
+      margin: 8px 0 14px;
+      color: var(--primary-dark);
+    }
 
-</body>
-</html>
+    .subtitle{
+      font-size: clamp(14px, 2.8vw, 18px);
+      opacity:0.8;
+      margin:0 0 22px;
+    }
+
+    /* ---------- Buttons ---------- */
+    .buttons{
+      position:relative;
+      display:flex; align-items:center; justify-content:center;
+      gap:16px;
+      min-height:84px; /* space for runaway No */
+      margin-top: 6px;
+    }
+
+    .btn{
+      position:relative;
+      padding:14px 22px;
+      font-size: clamp(15px, 2.8vw, 18px);
+      border:none; border-radius:12px;
+      cursor:pointer;
+      transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
+      user-select:none;
+    }
+
+    #yes{
+      background: var(--primary);
+      color:#fff;
+      box-shadow: 0 8px 18px rgba(255,77,121,.35);
+    }
+    #yes:hover{ transform: translateY(-1px) scale(1.02); }
+    #yes:active{ transform: translateY(1px) scale(.98); }
+
+    #no{
+      background:#ffe1ea;
+      color:#b02a4a;
+      box-shadow: 0 6px 14px rgba(176,42,74,.20);
+      position:absolute; /* so we can move it around */
+    }
+
+    /* ---------- Floating Hearts ---------- */
+    .heart{
+      position:fixed;
+      bottom:-30px;
+      font-size: 18px;
+      opacity:0;
+      animation: floatUp 6s linear forwards;
+      pointer-events:none;
+      filter: drop-shadow(0 4px 6px rgba(255,77,121,.3));
+    }
+
+    @keyframes floatUp{
+      0%   { transform: translateY(0) translateX(0) rotate(0deg) scale(.8); opacity:0; }
+      10%  { opacity:.9; }
+      100% { transform: translateY(-120vh) translateX(var(--drift, 0px)) rotate(20deg) scale(1.4); opacity:0; }
+    }
+
+    /* ---------- Success Overlay ---------- */
+    .overlay{
+      position:fixed; inset:0;
+      background: rgba(255, 224, 234, 0.85);
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; visibility:hidden;
+      transition: opacity .25s ease, visibility .25s ease;
+      backdrop-filter: blur(4px);
+      z-index: 50;
+    }
+    .overlay.show{ opacity:1; visibility:visible; }
+
+    .modal{
+      background: #fff;
+      border-radius: 20px;
+      padding: 26px 22px;
+      width:min(560px, 90vw);
+      text-align:center;
+      box-shadow: 0 10px 30px rgba(0,0,0,.08);
+      position:relative;
+    }
+    .modal h2{
+      margin:0 0 6px;
+      font-size: clamp(22px, 4vw, 32px);
+      color: var(--primary-dark);
+    }
+    .modal p{ margin:0 0 18px; opacity:.9; }
+
+    .close{
+      margin-top:8px;
+      padding:12px 18px;
+      background:#ffe1ea; color:#b02a4a;
+      border:none; border-radius:10px; cursor:pointer;
+    }
+
+    /* ---------- Music Button ---------- */
+    .music-btn{
+      position: fixed; right: 14px; bottom: 14px; z-index:60;
+      background: #fff; color:#b02a4a;
+      border: 2px solid #ffc2d1;
+      padding: 10px 14px; border-radius: 999px;
+      box-shadow: 0 8px 20px rgba(255, 105, 180, .25);
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* ---------- Confetti Canvas ---------- */
+    #confetti{
+      position:fixed; inset:0; pointer-events:none; z-index:55;
+    }
+
+    /* ---------- Footer note ---------- */
+    .note{
+      margin-top:14px; font-size:12px; opacity:.7;
+    }
