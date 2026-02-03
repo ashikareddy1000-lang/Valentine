@@ -1,12 +1,81 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Sanity Check</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Piccolo, will you be mine forever? 💖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    /* Minimal, reliable styling */
+    :root { --pink:#ff4d79; --rose:#ffe1ea; --text:#522836; --bg:#fff7fb; --box:#ffffff; --line:#ffd2df; }
+    html,body{margin:0;padding:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
+    .wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px}
+    .card{width:min(720px,92vw);background:var(--box);border-radius:16px;border:1px solid var(--line);box-shadow:0 8px 18px rgba(0,0,0,.06);padding:20px}
+    h1{margin:.25rem 0 .75rem;font-size:clamp(24px,4.8vw,36px);color:#e23f6a;text-align:center}
+    p.sub{text-align:center;opacity:.85;margin:.25rem 0 1rem}
+    .center{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
+    .btn{border:none;border-radius:10px;padding:12px 18px;cursor:pointer;font-size:16px}
+    .btn-yes{background:var(--pink);color:#fff}
+    .btn-no{background:var(--rose);color:#a01e43}
+
+    form{display:none;margin-top:12px;border:1.5px solid var(--line);border-radius:14px;padding:14px;background:#fff}
+    fieldset{border:none;margin:0 0 12px;padding:0}
+    .legend{font-weight:600;margin-bottom:8px;display:block}
+    label.option{display:block;border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;cursor:pointer;background:#fff}
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:10px}
+    .secondary{background:#ffe1ea;color:#a01e43;border:none;border-radius:10px;padding:10px 14px;cursor:pointer}
+    .primary{background:var(--pink);color:#fff;border:none;border-radius:10px;padding:10px 16px;cursor:pointer}
+  </style>
 </head>
-<body style="font-family: Arial; padding: 1.5rem;">
-  <h1>✅ GitHub Pages is serving this file.</h1>
-  <p>If you see this, Pages is correctly configured for <strong>main / (root)</strong>.</p>
-</body>
-</html>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="center" style="font-size:34px" aria-hidden="true">💘</div>
+      <h1>Piccolo, will you be mine forever?</h1>
+      <p class="sub">I have a strong feeling you’ll pick the right answer 😉</p>
+
+      <div class="center">
+        <button type="button" class="btn btn-yes" id="yesBtn">Yes 💖</button>
+        <button type="button" class="btn btn-no"  id="noBtn">No 😅</button>
+      </div>
+
+      <!-- Your 4 questions exactly as requested -->
+      <form id="quizForm">
+        <!-- Q1 -->
+        <fieldset>
+          <span class="legend">1) What makes our relationship special to you?</span>
+          <label class="option"><input type="radio" name="special" value="The way we understand each other ❤️"> The way we understand each other ❤️</label>
+          <label class="option"><input type="radio" name="special" value="The comfort + chaos combo 😌🔥"> The comfort + chaos combo 😌🔥</label>
+          <label class="option"><input type="radio" name="special" value="How we laugh like idiots together 😂"> How we laugh like idiots together 😂</label>
+          <label class="option"><input type="radio" name="special" value="Everything — you + me is my favourite feeling 💞"> Everything — you + me is my favourite feeling 💞</label>
+        </fieldset>
+
+        <!-- Q2 -->
+        <fieldset>
+          <span class="legend">2) Pick your dream Valentine’s gift from me:</span>
+          <label class="option"><input type="radio" name="gift" value="Matching couple accessories ❤️‍🔥"> Matching couple accessories ❤️‍🔥</label>
+          <label class="option"><input type="radio" name="gift" value="Personalized playlist 🎧"> Personalized playlist 🎧</label>
+          <label class="option"><input type="radio" name="gift" value="A mystery gift (you’ll find out 😏)"> A mystery gift (you’ll find out 😏)</label>
+          <label class="option"><input type="radio" name="gift" value="A whole date planned around your mood  💝"> A whole date planned around your mood  💝</label>
+        </fieldset>
+
+        <!-- Q3 -->
+        <fieldset>
+          <span class="legend">3) Choose our next weekend getaway:</span>
+          <label class="option"><input type="radio" name="getaway" value="Nature staycation with bonfire 🔥"> Nature staycation with bonfire 🔥</label>
+          <label class="option"><input type="radio" name="getaway" value="Luxury resort spa day 💆‍♂️💆‍♀️"> Luxury resort spa day 💆‍♂️💆‍♀️</label>
+          <label class="option"><input type="radio" name="getaway" value="Adventure day — trekking/boating 🥾🚣‍♂️"> Adventure day — trekking/boating 🥾🚣‍♂️</label>
+          <label class="option"><input type="radio" name="getaway" value="City date — cafés + photos + shopping ☕🛍️"> City date — cafés + photos + shopping ☕🛍️</label>
+        </fieldset>
+
+        <!-- Q4 -->
+        <fieldset>
+          <span class="legend">4) What vibe should our Valentine’s trip have?</span>
+          <label class="option"><input type="radio" name="vibe" value="Romantic + slow + cozy 🕯️"> Romantic + slow + cozy 🕯️</label>
+          <label class="option"><input type="radio" name="vibe" value="Playful + fun + spontaneous 😄"> Playful + fun + spontaneous 😄</label>
+          <label class="option"><input type="radio" name="vibe" value="Adventurous + energetic 🧗‍♂️"> Adventurous + energetic 🧗‍♂️</label>
+          <label class="option"><input type="radio" name="vibe" value="Chill + peaceful + intimate 🌙"> Chill + peaceful + intimate 🌙</label>
+        </fieldset>
+
+        <div class="actions">
+          <button type="button" class="secondary" id="cancelBtn">Cancel</button>
