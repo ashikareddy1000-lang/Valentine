@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Be My Valentine 💖</title>
   <style>
-    /* ---------- Theme ---------- */
     :root{
       --bg1:#ffe7ef;
       --bg2:#ffd1e0;
@@ -14,7 +13,6 @@
       --text:#5a2a3b;
       --white:#fff;
     }
-
     html,body{
       height:100%;
       margin:0;
@@ -25,73 +23,252 @@
                   radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
                   linear-gradient(160deg, #fff, #ffeef4 60%, #ffe3ed);
     }
-
-    /* ---------- Center Card ---------- */
-    .wrap{
-      min-height:100dvh;
-      display:flex; align-items:center; justify-content:center;
-      padding:24px;
-    }
-
+    .wrap{ min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:24px; }
     .card{
-      position:relative;
-      width:min(720px, 92vw);
-      background:var(--white);
-      border-radius:24px;
-      box-shadow: 0 15px 40px rgba(255, 77, 121, 0.20),
-                  0 6px 18px rgba(0,0,0,0.08);
-      padding: clamp(22px, 4vw, 44px);
-      text-align:center;
-      overflow:hidden;
+      position:relative; width:min(720px, 92vw); background:var(--white);
+      border-radius:24px; box-shadow: 0 15px 40px rgba(255, 77, 121, 0.20), 0 6px 18px rgba(0,0,0,0.08);
+      padding: clamp(22px, 4vw, 44px); text-align:center; overflow:hidden;
     }
-
-    .title{
-      font-size: clamp(28px, 4.6vw, 44px);
-      line-height:1.15;
-      margin: 8px 0 14px;
-      color: var(--primary-dark);
-    }
-
-    .subtitle{
-      font-size: clamp(14px, 2.8vw, 18px);
-      opacity:0.85;
-      margin:0 0 22px;
-    }
-
-    /* ---------- Buttons ---------- */
-    .buttons{
-      display:flex; align-items:center; justify-content:center;
-      gap:16px; flex-wrap:wrap;
-      margin-top: 10px;
-    }
-
-    .btn{
-      padding:14px 22px;
-      font-size: clamp(15px, 2.8vw, 18px);
-      border:none; border-radius:12px;
-      cursor:pointer;
-      transition: transform .08s ease, box-shadow .2s ease, background .2s ease;
-      user-select:none;
-    }
-
-    #yes{
-      background: var(--primary);
-      color:#fff;
-      box-shadow: 0 8px 18px rgba(255,77,121,.35);
-    }
+    .title{ font-size: clamp(28px, 4.6vw, 44px); line-height:1.15; margin:8px 0 14px; color:var(--primary-dark); }
+    .subtitle{ font-size: clamp(14px, 2.8vw, 18px); opacity:0.85; margin:0 0 22px; }
+    .buttons{ display:flex; align-items:center; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:10px; }
+    .btn{ padding:14px 22px; font-size: clamp(15px, 2.8vw, 18px); border:none; border-radius:12px; cursor:pointer; transition: transform .08s ease, box-shadow .2s ease, background .2s ease; user-select:none; }
+    #yes{ background: var(--primary); color:#fff; box-shadow: 0 8px 18px rgba(255,77,121,.35); }
     #yes:hover{ transform: translateY(-1px) scale(1.02); }
     #yes:active{ transform: translateY(1px) scale(.98); }
-
-    #no{
-      background:#ffe1ea;
-      color:#b02a4a;
-      box-shadow: 0 6px 14px rgba(176,42,74,.20);
-    }
+    #no{ background:#ffe1ea; color:#b02a4a; box-shadow: 0 6px 14px rgba(176,42,74,.20); }
     #no:hover{ transform: translateY(-1px); }
+    .heart{ position:fixed; bottom:-30px; font-size:18px; opacity:0; animation: floatUp 6.5s linear forwards; pointer-events:none; filter: drop-shadow(0 4px 6px rgba(255,77,121,.3)); z-index:0; }
+    @keyframes floatUp{ 0%{ transform: translateY(0) translateX(0) rotate(0deg) scale(.8); opacity:0; } 10%{ opacity:.9; } 100%{ transform: translateY(-120vh) translateX(var(--drift, 0px)) rotate(20deg) scale(1.35); opacity:0; } }
+    .overlay{ position:fixed; inset:0; background: rgba(255, 224, 234, 0.85); display:flex; align-items:center; justify-content:center; opacity:0; visibility:hidden; transition: opacity .25s ease, visibility .25s ease; backdrop-filter: blur(4px); z-index:20; }
+    .overlay.show{ opacity:1; visibility:visible; }
+    .modal{ background:#fff; border-radius:20px; padding:22px; width:min(640px, 92vw); text-align:left; box-shadow:0 10px 30px rgba(0,0,0,.08); position:relative; }
+    .modal h2{ margin:0 0 6px; font-size: clamp(22px, 4vw, 28px); color: var(--primary-dark); text-align:center; }
+    .modal p.desc{ margin:0 0 14px; opacity:.85; text-align:center; }
+    .steps{ display:flex; gap:8px; justify-content:center; margin:6px 0 14px; }
+    .dot{ width:10px; height:10px; border-radius:50%; background:#ffd2df; transition:.2s; }
+    .dot.active{ background: var(--primary); transform: scale(1.15); }
+    .q{ display:none; animation: fade .25s ease; }
+    .q.active{ display:block; }
+    @keyframes fade { from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+    fieldset{ border:none; padding:0; margin:0 0 6px; }
+    .option{ display:block; margin:8px 0; background:#fff6f9; border:1.5px solid #ffd2df; border-radius:12px; padding:10px 12px; cursor:pointer; }
+    .option:hover{ border-color: var(--primary); }
+    .nav{ display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:14px; }
+    .secondary{ background:#ffe1ea; color:#b02a4a; border:none; border-radius:10px; padding:10px 14px; cursor:pointer; }
+    .primary{ background: var(--primary); color:#fff; border:none; border-radius:10px; padding:10px 16px; cursor:pointer; }
+    #confetti{ position:fixed; inset:0; pointer-events:none; z-index:25; }
+    .note{ margin-top:14px; font-size:12px; opacity:.7; text-align:center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div style="font-size:38px" aria-hidden="true">💘</div>
+      <h1 class="title">Tharkesh, will you be my Valentine?</h1>
+      <p class="subtitle">I have a strong feeling you’ll pick the right answer 😉</p>
 
-    /* ---------- Floating Hearts ---------- */
-    .heart{
-      position:fixed;
-      bottom:-30px;
-      font-size: 18px;
-      opacity:0;
+      <div class="buttons">
+        <button id="yes" class="btn">Yes 💖</button>
+        <button id="no" class="btn">No 😅</button>
+      </div>
+
+      <div class="note">Made with love by Ashika ✨</div>
+    </div>
+  </div>
+
+  <canvas id="confetti"></canvas>
+
+  <div class="overlay" id="overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+      <h2 id="quizTitle">Yay! Quick (and funny) questions 😄</h2>
+      <p class="desc">Just to plan our perfect date...</p>
+      <div class="steps">
+        <span class="dot" data-step="0"></span>
+        <span class="dot" data-step="1"></span>
+        <span class="dot" data-step="2"></span>
+      </div>
+
+      <div class="q active" data-step="0">
+        <fieldset>
+          <legend><strong>1) Choose our date plan:</strong></legend>
+          <label class="option"><input type="radio" name="date" value="Candlelight dinner 🍷" required> Candlelight dinner 🍷</label>
+          <label class="option"><input type="radio" name="date" value="Street food trail 🌮"> Street food trail 🌮</label>
+          <label class="option"><input type="radio" name="date" value="Movie + cuddles 🎬"> Movie + cuddles 🎬</label>
+          <label class="option"><input type="radio" name="date" value="Surprise me 🎁"> Surprise me 🎁</label>
+        </fieldset>
+        <div class="nav">
+          <span></span>
+          <button class="primary" data-next>Next →</button>
+        </div>
+      </div>
+
+      <div class="q" data-step="1">
+        <fieldset>
+          <legend><strong>2) Your official title henceforth?</strong></legend>
+          <label class="option"><input type="radio" name="title" value="Chief Cuddle Officer 🧸" required> Chief Cuddle Officer 🧸</label>
+          <label class="option"><input type="radio" name="title" value="Director of Surprises 🎁"> Director of Surprises 🎁</label>
+          <label class="option"><input type="radio" name="title" value="Minister of Hugs 🤗"> Minister of Hugs 🤗</label>
+          <label class="option"><input type="radio" name="title" value="CEO of My Heart 💼❤️"> CEO of My Heart 💼❤️</label>
+        </fieldset>
+        <div class="nav">
+          <button class="secondary" data-back>← Back</button>
+          <button class="primary" data-next>Next →</button>
+        </div>
+      </div>
+
+      <div class="q" data-step="2">
+        <fieldset>
+          <legend><strong>3) How excited are you?</strong> <span id="excitedLvl">7/10 😍</span></legend>
+          <input type="range" min="1" max="10" value="7" id="slider" style="width:100%">
+        </fieldset>
+        <div class="nav">
+          <button class="secondary" data-back>← Back</button>
+          <button class="primary" id="submitQuiz">Finish 🎉</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Floating hearts
+    const HEARTS = ['💖','💗','💓','💞','💕','💘','❤️'];
+    function spawnHeart() {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = HEARTS[Math.floor(Math.random()*HEARTS.length)];
+      const left = Math.random() * 100;
+      const size = 16 + Math.random()*28;
+      const drift = (Math.random()*120 - 60) + 'px';
+      h.style.left = left + 'vw';
+      h.style.fontSize = size + 'px';
+      h.style.setProperty('--drift', drift);
+      document.body.appendChild(h);
+      setTimeout(()=> h.remove(), 7000);
+    }
+    setInterval(spawnHeart, 700);
+
+    // Buttons and overlay logic
+    const yesBtn = document.getElementById('yes');
+    const noBtn = document.getElementById('no');
+    const overlay = document.getElementById('overlay');
+
+    noBtn.addEventListener('click', () => {
+      alert("Ahem... 'No' is temporarily out of service 😌 Try 'Yes'?");
+    });
+
+    // Quiz steps
+    const steps = Array.from(document.querySelectorAll('.q'));
+    const dots = Array.from(document.querySelectorAll('.dot'));
+    const slider = document.getElementById('slider');
+    const excitedLvl = document.getElementById('excitedLvl');
+    let current = 0;
+
+    function showStep(i){
+      steps.forEach(s => s.classList.remove('active'));
+      dots.forEach(d => d.classList.remove('active'));
+      steps[i].classList.add('active');
+      dots[i].classList.add('active');
+    }
+    showStep(current);
+
+    slider.addEventListener('input', () => {
+      const v = slider.value;
+      const mood = v >= 9 ? '🤯💖' : v >= 7 ? '😍' : v >= 5 ? '😊' : v >= 3 ? '🙂' : '🙈';
+      excitedLvl.textContent = `${v}/10 ${mood}`;
+    });
+
+    document.querySelectorAll('[data-next]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if (current === 0 && !document.querySelector('input[name="date"]:checked')) { alert('Please pick a date plan 💕'); return; }
+        if (current === 1 && !document.querySelector('input[name="title"]:checked')) { alert('Please pick a title 😄'); return; }
+        current = Math.min(current + 1, steps.length - 1);
+        showStep(current);
+      });
+    });
+    document.querySelectorAll('[data-back]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        current = Math.max(current - 1, 0);
+        showStep(current);
+      });
+    });
+
+    yesBtn.addEventListener('click', () => {
+      overlay.classList.add('show');
+    });
+
+    // Confetti
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let confettiParticles = [];
+    let confettiActive = false;
+
+    function resizeCanvas(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    function makeConfettiBurst(count=180){
+      const colors = ['#ff4d79','#ff8fab','#ffd6e0','#f7b801','#8ac926','#1982c4'];
+      for (let i=0;i<count;i++){
+        confettiParticles.push({
+          x: canvas.width/2,
+          y: canvas.height/3,
+          vx: (Math.random()*6-3),
+          vy: (Math.random()*-6-2),
+          g: 0.08 + Math.random()*0.08,
+          size: 3 + Math.random()*4,
+          color: colors[Math.floor(Math.random()*colors.length)],
+          rot: Math.random()*Math.PI,
+          vr: (Math.random()*0.2-0.1)
+        });
+      }
+      if (!confettiActive){
+        confettiActive = true;
+        requestAnimationFrame(confettiFrame);
+      }
+    }
+    window.makeConfettiBurst = makeConfettiBurst;
+
+    function confettiFrame(){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      confettiParticles.forEach(p=>{
+        p.vy += p.g;
+        p.x += p.vx; p.y += p.vy;
+        p.rot += p.vr;
+
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size/2, -p.size/2, p.size, p.size);
+        ctx.restore();
+      });
+      confettiParticles = confettiParticles.filter(p => p.y < canvas.height + 20);
+      if (confettiParticles.length > 0){
+        requestAnimationFrame(confettiFrame);
+      } else {
+        confettiActive = false;
+      }
+    }
+
+    // Finish quiz
+    document.getElementById('submitQuiz').addEventListener('click', () => {
+      const answers = {
+        date: (document.querySelector('input[name="date"]:checked')||{}).value,
+        title: (document.querySelector('input[name="title"]:checked')||{}).value,
+        excited: slider.value
+      };
+      overlay.classList.remove('show');
+      makeConfettiBurst(240);
+      setTimeout(()=> {
+        alert(
+          `Perfect! 💖\n\nDate plan: ${answers.date}\nTitle: ${answers.title}\nExcitement: ${answers.excited}/10\n\nIt’s a date, Tharkesh! 🎉`
+        );
+      }, 150);
+    });
+  </script>
+</body>
+</html>
