@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Be My Valentine 💖</title>
   <style>
-    /* ---------- Base & Theme ---------- */
+    /* ---------- Theme ---------- */
     :root{
       --bg1:#ffe7ef;
       --bg2:#ffd1e0;
       --primary:#ff4d79;
       --primary-dark:#e23f6a;
-      --accent:#ff8fab;
       --text:#5a2a3b;
       --white:#fff;
     }
@@ -22,17 +21,18 @@
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       color:var(--text);
       overflow-x:hidden;
-    }
-
-    body{
       background: radial-gradient(1200px 1200px at 20% 10%, var(--bg1), transparent),
                   radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
                   linear-gradient(160deg, #fff, #ffeef4 60%, #ffe3ed);
+    }
+
+    /* ---------- Center Card ---------- */
+    .wrap{
+      min-height:100dvh;
       display:flex; align-items:center; justify-content:center;
       padding:24px;
     }
 
-    /* ---------- Card ---------- */
     .card{
       position:relative;
       width:min(720px, 92vw);
@@ -54,21 +54,18 @@
 
     .subtitle{
       font-size: clamp(14px, 2.8vw, 18px);
-      opacity:0.8;
+      opacity:0.85;
       margin:0 0 22px;
     }
 
     /* ---------- Buttons ---------- */
     .buttons{
-      position:relative;
       display:flex; align-items:center; justify-content:center;
-      gap:16px;
-      min-height:84px; /* space for runaway No */
-      margin-top: 6px;
+      gap:16px; flex-wrap:wrap;
+      margin-top: 10px;
     }
 
     .btn{
-      position:relative;
       padding:14px 22px;
       font-size: clamp(15px, 2.8vw, 18px);
       border:none; border-radius:12px;
@@ -89,8 +86,8 @@
       background:#ffe1ea;
       color:#b02a4a;
       box-shadow: 0 6px 14px rgba(176,42,74,.20);
-      position:absolute; /* so we can move it around */
     }
+    #no:hover{ transform: translateY(-1px); }
 
     /* ---------- Floating Hearts ---------- */
     .heart{
@@ -98,91 +95,3 @@
       bottom:-30px;
       font-size: 18px;
       opacity:0;
-      animation: floatUp 6s linear forwards;
-      pointer-events:none;
-      filter: drop-shadow(0 4px 6px rgba(255,77,121,.3));
-    }
-
-    @keyframes floatUp{
-      0%   { transform: translateY(0) translateX(0) rotate(0deg) scale(.8); opacity:0; }
-      10%  { opacity:.9; }
-      100% { transform: translateY(-120vh) translateX(var(--drift, 0px)) rotate(20deg) scale(1.4); opacity:0; }
-    }
-
-    /* ---------- Success Overlay ---------- */
-    .overlay{
-      position:fixed; inset:0;
-      background: rgba(255, 224, 234, 0.85);
-      display:flex; align-items:center; justify-content:center;
-      opacity:0; visibility:hidden;
-      transition: opacity .25s ease, visibility .25s ease;
-      backdrop-filter: blur(4px);
-      z-index: 50;
-    }
-    .overlay.show{ opacity:1; visibility:visible; }
-
-    .modal{
-      background: #fff;
-      border-radius: 20px;
-      padding: 26px 22px;
-      width:min(560px, 90vw);
-      text-align:center;
-      box-shadow: 0 10px 30px rgba(0,0,0,.08);
-      position:relative;
-    }
-    .modal h2{
-      margin:0 0 6px;
-      font-size: clamp(22px, 4vw, 32px);
-      color: var(--primary-dark);
-    }
-    .modal p{ margin:0 0 18px; opacity:.9; }
-
-    .close{
-      margin-top:8px;
-      padding:12px 18px;
-      background:#ffe1ea; color:#b02a4a;
-      border:none; border-radius:10px; cursor:pointer;
-    }
-
-    /* ---------- Confetti Canvas ---------- */
-    #confetti{
-      position:fixed; inset:0; pointer-events:none; z-index:55;
-    }
-
-    /* ---------- Footer note ---------- */
-    .note{
-      margin-top:14px; font-size:12px; opacity:.7;
-    }
-  </style>
-</head>
-<body>
-  <div class="card" id="card">
-    <div style="font-size: 38px" aria-hidden="true">💘</div>
-    <h1 class="title">Tharkesh, will you be my Valentine?</h1>
-    <p class="subtitle">I have a very strong feeling you’ll pick the right answer 😉</p>
-
-    <div class="buttons">
-      <button id="yes" class="btn">Yes 💖</button>
-      <button id="no" class="btn">No 😅</button>
-    </div>
-
-    <div class="note">Made with love by Ashika ✨</div>
-  </div>
-
-  <!-- Confetti -->
-  <canvas id="confetti"></canvas>
-
-  <!-- Success Overlay -->
-  <div class="overlay" id="overlay">
-    <div class="modal">
-      <div style="font-size: 44px" aria-hidden="true">🎉💖</div>
-      <h2>I knew you’d say yes, Tharkesh! 💗</h2>
-      <p>Now it’s a date. Get ready for something special! ✨</p>
-      <button class="close" id="closeModal">Aww, okay! 🥰</button>
-    </div>
-  </div>
-
-  <script>
-    /* =========================================================
-       💞 Floating Hearts
-       ========================================================= */
