@@ -8,6 +8,7 @@
     :root{
       --bg1:#ffe7ef; --bg2:#ffd1e0; --primary:#ff4d79; --primary-dark:#e23f6a;
       --text:#5a2a3b; --white:#fff; --ok:#14b8a6;
+      --gold:#ffcc66;
     }
 
     html,body{
@@ -29,6 +30,8 @@
       width:100%; background:var(--white); border-radius:24px;
       box-shadow:0 15px 40px rgba(255, 77, 121, 0.20), 0 6px 18px rgba(0,0,0,0.08);
       padding: clamp(22px, 4vw, 44px); text-align:center;
+      position: relative;
+      overflow: hidden;
     }
 
     .title{ font-size: clamp(28px, 4.6vw, 44px); margin-bottom: 10px; color:var(--primary-dark); }
@@ -108,9 +111,9 @@
     /* === FESTIVAL FINALE STYLES === */
     .finale-layer{ position:fixed; inset:0; pointer-events:none; z-index:9999; }
 
-    /* LOVE YOU overlay (boosted so it's clearly visible) */
+    /* LOVE YOU PICCO overlay */
     .love-overlay{ position:absolute; inset:0; overflow:hidden; display:grid; place-items:center; background:transparent; opacity:0; animation: loveFade 400ms ease forwards 200ms; }
-    @keyframes loveFade{ to{ opacity:0.35; } } /* increased from 0.25 */
+    @keyframes loveFade{ to{ opacity:0.35; } }
     .love-col{
       position:absolute; top:-150%; bottom:-150%; width:max(18vw, 220px);
       color:#ff2f66; opacity:.22; font-weight:800; line-height:1.6; text-align:center;
@@ -119,7 +122,7 @@
       filter: drop-shadow(0 2px 2px rgba(0,0,0,.07));
       animation: loveDrift 10s linear infinite;
       will-change: transform;
-      font-size: clamp(14px, 2.8vw, 22px); /* added size to stand out */
+      font-size: clamp(14px, 2.8vw, 22px);
       letter-spacing: .2px;
     }
     @keyframes loveDrift{ 0%{ transform: translateY(0) rotate(-12deg); } 100%{ transform: translateY(40%) rotate(-12deg); } }
@@ -231,13 +234,81 @@
       30%{ opacity:1; }
       100%{ transform: scale(1.2) translateY(-14px); opacity:0; }
     }
+
+    /* === NEW: Page-Open Surprises Styles === */
+    .intro-layer{
+      position:fixed; inset:0; z-index:10000; pointer-events:none;
+      display:block;
+    }
+    .curtain{
+      position:absolute; top:0; bottom:0; width:52%;
+      background: linear-gradient(120deg,#ffccde,#ffb4cd 40%,#ffa3c2);
+      box-shadow: inset 0 0 40px rgba(255,255,255,.4);
+    }
+    .curtain.left{ left:0; animation: curtainLeft 1400ms ease forwards 1000ms; }
+    .curtain.right{ right:0; animation: curtainRight 1400ms ease forwards 1000ms; }
+    @keyframes curtainLeft{ to{ transform: translateX(-105%); } }
+    @keyframes curtainRight{ to{ transform: translateX(105%); } }
+
+    .countdown{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+      font-size: clamp(36px, 8vw, 80px); font-weight:900; color:#e23f6a;
+      text-shadow: 0 2px 0 #fff, 0 10px 30px rgba(226,63,106,.35);
+      opacity:0; animation: popIn 900ms ease forwards;
+    }
+    @keyframes popIn{
+      0%{ opacity:0; transform: translate(-50%,-50%) scale(.5); }
+      40%{ opacity:1; transform: translate(-50%,-50%) scale(1.1); }
+      100%{ opacity:1; transform: translate(-50%,-50%) scale(1); }
+    }
+
+    /* Petal shower */
+    .petal{
+      position:fixed; top:-40px; font-size: clamp(16px, 3.5vw, 24px);
+      will-change: transform, opacity;
+      animation: petalFall var(--dur, 9s) linear forwards;
+      opacity:.95; pointer-events:none;
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.08));
+      z-index: 9998;
+    }
+    @keyframes petalFall{
+      0%{ transform: translateY(-60px) translateX(0) rotate(0deg); opacity:0; }
+      8%{ opacity:1; }
+      50%{ transform: translateY(50vh) translateX(var(--sx, 0px)) rotate(180deg); }
+      100%{ transform: translateY(110vh) translateX(calc(var(--sx, 0px) * 2)) rotate(360deg); opacity:.9; }
+    }
+
+    /* Gift floating button */
+    .gift{
+      position:fixed; right:16px; bottom:16px; z-index: 10001; pointer-events:auto;
+      display:flex; align-items:center; gap:8px; border:none; border-radius:999px;
+      padding:10px 14px; font-weight:800; color:#fff; background: linear-gradient(135deg,#ff6a95,#ff4d79);
+      box-shadow: 0 10px 26px rgba(226,63,106,.28); cursor:pointer;
+      transform: translateY(0); animation: floaty 3s ease-in-out infinite;
+    }
+    .gift .tag{ background: rgba(255,255,255,.2); padding:2px 8px; border-radius:999px; font-size:13px; }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-6px); }
+    }
+
+    /* Subtle card glow when page opens */
+    .card.glow{
+      box-shadow:0 0 0 0 rgba(255,77,121,.45);
+      animation: cardPulse 1400ms ease-out 2;
+    }
+    @keyframes cardPulse{
+      0%{ box-shadow:0 0 0 0 rgba(255,77,121,.45); }
+      70%{ box-shadow:0 0 28px 12px rgba(255,77,121,.25); }
+      100%{ box-shadow:0 0 0 0 rgba(255,77,121,0); }
+    }
   </style>
 </head>
 
 <body>
 
   <div class="wrap">
-    <div class="card">
+    <div class="card" id="mainCard">
       <div style="font-size:38px">💘</div>
       <h1 class="title">Will you be my Boobie Piccolo forever?</h1>
       <p class="subtitle">Choose wisely… destiny (and cuddles) await 😌</p>
@@ -307,7 +378,7 @@
         </div>
       </section>
 
-      <!-- Step 4 (NEW – proposal) -->
+      <!-- Step 4 (proposal) -->
       <section class="step" data-step="4" hidden>
         <div class="q">4) Final: You have to marry me, you don’t have other option 🙈</div>
         <div class="options">
@@ -331,13 +402,18 @@
   <!-- Hearts Burst Container -->
   <div class="burst" id="burst" aria-hidden="true"></div>
 
+  <!-- Floating gift button (replay finale) -->
+  <button class="gift" id="giftBtn" title="Open a surprise 💖" style="display:none;">
+    🎁 <span class="tag">Surprise</span>
+  </button>
+
   <script>
     /* =========================================================
-       ✨ CONFIG: Edit to personalize (optional)
+       ✨ CONFIG: Personalize here (optional)
        ========================================================= */
     const CONFIG = {
       names: { left: "Ashika", right: "Tharkesh", initials: "A ♥ T" },
-      photoUrl: "", // e.g., "images/us.jpg" (leave empty to see a cute initials placeholder)
+      photoUrl: "", // e.g., "images/us.jpg"
       quotes: [
         "You + Me = Home 🏡❤️",
         "Every day with you is my favorite day ✨",
@@ -349,11 +425,12 @@
       rainDurationMs: 9500,
       cursorTrailMs: 6000,
       balloonCount: 14,
-      roseCount: 28
+      roseCount: 28,
+      openPetalsMs: 8000      // how long petals fall on page open
     };
 
     /* =========================================================
-       Floating Hearts (ambient)
+       Ambient floating hearts
        ========================================================= */
     const HEARTS = ['💖','💗','💞','💕','❤️','💓','💜','💚'];
     setInterval(() => {
@@ -367,7 +444,7 @@
     }, 700);
 
     /* =========================================================
-       UI wiring
+       UI elements
        ========================================================= */
     const btnNo = document.getElementById("no");
     const btnYes = document.getElementById("yes");
@@ -378,6 +455,8 @@
     const summaryBox = document.getElementById("summary");
     const closeBtn = document.getElementById("close");
     const burst = document.getElementById("burst");
+    const giftBtn = document.getElementById("giftBtn");
+    const mainCard = document.getElementById("mainCard");
 
     let current = 1;
     const last = steps.length;
@@ -454,7 +533,7 @@
     };
 
     /* Tiny heart burst (existing) */
-    function miniBurst(){
+    function miniBurst(x=null,y=null){
       burst.innerHTML = '';
       const N = 24;
       const icons = ['💖','💗','💞','💕','❤️','💓','💘','💚'];
@@ -468,8 +547,8 @@
         const dy = Math.sin(angle)*radius;
         p.style.setProperty('--dx', dx + 'px');
         p.style.setProperty('--dy', dy + 'px');
-        const cx = window.innerWidth/2;
-        const cy = window.innerHeight/2;
+        const cx = x ?? (window.innerWidth/2);
+        const cy = y ?? (window.innerHeight/2);
         p.style.left = (cx - 10) + 'px';
         p.style.top  = (cy - 10) + 'px';
         burst.appendChild(p);
@@ -478,38 +557,22 @@
     }
 
     /* =========================================================
-       FESTIVAL FINALE: Everything romantic & extra 🥰
+       FESTIVAL FINALE (same as before, with Love you Picco drift)
        ========================================================= */
     function grandFinaleFestival(){
       const layer = document.createElement('div');
       layer.className = 'finale-layer';
       document.body.appendChild(layer);
 
-      // 1) BIG CENTER BLAST
       bigBlast(layer);
-
-      // 2) EMOJI RAIN
       loveRain(layer, { durationMs: CONFIG.rainDurationMs, density: 30 });
-
-      // 3) “LOVE YOU PICCO” OVERLAY (updated text)
-      loveOverlay(layer);
-
-      // 4) BALLOONS with initials/names
+      loveOverlay(layer); // “Love you picco! Love you picco!”
       balloonsRise(layer, { count: CONFIG.balloonCount, label: CONFIG.names.initials });
-
-      // 5) ROSE GARDEN
       roseGarden(layer, { roses: CONFIG.roseCount });
-
-      // 6) TYPEWRITER QUOTES
       typewriterBanner(layer, CONFIG.quotes);
-
-      // 7) CURSOR SPARKLE TRAIL
       cursorTrail(CONFIG.cursorTrailMs);
-
-      // 8) PHOTO REVEAL
       photoReveal(layer, CONFIG);
 
-      // Cleanup the layer after the finale
       setTimeout(()=>layer.remove(), CONFIG.finaleMs);
     }
 
@@ -524,12 +587,10 @@
         const piece = document.createElement('div');
         piece.className = 'piece';
         piece.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-
         const angle = (Math.PI*2) * (i/count) + (Math.random()*0.35);
         const radius = 240 + Math.random()*180;
         const dx = Math.cos(angle)*radius;
         const dy = Math.sin(angle)*radius;
-
         piece.style.setProperty('--dx', dx + 'px');
         piece.style.setProperty('--dy', dy + 'px');
         center.appendChild(piece);
@@ -571,7 +632,6 @@
       setTimeout(()=>container.remove(), durationMs + 9500);
     }
 
-    // UPDATED: overlay with "Love you picco! Love you picco!"
     function loveOverlay(root){
       const overlay = document.createElement('div');
       overlay.className = 'love-overlay';
@@ -695,7 +755,6 @@
       const cap = document.createElement('div');
       cap.className = 'caption';
       cap.textContent = `${cfg.names.left}  ♥  ${cfg.names.right}`;
-
       frame.appendChild(img);
       frame.appendChild(cap);
       root.appendChild(frame);
@@ -759,6 +818,93 @@
         setTimeout(()=>ctx.close(), 1600);
       }catch(e){ /* ignore if blocked */ }
     }
+
+    /* =========================================================
+       NEW: Page-Open Surprises
+       ========================================================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      startWelcomeSequence();
+      // Show the gift button after reveal
+      setTimeout(()=> giftBtn.style.display = 'flex', 2200);
+
+      // Small card glow intro
+      mainCard.classList.add('glow');
+      setTimeout(()=> mainCard.classList.remove('glow'), 1600);
+    });
+
+    giftBtn.addEventListener('click', () => {
+      grandFinaleFestival();
+      // optional: mini chime after click
+      playChime();
+    });
+
+    function startWelcomeSequence(){
+      // 1) Curtains and countdown
+      const layer = document.createElement('div');
+      layer.className = 'intro-layer';
+      const left = document.createElement('div');
+      left.className = 'curtain left';
+      const right = document.createElement('div');
+      right.className = 'curtain right';
+      const cd = document.createElement('div');
+      cd.className = 'countdown';
+      layer.appendChild(left); layer.appendChild(right); layer.appendChild(cd);
+      document.body.appendChild(layer);
+
+      const beats = ['3','2','1','💖'];
+      let i=0;
+      function tick(){
+        cd.textContent = beats[i++];
+        cd.style.animation = 'none';
+        // force reflow to restart animation
+        void cd.offsetWidth;
+        cd.style.animation = 'popIn 900ms ease forwards';
+        if(i < beats.length) setTimeout(tick, 650);
+      }
+      tick();
+
+      // 2) Petal shower during opening
+      petalShower({ durationMs: CONFIG.openPetalsMs });
+
+      // 3) Remove intro layer after curtains finish
+      setTimeout(()=> layer.remove(), 2600);
+    }
+
+    // Petal shower generator (re-usable)
+    let petalTimer = null;
+    function petalShower({ durationMs = 8000 }={}){
+      const petals = ['🌸','💮','🌺','🌷','🌹'];
+      const start = performance.now();
+
+      function spawn(){
+        const now = performance.now();
+        if(now - start > durationMs){ petalTimer && clearTimeout(petalTimer); return; }
+        const p = document.createElement('div');
+        p.className = 'petal';
+        p.textContent = petals[Math.floor(Math.random()*petals.length)];
+        p.style.left = (Math.random()*100) + 'vw';
+        p.style.setProperty('--dur', (7 + Math.random()*4) + 's');
+        p.style.setProperty('--sx', ((Math.random()*2-1) * (40 + Math.random()*60)) + 'px');
+        document.body.appendChild(p);
+        setTimeout(()=>p.remove(), 11000);
+        petalTimer = setTimeout(spawn, 90 + Math.random()*140);
+      }
+      // start multiple streams
+      for(let i=0;i<6;i++) setTimeout(spawn, i*120);
+    }
+
+    // === Easter egg keys ===
+    window.addEventListener('keydown', (e)=>{
+      if(e.key.toLowerCase() === 'l'){ // love sprinkle at cursor center
+        miniBurst(window.innerWidth/2, window.innerHeight/2);
+      }else if(e.key.toLowerCase() === 'b'){ // balloons quick
+        const layer = document.createElement('div'); layer.className='finale-layer'; document.body.appendChild(layer);
+        balloonsRise(layer, { count: 10, label: CONFIG.names.initials });
+        setTimeout(()=>layer.remove(), 6000);
+      }else if(e.key.toLowerCase() === 'p'){ // toggle petals
+        petalShower({ durationMs: 6000 });
+      }
+    });
   </script>
 
 </body>
