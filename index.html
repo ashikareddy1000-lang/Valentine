@@ -162,11 +162,9 @@
     .trail.heart { text-shadow: 0 0 10px rgba(255,77,121,.5), 0 0 18px rgba(255,77,121,.3); }
     @keyframes trailFade{ 0%{ opacity:.95; transform: translate(-50%, -50%) scale(.6); } 100%{ opacity:0; transform: translate(-50%, -80%) scale(1.2); } }
 
-    /* Photo frame styles REMOVED per your request */
-
     /* === NEW: Page-Open Surprises Styles === */
 
-    /* Curtains (kept from earlier) */
+    /* Curtains */
     .intro-layer{ position:fixed; inset:0; z-index:10000; pointer-events:none; display:block; }
     .curtain{ position:absolute; top:0; bottom:0; width:52%; background: linear-gradient(120deg,#ffccde,#ffb4cd 40%,#ffa3c2); box-shadow: inset 0 0 40px rgba(255,255,255,.4); }
     .curtain.left{ left:0; animation: curtainLeft 1400ms ease forwards 1000ms; }
@@ -297,6 +295,18 @@
     }
     @keyframes handIn{ to{ opacity:1; transform: translateX(-50%) scale(1); } }
     @keyframes handOut{ to{ opacity:0; transform: translateX(-50%) translateY(-10px) scale(.95); } }
+
+    /* NEW: Emoji storyboard overlay (cute PG opener) */
+    .intro-overlay{
+      position:fixed; inset:0; display:grid; place-items:center;
+      background: rgba(255,224,234,.85);
+      backdrop-filter: blur(4px);
+      z-index:10011; pointer-events:none;
+      animation: introFade 900ms ease forwards 2600ms; /* fades out after ~2.6s */
+    }
+    @keyframes introFade{
+      to{ opacity:0; visibility:hidden; }
+    }
   </style>
 </head>
 
@@ -312,6 +322,13 @@
         <button id="yes" class="btn">Yes 💖</button>
         <button id="no" class="btn">No 😅</button>
       </div>
+    </div>
+  </div>
+
+  <!-- 💟 Cute emoji storyboard opener (PG) -->
+  <div id="emojiStoryboard" class="intro-overlay" aria-hidden="true">
+    <div id="emojiScene" style="font-size: clamp(48px, 12vw, 92px); filter: drop-shadow(0 6px 20px rgba(226,63,106,.25));">
+      🤗
     </div>
   </div>
 
@@ -537,7 +554,8 @@
         p.className = 'p';
         p.textContent = icons[Math.floor(Math.random()*icons.length)];
         const angle = (Math.PI*2) * (i/N);
-        const radius = 160 + Math.random()*80;
+        aconst_radius = 160 + Math.random()*80; // variable renamed to avoid accidental global
+        const radius = aconst_radius;
         const dx = Math.cos(angle)*radius;
         const dy = Math.sin(angle)*radius;
         p.style.setProperty('--dx', dx + 'px');
@@ -734,7 +752,7 @@
       setTimeout(()=>{ active=false; window.removeEventListener('mousemove', handler); }, ms);
     }
 
-    // Gentle chime using WebAudio (plays on click or might get blocked on open)
+    // Soft chime used on Finish (and on welcome below—may be blocked by autoplay policies)
     function playChime(volume=0.08){
       try{
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -761,7 +779,7 @@
     }
 
     /* =========================================================
-       NEW: Page-Open Surprises
+       NEW: Page-Open Surprises — Sequencing
        ========================================================= */
     document.addEventListener('DOMContentLoaded', () => {
       // Gift button appears slightly later
@@ -785,6 +803,10 @@
       setTimeout(()=>floatingLoveNotes(), 1700);                        // love notes
       setTimeout(()=>handWave(), 1600);                                 // hand wave
       setTimeout(()=>ribbonUnwrap(), 400);                              // gift ribbon (quick)
+
+      // Start cute emoji storyboard (PG opener)
+      startEmojiStoryboard();
+
       // Tiny welcome bell (may be blocked on autoplay; harmless if so)
       setTimeout(()=>playChime(0.05), 1000);
     });
@@ -862,7 +884,6 @@
       const aura = document.createElement('div'); aura.className='heart-aura';
       const emoji = document.createElement('div'); emoji.className='emoji'; emoji.textContent='❤️';
       aura.appendChild(emoji);
-      // Place inside the card so it appears behind content
       mainCard.style.position='relative';
       mainCard.prepend(aura);
       setTimeout(()=>aura.remove(), 2400);
@@ -927,6 +948,27 @@
       const h = document.createElement('div'); h.className='hand-wave'; h.textContent='👋🫶';
       document.body.appendChild(h);
       setTimeout(()=>h.remove(), 2400);
+    }
+
+    /* === Cute emoji storyboard logic === */
+    function startEmojiStoryboard(){
+      const el = document.getElementById('emojiScene');
+      if(!el) return;
+      const seq = ['🤗','😘','🥰','💞'];
+      let i = 0;
+      const t = setInterval(()=>{
+        i = (i+1) % seq.length;
+        el.textContent = seq[i];
+        el.style.transition = 'transform 140ms ease';
+        el.style.transform = 'scale(1.08)';
+        setTimeout(()=> el.style.transform='scale(1)', 140);
+      }, 520);
+      // Cleanup after overlay fades (about 2.6s + fade)
+      setTimeout(()=>{
+        clearInterval(t);
+        const overlay = document.getElementById('emojiStoryboard');
+        overlay && setTimeout(()=> overlay.remove(), 1200);
+      }, 2600);
     }
 
     /* === Easter egg keys === */
