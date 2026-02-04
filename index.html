@@ -11,7 +11,7 @@
     }
     html,body{margin:0;padding:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
     .wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;position:relative;overflow:hidden}
-    .card{width:min(720px,92vw);background:var(--box);border-radius:16px;border:1px solid var(--line);box-shadow:0 8px 18px rgba(0,0,0,.06);padding:20px;position:relative;z-index:2}
+    .card{width:min(720px,92vw);background:var(--box);border-radius:16px;border:1px solid var(--line);box-shadow:0 8px 18px rgba(0,0,0,.06);padding:20px;position:relative;z-index:3}
     h1{margin:.25rem 0 .75rem;font-size:clamp(24px,4.8vw,36px);color:var(--accent);text-align:center}
     p.sub{text-align:center;opacity:.85;margin:.25rem 0 1rem}
     .center{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
@@ -44,23 +44,28 @@
     .progress::-webkit-progress-value{background:var(--pink);border-radius:999px}
     .progress-value{font-size:12px;opacity:.75;min-width:48px;text-align:right}
 
-    /* Floating hearts layer */
-    .hearts-layer{
-      position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:1;
-    }
-    .heart{
-      position:absolute; bottom:-40px; font-size:22px; opacity:0.9; filter: drop-shadow(0 2px 2px rgba(0,0,0,.06));
+    /* Floating layers (behind the card) */
+    .bg-layer{position:fixed; inset:0; overflow:hidden; pointer-events:none;}
+    .hearts-layer{z-index:1;}
+    .dolls-layer{z-index:2;} /* dolls above hearts, below the card */
+
+    /* Heart/Doll animation (shared) */
+    .sprite{
+      position:absolute; bottom:-60px; will-change: transform, opacity; filter: drop-shadow(0 2px 2px rgba(0,0,0,.06));
       animation: floatUp var(--dur) linear forwards, sway var(--sway-dur) ease-in-out infinite alternate;
-      will-change: transform, opacity;
     }
+    .sprite.emoji{font-size: clamp(20px, 3.2vw, 30px)}
+    .sprite.img{width: var(--size); height: var(--size)}
+    .sprite img{width:100%; height:100%; object-fit:contain; display:block}
+
     @keyframes floatUp{
-      from{transform:translateY(0) scale(var(--scale)); opacity:0.0}
-      8% {opacity:0.9}
+      from{transform:translateY(0) scale(var(--scale)); opacity:0}
+      10%{opacity:0.95}
       to{transform:translateY(-120vh) scale(var(--scale)); opacity:0}
     }
     @keyframes sway{
-      from{transform: translateX(-8px) translateY(0) scale(var(--scale))}
-      to{transform: translateX(8px) translateY(0) scale(var(--scale))}
+      from{transform: translateX(-10px) translateY(0) scale(var(--scale))}
+      to{transform: translateX(10px) translateY(0) scale(var(--scale))}
     }
 
     /* Toast for final summary */
@@ -76,13 +81,14 @@
 
     /* Reduced motion respect */
     @media (prefers-reduced-motion: reduce){
-      .heart{animation: none}
+      .sprite{animation:none}
     }
   </style>
 </head>
 <body>
-  <!-- Floating hearts layer -->
-  <div class="hearts-layer" aria-hidden="true"></div>
+  <!-- Floating background layers -->
+  <div class="bg-layer hearts-layer" aria-hidden="true"></div>
+  <div class="bg-layer dolls-layer" aria-hidden="true"></div>
 
   <div class="wrap">
     <div class="card" role="dialog" aria-modal="true" aria-labelledby="title">
@@ -98,7 +104,6 @@
 
       <!-- Multi-step fun quiz -->
       <form id="quizForm" aria-live="polite" aria-describedby="progressText">
-        <!-- Progress -->
         <div class="progress-wrap">
           <progress class="progress" id="progressBar" max="5" value="1"></progress>
           <div class="progress-value" id="progressText">1 / 5</div>
@@ -190,6 +195,7 @@
     const progressBar = document.getElementById('progressBar');
     const progressText = document.getElementById('progressText');
     const heartsLayer = document.querySelector('.hearts-layer');
+    const dollsLayer = document.querySelector('.dolls-layer');
 
     // ======= Quiz flow =======
     let currentStep = 1;
@@ -200,7 +206,6 @@
       form.scrollIntoView({ behavior: 'smooth', block: 'start' });
       currentStep = 1;
       updateUI();
-      // Move focus into the first interactive control
       const firstInput = steps[0].querySelector('input');
       if (firstInput) firstInput.focus({ preventScroll: true });
     }
@@ -215,14 +220,12 @@
         const radios = steps[currentStep-1].querySelectorAll('input[type="radio"]');
         const oneChecked = Array.from(radios).some(r => r.checked);
         if (radios.length && !oneChecked) {
-          // subtle prompt
           alert('Pick one option before moving ahead 💕');
           return;
         }
       }
       currentStep = Math.min(Math.max(1, currentStep + stepDelta), totalSteps);
       updateUI();
-      // Focus the first control in the new step
       const firstInput = steps[currentStep-1].querySelector('input');
       if (firstInput) firstInput.focus({ preventScroll: true });
     }
@@ -238,68 +241,128 @@
 
     function resetForm() {
       form.reset();
-      // Reset slider label
-      if (exLabel) exLabel.textContent = `${exSlider.value}/${exSlider.max} 😍`;
+      if (exLabel && exSlider) exLabel.textContent = `${exSlider.value}/${exSlider.max} 😍`;
       currentStep = 1;
       updateUI();
     }
 
-    // ======= Hearts animation =======
+    // ======= Floating Hearts (start on load) =======
     let heartsTimer = null;
     const heartChars = ['💖','💘','💝','💗','💓','💞'];
-
     function spawnHeart() {
-      const h = document.createElement('div');
-      h.className = 'heart';
-      h.textContent = heartChars[Math.floor(Math.random()*heartChars.length)];
-      // random x position
+      const el = document.createElement('div');
+      el.className = 'sprite emoji';
+      el.textContent = heartChars[(Math.random()*heartChars.length)|0];
+
       const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
       const left = Math.random() * vw;
       const scale = (Math.random() * 0.6 + 0.7).toFixed(2); // 0.7 - 1.3
       const dur = (Math.random() * 3 + 5).toFixed(2) + 's'; // 5s - 8s
       const swayDur = (Math.random() * 2 + 2).toFixed(2) + 's'; // 2s - 4s
 
-      h.style.left = `${left}px`;
-      h.style.setProperty('--scale', scale);
-      h.style.setProperty('--dur', dur);
-      h.style.setProperty('--sway-dur', swayDur);
-      heartsLayer.appendChild(h);
-
-      // Cleanup after animation ends
-      h.addEventListener('animationend', () => h.remove());
+      el.style.left = `${left}px`;
+      el.style.setProperty('--scale', scale);
+      el.style.setProperty('--dur', dur);
+      el.style.setProperty('--sway-dur', swayDur);
+      heartsLayer.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
     }
-
     function startHearts() {
       if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       if (heartsTimer) return;
-      // Gentle sprinkle: vary burst size slightly
       heartsTimer = setInterval(() => {
-        const count = Math.random() < 0.35 ? 2 : 1; // sometimes 2 at once
+        const count = Math.random() < 0.35 ? 2 : 1;
         for (let i=0;i<count;i++) spawnHeart();
-        // prevent overpopulation
-        const maxHearts = 36;
-        while (heartsLayer.children.length > maxHearts) {
-          heartsLayer.removeChild(heartsLayer.firstChild);
-        }
-      }, 500); // every 0.5s
+        const maxHearts = 42;
+        while (heartsLayer.children.length > maxHearts) heartsLayer.removeChild(heartsLayer.firstChild);
+      }, 520);
     }
-
     function stopHearts() {
-      if (heartsTimer) {
-        clearInterval(heartsTimer);
-        heartsTimer = null;
-      }
+      if (!heartsTimer) return;
+      clearInterval(heartsTimer);
+      heartsTimer = null;
     }
 
-    // Pause when tab hidden (battery friendly)
+    // ======= Floating Dolls (start on load) =======
+    let dollsTimer = null;
+    // Option A: Emoji dolls (works anywhere)
+    const dollSet = [
+      { type:'emoji', content:'🧸' },
+      { type:'emoji', content:'👧🏻' },
+      { type:'emoji', content:'👦🏽' },
+      { type:'emoji', content:'🧒🏼' },
+      { type:'emoji', content:'🧚‍♀️' }
+    ];
+
+    // Option B (optional): Replace with your PNG/WebP URLs (transparent bg)
+    // const dollSet = [
+    //   { type:'img', src:'./dolls/teddy.png', size:'46px' },
+    //   { type:'img', src:'./dolls/couple.png', size:'54px' },
+    //   { type:'img', src:'./dolls/girl.png', size:'48px' },
+    // ];
+
+    function spawnDoll() {
+      const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+      const left = Math.random() * vw;
+
+      const scale = (Math.random() * 0.4 + 0.9).toFixed(2); // 0.9 - 1.3
+      const dur = (Math.random() * 5 + 9).toFixed(2) + 's'; // slower: 9s - 14s
+      const swayDur = (Math.random() * 2.5 + 2.5).toFixed(2) + 's'; // 2.5s - 5s
+
+      const choice = dollSet[(Math.random()*dollSet.length)|0];
+
+      let el;
+      if (choice.type === 'img') {
+        el = document.createElement('div');
+        el.className = 'sprite img';
+        el.style.setProperty('--size', choice.size || '52px');
+        const img = document.createElement('img');
+        img.alt = '';
+        img.src = choice.src;
+        el.appendChild(img);
+      } else {
+        el = document.createElement('div');
+        el.className = 'sprite emoji';
+        el.textContent = choice.content;
+      }
+
+      el.style.left = `${left}px`;
+      el.style.setProperty('--scale', scale);
+      el.style.setProperty('--dur', dur);
+      el.style.setProperty('--sway-dur', swayDur);
+      dollsLayer.appendChild(el);
+      el.addEventListener('animationend', () => el.remove());
+    }
+
+    function startDolls() {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (dollsTimer) return;
+      // Spawn a "few" dolls: gentle density
+      dollsTimer = setInterval(() => {
+        // 0,1 or sometimes 2 dolls
+        const r = Math.random();
+        const count = r < 0.15 ? 2 : (r < 0.6 ? 1 : 0);
+        for (let i=0;i<count;i++) spawnDoll();
+        const maxDolls = 16;
+        while (dollsLayer.children.length > maxDolls) dollsLayer.removeChild(dollsLayer.firstChild);
+      }, 900);
+    }
+    function stopDolls() {
+      if (!dollsTimer) return;
+      clearInterval(dollsTimer);
+      dollsTimer = null;
+    }
+
+    // Pause animations when tab hidden (battery friendly)
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) stopHearts(); else startHearts();
+      if (document.hidden) { stopHearts(); stopDolls(); }
+      else { startHearts(); startDolls(); }
     });
 
     // ======= Event bindings =======
     yesBtn.addEventListener('click', function () {
       showForm();
-      startHearts();
+      // keep animations running (they already start on load)
     });
 
     noBtn.addEventListener('click', function () {
@@ -315,7 +378,7 @@
     cancelBtn.addEventListener('click', function () {
       hideForm();
       resetForm();
-      stopHearts();
+      // keep the ambient hearts & dolls running for vibe ✨
     });
 
     backBtn.addEventListener('click', () => go(-1));
@@ -338,11 +401,9 @@
       showToast('Yay! You said YES 💞', summary);
       hideForm();
       resetForm();
-      // keep hearts floating for a happy moment
-      setTimeout(stopHearts, 6000);
+      // leave the floating vibe on ✨
     });
 
-    // Simple toast
     function showToast(title, text){
       const t = document.createElement('div');
       t.className = 'toast';
@@ -365,6 +426,12 @@
           nextBtn.click();
         }
       }
+    });
+
+    // ======= Start hearts & dolls as soon as the page opens =======
+    window.addEventListener('DOMContentLoaded', () => {
+      startHearts();
+      startDolls();
     });
   </script>
 </body>
