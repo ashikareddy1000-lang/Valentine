@@ -1,92 +1,541 @@
-<script>
-  (function initCuteVideoOpener(){
-    const overlay = document.getElementById('cuteVideoOverlay');
-    const video   = document.getElementById('cuteVideo');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Will You Be My Boobie Piccolo Forever? 💖</title>
+
+  <!-- Lottie (for the cute non-video opener that needs no files) -->
+  https://unpkg.com/lottie-web/build/player/lottie.min.js</script>
+
+  <style>
+    :root{
+      --bg1:#ffe7ef; --bg2:#ffd1e0; --primary:#ff4d79; --primary-dark:#e23f6a;
+      --text:#5a2a3b; --white:#fff; --ok:#14b8a6;
+    }
+
+    html,body{
+      height:100%; margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--text); overflow-x:hidden;
+      background:
+        radial-gradient(1200px 1200px at 20% 10%, var(--bg1), transparent),
+        radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
+        linear-gradient(160deg, #fff, #ffeef4 60%, #ffe3ed);
+    }
+
+    .wrap{ min-height:100dvh; display:flex; align-items:center; justify-content:center; padding:24px; width:min(720px, 92vw); margin-inline:auto; }
+    .card{
+      width:100%; background:var(--white); border-radius:24px;
+      box-shadow:0 15px 40px rgba(255, 77, 121, 0.20), 0 6px 18px rgba(0,0,0,0.08);
+      padding: clamp(22px, 4vw, 44px); text-align:center; position: relative; overflow:hidden;
+    }
+    .title{ font-size: clamp(28px, 4.6vw, 44px); margin-bottom: 10px; color:var(--primary-dark); }
+    .subtitle{ font-size: clamp(14px, 2.8vw, 18px); opacity:0.9; margin-bottom: 22px; }
+    .buttons{ display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
+    .btn{ padding:14px 22px; font-size: clamp(15px, 2.8vw, 18px); border:none; border-radius:12px; cursor:pointer; transition: transform .05s ease, box-shadow .2s ease, background .2s ease; }
+    .btn:active { transform: translateY(1px); }
+    #yes{ background:var(--primary); color:#fff; box-shadow:0 6px 14px rgba(226,63,106,.28); }
+    #no{ background:#ffe1ea; color:#b02a4a; }
+
+    /* Ambient floating hearts */
+    .heart{ position:fixed; bottom:-30px; font-size: 18px; opacity:0; animation: floatUp 6.5s linear forwards; pointer-events:none; }
+    @keyframes floatUp{ 0%{opacity:0; transform:translateY(0);} 10%{opacity:1;} 100%{opacity:0; transform:translateY(-120vh);} }
+
+    /* Modal */
+    .overlay{ position:fixed; inset:0; background:rgba(255, 224, 234, 0.85); display:flex; align-items:center; justify-content:center; visibility:hidden; opacity:0; transition:0.3s; padding:20px; }
+    .overlay.show{ visibility:visible; opacity:1; }
+    .modal{ background:#fff; width:min(720px, 94vw); padding:24px; border-radius:20px; box-shadow:0 10px 28px rgba(0,0,0,.08); }
+    .progress-wrap{ background:#ffeaf1; border-radius:12px; height:10px; overflow:hidden; margin:14px 0 20px 0; }
+    .progress-bar{ height:100%; background:linear-gradient(90deg, var(--primary), #ff7aa1); width:0%; transition:width .25s ease; }
+    .q{ padding:14px 0 8px 0; font-weight:600; color:#9a3553; }
+    .options{ display:grid; grid-template-columns: 1fr; gap:10px; margin: 4px 0 8px 0; }
+    .opt{ display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:12px; background:#fff7fa; border:1px solid #ffd3e0; cursor:pointer; }
+    .opt input{ margin-top:3px; }
+    .nav{ display:flex; justify-content:space-between; gap:12px; margin-top:18px; flex-wrap:wrap; }
+    .btn-next{ background:var(--primary); color:#fff; }
+    .btn-back{ background:#ffe1ea; color:#b02a4a; }
+    .btn-finish{ background:var(--ok); color:#fff; }
+    .note{ font-size:14px; color:#b02a4a; margin-top:10px; display:none; }
+    .summary{ background:#fff7fa; border:1px solid #ffd3e0; border-radius:12px; padding:12px; margin:12px 0 0; font-size:15px; }
+
+    /* Tiny heart burst */
+    .burst{ position:fixed; inset:0; pointer-events:none; }
+    .burst .p{ position:absolute; font-size:20px; opacity:0; animation:pop 1000ms ease forwards; }
+    @keyframes pop{ 0% { transform: translate(0,0) scale(.6); opacity:0; } 20% { opacity:1; } 100% { transform: translate(var(--dx), var(--dy)) scale(1.4); opacity:0; } }
+
+    /* Finale layer + “Love you picco! … ” overlay */
+    .finale-layer{ position:fixed; inset:0; pointer-events:none; z-index:9999; }
+    .love-overlay{ position:absolute; inset:0; display:grid; place-items:center; opacity:0; animation: loveFade 400ms ease forwards 200ms; }
+    @keyframes loveFade{ to{ opacity:0.35; } }
+    .love-col{ position:absolute; top:-150%; bottom:-150%; width:max(18vw, 220px); color:#ff2f66; opacity:.22; font-weight:800; line-height:1.6; text-align:center; text-shadow: 0 1px 0 rgba(255,255,255,.75); transform:rotate(-12deg); filter: drop-shadow(0 2px 2px rgba(0,0,0,.07)); animation: loveDrift 10s linear infinite; font-size: clamp(14px, 2.8vw, 22px); letter-spacing: .2px; }
+    @keyframes loveDrift{ 0%{ transform: translateY(0) rotate(-12deg); } 100%{ transform: translateY(40%) rotate(-12deg); } }
+
+    /* Finale: rain + blast */
+    .love-rain{ position:absolute; inset:0; overflow:hidden; }
+    .drop{ position:absolute; top:-60px; font-size: clamp(20px, 3.5vw, 34px); animation: fall var(--dur, 6s) linear forwards; opacity:.95; }
+    @keyframes fall{ 0%{ transform: translateY(-80px) translateX(0) rotate(0deg); opacity:0; } 8%{ opacity:1; } 100%{ transform: translateY(110vh) translateX(var(--sx, 0px)) rotate(var(--rot, 0deg)); opacity:0.85; } }
+    .blast{ position:absolute; left:50%; top:50%; transform: translate(-50%, -50%); }
+    .piece{ position:absolute; font-size: clamp(24px, 4.8vw, 42px); animation: explode 1100ms ease-out forwards, spin 1100ms linear forwards; }
+    @keyframes explode{ 0%{ transform: translate(0,0) scale(.4); opacity:0; } 18%{ opacity:1; } 100%{ transform: translate(var(--dx), var(--dy)) scale(1.2); opacity:0; } }
+    @keyframes spin{ to{ transform: rotate(1turn); } }
+    .summary.glow{ box-shadow: 0 0 0 0 rgba(255,77,121,.55); animation: pulse 1200ms ease-out 2; }
+    @keyframes pulse{ 0%{ box-shadow:0 0 0 0 rgba(255,77,121,.55); } 70%{ box-shadow:0 0 24px 10px rgba(255,77,121,.28); } 100%{ box-shadow:0 0 0 0 rgba(255,77,121,0); } }
+
+    /* Gift replay button */
+    .gift{ position:fixed; right:16px; bottom:16px; z-index: 10001; display:none; align-items:center; gap:8px; border:none; border-radius:999px; padding:10px 14px; font-weight:800; color:#fff; background: linear-gradient(135deg,#ff6a95,#ff4d79); box-shadow: 0 10px 26px rgba(226,63,106,.28); cursor:pointer; animation: floaty 3s ease-in-out infinite; }
+    .gift .tag{ background: rgba(255,255,255,.2); padding:2px 8px; border-radius:999px; font-size:13px; }
+    @keyframes floaty{ 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-6px); } }
+    .card.glow{ box-shadow:0 0 0 0 rgba(255,77,121,.45); animation: cardPulse 1400ms ease-out 2; }
+    @keyframes cardPulse{ 0%{ box-shadow:0 0 0 0 rgba(255,77,121,.45); } 70%{ box-shadow:0 0 28px 12px rgba(255,77,121,.25); } 100%{ box-shadow:0 0 0 0 rgba(255,77,121,0); } }
+
+    /* Curtains */
+    .intro-layer{ position:fixed; inset:0; z-index:10010; pointer-events:none; }
+    .curtain{ position:absolute; top:0; bottom:0; width:52%; background: linear-gradient(120deg,#ffccde,#ffb4cd 40%,#ffa3c2); box-shadow: inset 0 0 40px rgba(255,255,255,.4); }
+    .curtain.left{ left:0; animation: curtainLeft 1400ms ease forwards 1000ms; }
+    .curtain.right{ right:0; animation: curtainRight 1400ms ease forwards 1000ms; }
+    @keyframes curtainLeft{ to{ transform: translateX(-105%); } }
+    @keyframes curtainRight{ to{ transform: translateX(105%); } }
+    .countdown{ position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); font-size: clamp(36px, 8vw, 80px); font-weight:900; color:#e23f6a; text-shadow: 0 2px 0 #fff, 0 10px 30px rgba(226,63,106,.35); opacity:0; animation: popIn 900ms ease forwards; }
+    @keyframes popIn{ 0%{ opacity:0; transform: translate(-50%,-50%) scale(.5); } 40%{ opacity:1; transform: translate(-50%,-50%) scale(1.1); } 100%{ opacity:1; transform: translate(-50%,-50%) scale(1); } }
+
+    /* Cute opener overlay (works for Lottie or Video) */
+    .opener-layer{
+      position:fixed; inset:0; display:grid; place-items:center;
+      background: rgba(255,224,234,.85); backdrop-filter: blur(4px);
+      z-index:10005; opacity:1; transition: opacity .6s ease, visibility .6s ease;
+    }
+    .opener-box{ position:relative; border-radius:20px; overflow:hidden; background:#fff; box-shadow:0 18px 60px rgba(226,63,106,.25), 0 10px 24px rgba(0,0,0,.08); display:grid; place-items:center; }
+    .opener-controls{ position:absolute; inset:auto 8px 8px auto; display:flex; gap:8px; }
+    .opener-btn{ pointer-events:auto; cursor:pointer; border:none; border-radius:999px; padding:8px 12px; font-weight:800; color:#fff; background: linear-gradient(135deg,#ff6a95,#ff4d79); box-shadow:0 6px 16px rgba(226,63,106,.25); }
+    .opener-video{ width:min(84vw, 520px); max-height:70vh; display:block; background:#000; object-fit:cover; border-radius:20px; }
+    .play-btn{ display:none; }
+  </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+    <div class="card" id="mainCard">
+      <div style="font-size:38px">💘</div>
+      <h1 class="title">Will you be my Boobie Piccolo forever?</h1>
+      <p class="subtitle">Choose wisely… destiny (and cuddles) await 😌</p>
+      <div class="buttons">
+        <button id="yes" class="btn">Yes 💖</button>
+        <button id="no" class="btn">No 😅</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Curtains -->
+  <div class="intro-layer" id="introLayer" aria-hidden="true">
+    <div class="curtain left"></div>
+    <div class="curtain right"></div>
+    <div class="countdown" id="countdown">3</div>
+  </div>
+
+  <!-- Cute opener (Lottie by default; will fallback to video if configured) -->
+  <div class="opener-layer" id="openerLayer" aria-hidden="false">
+    <div class="opener-box">
+      <!-- Lottie container -->
+      <div id="lottieBox" style="width:min(84vw,520px); height:min(70vh,420px);"></div>
+
+      <!-- Video element (hidden unless used) -->
+      <video id="cuteVideo" class="opener-video" style="display:none;"
+             autoplay muted playsinline webkit-playsinline preload="auto" loop
+             poster=""></video>
+
+      <div class="opener-controls">
+        <button id="playBtn" class="opener-btn play-btn">Play ▶️</button>
+        <button id="skipBtn" class="opener-btn">Skip ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal / Quiz -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+      <h2 id="quizTitle">Yay! Quick fun questions 😄</h2>
+      <p class="lead">Pick what speaks to your heart:</p>
+
+      <div class="progress-wrap" aria-hidden="true">
+        <div class="progress-bar" id="progress"></div>
+      </div>
+
+      <!-- Step 1 -->
+      <section class="step" data-step="1">
+        <div class="q">1) Select your future role 😌</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="role" value="CEO of My Heart ❤️" /> Having Kids before marriage ❤️</label>
+          <label class="opt"><input type="radio" name="role" value="Chief Cuddle Officer 🧸" /> Having Kids after marriage 🧸</label>
+          <label class="opt"><input type="radio" name="role" value="Permanent Valentine 💘" /> Well Romantic Husband 💘</label>
+          <label class="opt"><input type="radio" name="role" value="Piccolo’s Favorite Human 🌱💚" /> All of the above 🌱💚</label>
+        </div>
+        <div class="note" id="note-1">Please select one option to continue.</div>
+        <div class="nav">
+          <button class="btn btn-back" data-prev disabled>Back</button>
+          <button class="btn btn-next" data-next>Next →</button>
+        </div>
+      </section>
+
+      <!-- Step 2 -->
+      <section class="step" data-step="2" hidden>
+        <div class="q">2) Our perfect date night is… ✨</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="date" value="Stargazing + Hot Chocolate 🌌☕" /> Stargazing + Hot Chocolate 🌌☕</label>
+          <label class="opt"><input type="radio" name="date" value="Cozy movie & blanket fort 🎬🛋️" /> Cozy movie & blanket fort 🎬🛋️</label>
+          <label class="opt"><input type="radio" name="date" value="Long drive + late-night talks 🚗💬" /> Long drive + late-night talks 🚗💬</label>
+          <label class="opt"><input type="radio" name="date" value="Training with Piccolo, then ramen 🥋🍜" /> Training with Piccolo, then ramen 🥋🍜</label>
+        </div>
+        <div class="note" id="note-2">Please select one option to continue.</div>
+        <div class="nav">
+          <button class="btn btn-back" data-prev>← Back</button>
+          <button class="btn btn-next" data-next>Next →</button>
+        </div>
+      </section>
+
+      <!-- Step 3 -->
+      <section class="step" data-step="3" hidden>
+        <div class="q">3) Pinky promise: What do you want forever? 🥹</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="promise" value="Morning texts & warm hugs 🌞🤗" /> Morning texts & warm hugs 🌞🤗</label>
+          <label class="opt"><input type="radio" name="promise" value="Adventures & inside jokes ✈️😂" /> Adventures & inside jokes & Romance ✈️😂</label>
+          <label class="opt"><input type="radio" name="promise" value="Unwavering support & patience 💪💞" /> Unwavering support & patience 💪💞</label>
+          <label class="opt"><input type="radio" name="promise" value="Training arcs together like Piccolo & Gohan 💚" /> Training arcs together & Travelling together 💚</label>
+        </div>
+        <div class="note" id="note-3">Please select one option to continue.</div>
+        <div class="nav">
+          <button class="btn btn-back" data-prev>← Back</button>
+          <button class="btn btn-next" data-next>Next →</button>
+        </div>
+      </section>
+
+      <!-- Step 4 -->
+      <section class="step" data-step="4" hidden>
+        <div class="q">4) Final: You have to marry me, you don’t have other option 🙈</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="marry" value="Yes, forever 💍" checked /> Yes, forever 💍</label>
+        </div>
+        <div class="nav">
+          <button class="btn btn-back" data-prev>← Back</button>
+          <button class="btn btn-finish" id="finish">Finish 🎉</button>
+        </div>
+
+        <!-- Summary -->
+        <div id="summary" class="summary" hidden></div>
+        <div class="buttons" style="margin-top:12px;">
+          <button id="close" class="btn link-quiet" hidden>Close</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- Hearts Burst Container -->
+  <div class="burst" id="burst" aria-hidden="true"></div>
+
+  <!-- Gift replay button -->
+  <button class="gift" id="giftBtn" title="Open a surprise 💖">🎁 <span class="tag">Surprise</span></button>
+
+  <script>
+    /* ======================= CONFIG ======================= */
+    const CONFIG = {
+      // Use Lottie opener by default (no files needed)
+      useLottieOpener: true,
+
+      // A wholesome, cute Lottie animation (hugs/hearts vibe)
+      // You can change this to any Lottie JSON URL you like later:
+      lottieUrl: "https://assets10.lottiefiles.com/packages/lf20_5ngs2ksb.json",
+
+      // If you later have a video URL, set it here and flip useLottieOpener to false:
+      videoUrl: "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4#t=0.001",
+
+      videoAutoHideMs: 5200,
+      finaleMs: 12000,
+      rainDurationMs: 9500,
+      cursorTrailMs: 6000,
+      names: { left: "Ashika", right: "Tharkesh", initials: "A ♥ T" },
+      quotes: [
+        "You + Me = Home 🏡❤️",
+        "Every day with you is my favorite day ✨",
+        "Forever is better with you 💘",
+        "My heart chooses you, always 💞",
+        "From this moment, always us 💍"
+      ]
+    };
+
+    /* ================= Ambient floating hearts ============= */
+    const HEARTS = ['💖','💗','💞','💕','❤️','💓','💜','💚'];
+    setInterval(() => {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = HEARTS[Math.floor(Math.random()*HEARTS.length)];
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.fontSize = (18 + Math.random()*20) + "px";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(), 6500);
+    }, 700);
+
+    /* ========================= UI ========================= */
+    const btnNo = document.getElementById("no");
+    const btnYes = document.getElementById("yes");
+    const overlay = document.getElementById("overlay");
+    const progress = document.getElementById("progress");
+    const steps = Array.from(document.querySelectorAll(".step"));
+    const finishBtn = document.getElementById("finish");
+    const summaryBox = document.getElementById("summary");
+    const closeBtn = document.getElementById("close");
+    const burst = document.getElementById("burst");
+    const giftBtn = document.getElementById("giftBtn");
+
+    // Intro elements
+    const introLayer = document.getElementById('introLayer');
+    const countdown = document.getElementById('countdown');
+
+    // Opener elements (Lottie/Video)
+    const openerLayer = document.getElementById('openerLayer');
+    const lottieBox = document.getElementById('lottieBox');
+    const videoEl = document.getElementById('cuteVideo');
     const playBtn = document.getElementById('playBtn');
     const skipBtn = document.getElementById('skipBtn');
 
-    if(!overlay || !video) return;
+    let current = 1;
+    const last = steps.length;
+    const answers = { role:null, date:null, promise:null, marry:null };
 
-    // Ensure attributes (in case markup changed)
-    video.muted = true;
-    video.setAttribute('muted','');
-    video.setAttribute('playsinline','');
-    video.setAttribute('webkit-playsinline','');
-    video.setAttribute('autoplay','');
-    video.preload = 'auto';
-    // iOS sometimes needs a fresh load after setting attributes
-    try { video.load(); } catch (e) {}
+    btnNo.onclick = () => alert("No is not allowed 😌 Try again!");
+    btnYes.onclick = () => { overlay.classList.add("show"); overlay.setAttribute('aria-hidden', 'false'); goTo(1); };
 
-    let autoHideTimer = null;
-
-    function tryPlay(label){
-      const p = video.play?.();
-      if(p && typeof p.then === 'function'){
-        p.then(()=>{
-          // success
-          playBtn && (playBtn.style.display = 'none');
-          // auto-hide after a bit
-          startAutoHide();
-        }).catch((err)=>{
-          // blocked by policy: show Play button
-          if(playBtn) playBtn.style.display = 'inline-flex';
-          // console for debugging
-          console.debug('[Video autoplay blocked]', label, err);
-        });
-      }else{
-        // Older browsers: start auto-hide anyway
-        startAutoHide();
-      }
+    function goTo(step){
+      current = step;
+      steps.forEach(s => s.hidden = Number(s.dataset.step) !== step);
+      const pct = Math.round((step-1)/(last-1) * 100);
+      progress.style.width = pct + "%";
+      const backBtn = steps[step-1].querySelector("[data-prev]");
+      if(backBtn) backBtn.disabled = (step === 1);
     }
 
-    function startAutoHide(){
-      if(autoHideTimer) return;
-      autoHideTimer = setTimeout(hideOverlay, (window.CONFIG?.videoAutoHideMs ?? 5200));
+    function getSelected(name){ const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; }
+    function validate(step){
+      const map = {1:'role', 2:'date', 3:'promise', 4:'marry'};
+      const name = map[step]; const val = getSelected(name);
+      const note = document.getElementById(`note-${step}`);
+      if(!val){ if(note) note.style.display = 'block'; return false; }
+      if(note) note.style.display = 'none';
+      answers[name] = val; return true;
     }
 
-    function hideOverlay(){
-      if(!overlay) return;
-      overlay.style.opacity = '0';
-      overlay.style.visibility = 'hidden';
-      try { video.pause(); } catch(e) {}
-      setTimeout(()=> overlay.remove(), 600);
-    }
-
-    // Attempt immediately
-    tryPlay('initial');
-
-    // Retry once the video has data
-    video.addEventListener('loadeddata', ()=> tryPlay('loadeddata'), { once:true });
-
-    // If tab becomes visible later, retry
-    document.addEventListener('visibilitychange', ()=>{
-      if(document.visibilityState === 'visible'){
-        tryPlay('visibilitychange');
-      }
+    document.querySelectorAll("[data-next]").forEach(btn=>{
+      btn.addEventListener('click', ()=>{ if(!validate(current)) return; if(current < last) goTo(current+1); });
+    });
+    document.querySelectorAll("[data-prev]").forEach(btn=>{
+      btn.addEventListener('click', ()=>{ if(current > 1) goTo(current-1); });
     });
 
-    // User-gesture fallback
-    if(playBtn){
-      playBtn.addEventListener('click', ()=>{
-        video.muted = true; // keep muted to satisfy autoplay
-        tryPlay('user-play');
-      });
+    finishBtn.onclick = () => {
+      if(!validate(4)) return;
+      const lines = [
+        `Role chosen: <b>${answers.role}</b>`,
+        `Perfect date: <b>${answers.date}</b>`,
+        `Forever promise: <b>${answers.promise}</b>`,
+        `Marriage answer: <b>${answers.marry}</b>`
+      ];
+      summaryBox.innerHTML = `
+        <h3 style="margin:4px 0 6px 0;">It’s official ❤️</h3>
+        <p style="margin:0 0 8px 0;">You said <b>Yes</b>—and I’m keeping this forever! 🥰</p>
+        <div>${lines.map(l=>`<div>• ${l}</div>`).join('')}</div>
+      `;
+      summaryBox.hidden = false;
+      summaryBox.classList.add('glow'); setTimeout(()=>summaryBox.classList.remove('glow'), 2400);
+      closeBtn.hidden = false;
+      miniBurst();
+      grandFinaleFestival();
+      playChime();
+      finishBtn.disabled = true;
+    };
+
+    closeBtn.onclick = () => {
+      overlay.classList.remove("show");
+      overlay.setAttribute('aria-hidden', 'true');
+      document.querySelectorAll('input[type="radio"]').forEach(i=>i.checked=false);
+      summaryBox.hidden = true; summaryBox.innerHTML = '';
+      finishBtn.disabled = false; closeBtn.hidden = true; goTo(1);
+    };
+
+    /* =========== Fixed: tiny heart burst (no typos) ========== */
+    function miniBurst(x=null,y=null){
+      const N = 24; const icons = ['💖','💗','💞','💕','❤️','💓','💘','💚'];
+      burst.innerHTML = '';
+      for(let i=0;i<N;i++){
+        const p = document.createElement('div');
+        p.className = 'p';
+        p.textContent = icons[Math.floor(Math.random()*icons.length)];
+        const angle = (Math.PI*2) * (i/N);
+        const radius = 160 + Math.random()*80;
+        const dx = Math.cos(angle)*radius;
+        const dy = Math.sin(angle)*radius;
+        p.style.setProperty('--dx', dx + 'px'); p.style.setProperty('--dy', dy + 'px');
+        const cx = x ?? (window.innerWidth/2); const cy = y ?? (window.innerHeight/2);
+        p.style.left = (cx - 10) + 'px'; p.style.top  = (cy - 10) + 'px';
+        burst.appendChild(p); setTimeout(()=>p.remove(), 1100);
+      }
     }
 
-    // Skip control
-    if(skipBtn){
-      skipBtn.addEventListener('click', ()=>{
-        if(autoHideTimer) clearTimeout(autoHideTimer);
-        hideOverlay();
-      });
+    /* =================== Finale (Finish) ===================== */
+    function grandFinaleFestival(){
+      const layer = document.createElement('div'); layer.className = 'finale-layer'; document.body.appendChild(layer);
+      bigBlast(layer); loveRain(layer, { durationMs: CONFIG.rainDurationMs, density: 30 }); loveOverlay(layer);
+      setTimeout(()=>layer.remove(), CONFIG.finaleMs);
+    }
+    function bigBlast(root){
+      const emojis = ['💖','💗','💞','💕','❤️','💓','💘','💋','😘','😚','🥰'];
+      const count = 52; const center = document.createElement('div'); center.className = 'blast'; root.appendChild(center);
+      for(let i=0;i<count;i++){
+        const piece = document.createElement('div'); piece.className = 'piece';
+        piece.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        const angle = (Math.PI*2) * (i/count) + (Math.random()*0.35);
+        const radius = 240 + Math.random()*180; const dx = Math.cos(angle)*radius; const dy = Math.sin(angle)*radius;
+        piece.style.setProperty('--dx', dx + 'px'); piece.style.setProperty('--dy', dy + 'px');
+        center.appendChild(piece); setTimeout(()=>piece.remove(), 1200);
+      }
+      setTimeout(()=>center.remove(), 1300);
+    }
+    function loveRain(root, { durationMs=8000, density=24 }={}){
+      const container = document.createElement('div'); container.className = 'love-rain'; root.appendChild(container);
+      const drops = Math.min(density * Math.ceil(window.innerWidth/480), 140);
+      const icons = ['💖','💗','💞','💕','❤️','💓','💘','💋','😘','😚','🥰'];
+      const start = performance.now();
+      function spawn(){
+        const now = performance.now(); if(now - start > durationMs) return;
+        const d = document.createElement('div'); d.className = 'drop';
+        d.textContent = icons[Math.floor(Math.random()*icons.length)];
+        d.style.left = (Math.random()*100) + 'vw';
+        d.style.setProperty('--sx', ((Math.random()*2-1) * (40 + Math.random()*80)) + 'px');
+        d.style.setProperty('--rot', (Math.random()*720 - 360) + 'deg');
+        d.style.setProperty('--dur', (5 + Math.random()*3.5) + 's');
+        container.appendChild(d); setTimeout(()=>d.remove(), 9000);
+        const interval = Math.max(50, 200 - (drops)); setTimeout(spawn, Math.random()*interval);
+      }
+      for(let i=0;i<Math.max(6, Math.floor(drops/6)); i++){ setTimeout(spawn, i*120); }
+      setTimeout(()=>container.remove(), durationMs + 9500);
+    }
+    function loveOverlay(root){
+      const overlay = document.createElement('div'); overlay.className = 'love-overlay'; root.appendChild(overlay);
+      const cols = Math.min(7, Math.max(4, Math.floor(window.innerWidth/260)));
+      for(let i=0;i<cols;i++){
+        const col = document.createElement('div'); col.className = 'love-col'; col.style.left = (i*(100/cols)) + '%';
+        col.style.animationDuration = (9 + Math.random()*4) + 's'; col.style.opacity = (0.20 + Math.random()*0.12).toFixed(2);
+        const block = []; const repeats = 18;
+        for(let r=0;r<repeats;r++){ block.push('Love you picco! Love you picco!'); }
+        col.textContent = block.join('  •  '); overlay.appendChild(col);
+      }
+      setTimeout(()=>overlay.remove(), 9000);
     }
 
-    // As a last resort, allow touch on the overlay to trigger play (mobile)
-    overlay.addEventListener('touchstart', ()=>{
-      tryPlay('touchstart');
-    }, { once:true });
+    // Soft chime
+    function playChime(volume=0.08){
+      try{
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx(); const now = ctx.currentTime;
+        function tone(freq, start, dur, gain=volume){
+          const osc = ctx.createOscillator(); const g = ctx.createGain();
+          osc.frequency.value = freq; osc.type = 'sine'; osc.connect(g); g.connect(ctx.destination);
+          g.gain.setValueAtTime(0, start); g.gain.linearRampToValueAtTime(gain, start+0.02); g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+          osc.start(start); osc.stop(start + dur + 0.02);
+        }
+        const base = now + 0.02; tone(523.25, base, 0.4); tone(659.25, base+0.08, 0.4); tone(783.99, base+0.16, 0.5);
+        setTimeout(()=>ctx.close(), 1200);
+      }catch(e){}
+    }
 
-    // Add a temporary control for debugging (remove later)
-    // video.setAttribute('controls',''); // <- uncomment to see controls if you need to test quickly
-  })();
-</script>
+    /* ==================== Page Open Flow ==================== */
+    document.addEventListener('DOMContentLoaded', () => {
+      // Gift button shows a bit later
+      setTimeout(()=> document.getElementById('giftBtn').style.display = 'flex', 2200);
+
+      // Small card glow
+      document.getElementById('mainCard').classList.add('glow');
+      setTimeout(()=> document.getElementById('mainCard').classList.remove('glow'), 1600);
+
+      // Curtains + countdown
+      startCurtains();
+
+      // Cute opener (Lottie by default / Video if configured)
+      initCuteOpener();
+    });
+
+    function startCurtains(){
+      const beats = ['3','2','1','💖']; let i=0;
+      function tick(){
+        countdown.textContent = beats[i++]; countdown.style.animation = 'none'; void countdown.offsetWidth;
+        countdown.style.animation = 'popIn 900ms ease forwards';
+        if(i < beats.length) setTimeout(tick, 650);
+      }
+      tick();
+      // Remove curtains after animation completes
+      setTimeout(()=> introLayer.remove(), 2600);
+    }
+
+    /* =============== Lottie / Video Opener ================== */
+    function initCuteOpener(){
+      const hide = ()=>{
+        openerLayer.style.opacity = '0';
+        openerLayer.style.visibility = 'hidden';
+        setTimeout(()=> openerLayer.remove(), 700);
+      };
+      skipBtn.addEventListener('click', hide);
+
+      if(CONFIG.useLottieOpener){
+        // Lottie animation opener (no asset needed from you)
+        try{
+          lottieBox.style.display = 'block';
+          videoEl.style.display = 'none';
+          lottie.loadAnimation({
+            container: lottieBox,
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: CONFIG.lottieUrl
+          });
+        }catch(e){}
+        setTimeout(hide, CONFIG.videoAutoHideMs);
+      }else{
+        // Video opener using a URL
+        lottieBox.style.display = 'none';
+        videoEl.style.display = 'block';
+        videoEl.src = CONFIG.videoUrl || "";
+        // ensure autoplay-friendly flags
+        videoEl.muted = true;
+        videoEl.setAttribute('muted','');
+        videoEl.setAttribute('playsinline','');
+        videoEl.setAttribute('webkit-playsinline','');
+        videoEl.setAttribute('autoplay','');
+        try { videoEl.load(); } catch(e){}
+
+        let autoTimer = null;
+        function startAutoHide(){ if(!autoTimer) autoTimer = setTimeout(hide, CONFIG.videoAutoHideMs); }
+        function tryPlay(label){
+          const p = videoEl.play?.();
+          if(p && typeof p.then === 'function'){
+            p.then(()=>{ playBtn.style.display='none'; startAutoHide(); })
+             .catch(()=>{ playBtn.style.display='inline-flex'; });
+          }else{ startAutoHide(); }
+        }
+        tryPlay('initial');
+        videoEl.addEventListener('loadeddata', ()=> tryPlay('loadeddata'), { once:true });
+        document.addEventListener('visibilitychange', ()=>{ if(document.visibilityState === 'visible'){ tryPlay('visible'); } });
+        openerLayer.addEventListener('touchstart', ()=> tryPlay('touchstart'), { once:true });
+        playBtn.addEventListener('click', ()=> tryPlay('user-play'));
+      }
+    }
+
+    /* =============== Replay Finale Button =================== */
+    giftBtn.addEventListener('click', ()=>{ grandFinaleFestival(); playChime(); });
+
+    /* =================== Keyboard Easter Eggs (optional) ==== */
+    window.addEventListener('keydown', (e)=>{
+      if(e.key.toLowerCase() === 'l'){ miniBurst(window.innerWidth/2, window.innerHeight/2); }
+    });
+  </script>
+
+</body>
+</html>
