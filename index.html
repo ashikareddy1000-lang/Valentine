@@ -12,9 +12,7 @@
       --primary-dark:#e23f6a;
       --text:#5a2a3b;
       --white:#fff;
-      --soft:#ffe1ea;
       --ok:#14b8a6;
-      --warn:#f59e0b;
     }
 
     html,body{
@@ -58,10 +56,7 @@
       margin-bottom: 22px;
     }
 
-    .buttons{
-      display:flex; justify-content:center;
-      gap:16px; flex-wrap:wrap;
-    }
+    .buttons{ display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
 
     .btn{
       padding:14px 22px;
@@ -70,19 +65,14 @@
       cursor:pointer; transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
     }
     .btn:active { transform: translateY(1px); }
-
     #yes{ background:var(--primary); color:#fff; box-shadow:0 6px 14px rgba(226,63,106,.28); }
     #no{ background:#ffe1ea; color:#b02a4a; }
 
     /* Floating hearts (background ambient) */
     .heart{
-      position:fixed;
-      bottom:-30px;
-      font-size: 18px;
-      opacity:0;
+      position:fixed; bottom:-30px; font-size: 18px; opacity:0;
       animation: floatUp 6.5s linear forwards;
-      pointer-events:none;
-      will-change: transform, opacity;
+      pointer-events:none; will-change: transform, opacity;
     }
     @keyframes floatUp{
       0%{opacity:0; transform:translateY(0);}
@@ -92,71 +82,34 @@
 
     /* Overlay & modal */
     .overlay{
-      position:fixed; inset:0;
-      background:rgba(255, 224, 234, 0.85);
+      position:fixed; inset:0; background:rgba(255, 224, 234, 0.85);
       display:flex; align-items:center; justify-content:center;
-      visibility:hidden; opacity:0;
-      transition:0.3s;
-      padding:20px;
+      visibility:hidden; opacity:0; transition:0.3s; padding:20px;
     }
     .overlay.show{ visibility:visible; opacity:1; }
 
     .modal{
-      background:#fff;
-      width:min(720px, 94vw);
-      padding:24px;
-      border-radius:20px;
-      box-shadow:0 10px 28px rgba(0,0,0,.08);
+      background:#fff; width:min(720px, 94vw); padding:24px;
+      border-radius:20px; box-shadow:0 10px 28px rgba(0,0,0,.08);
     }
 
-    .modal h2{
-      margin: 0 0 6px 0;
-    }
-    .lead{
-      margin:0 0 14px 0; opacity:.85;
-    }
+    .modal h2{ margin: 0 0 6px 0; }
+    .lead{ margin:0 0 14px 0; opacity:.85; }
 
-    .progress-wrap{
-      background:#ffeaf1;
-      border-radius:12px;
-      height:10px;
-      overflow:hidden;
-      margin:14px 0 20px 0;
-    }
-    .progress-bar{
-      height:100%;
-      background:linear-gradient(90deg, var(--primary), #ff7aa1);
-      width:0%;
-      transition:width .25s ease;
-    }
+    .progress-wrap{ background:#ffeaf1; border-radius:12px; height:10px; overflow:hidden; margin:14px 0 20px 0; }
+    .progress-bar{ height:100%; background:linear-gradient(90deg, var(--primary), #ff7aa1); width:0%; transition:width .25s ease; }
 
-    .q{
-      padding:14px 0 8px 0;
-      font-weight:600;
-      color:#9a3553;
-    }
+    .q{ padding:14px 0 8px 0; font-weight:600; color:#9a3553; }
 
-    .options{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:10px;
-      margin: 4px 0 8px 0;
-    }
+    .options{ display:grid; grid-template-columns: 1fr; gap:10px; margin: 4px 0 8px 0; }
     .opt{
-      display:flex; align-items:flex-start; gap:10px;
-      padding:12px;
-      border-radius:12px;
-      background:#fff7fa;
-      border:1px solid #ffd3e0;
-      cursor:pointer;
+      display:flex; align-items:flex-start; gap:10px; padding:12px; border-radius:12px;
+      background:#fff7fa; border:1px solid #ffd3e0; cursor:pointer;
     }
     .opt input{ margin-top:3px; }
-    .nav{
-      display:flex; justify-content:space-between; gap:12px; margin-top:18px; flex-wrap:wrap;
-    }
-    .link-quiet{
-      background:transparent; border:none; color:#b02a4a; cursor:pointer; padding:10px 12px;
-    }
+
+    .nav{ display:flex; justify-content:space-between; gap:12px; margin-top:18px; flex-wrap:wrap; }
+    .link-quiet{ background:transparent; border:none; color:#b02a4a; cursor:pointer; padding:10px 12px; }
     .btn-next{ background:var(--primary); color:#fff; }
     .btn-back{ background:#ffe1ea; color:#b02a4a; }
     .btn-finish{ background:var(--ok); color:#fff; }
@@ -168,50 +121,27 @@
     }
 
     /* Small confetti hearts burst (existing) */
-    .burst{
-      position:fixed; inset:0; pointer-events:none;
-    }
-    .burst .p{
-      position:absolute; font-size:20px; opacity:0; animation:pop 1000ms ease forwards;
-    }
+    .burst{ position:fixed; inset:0; pointer-events:none; }
+    .burst .p{ position:absolute; font-size:20px; opacity:0; animation:pop 1000ms ease forwards; }
     @keyframes pop{
       0% { transform: translate(0,0) scale(.6); opacity:0; }
       20% { opacity:1; }
       100% { transform: translate(var(--dx), var(--dy)) scale(1.4); opacity:0; }
     }
 
-    @media (min-width: 560px){
-      .options{ grid-template-columns: 1fr 1fr; }
-    }
+    @media (min-width: 560px){ .options{ grid-template-columns: 1fr 1fr; } }
 
     /* === GRAND FINALE STYLES === */
+    .finale-layer{ position:fixed; inset:0; pointer-events:none; z-index:9999; }
 
-    /* Fullscreen layer for finale elements */
-    .finale-layer{
-      position:fixed; inset:0; pointer-events:none; z-index:9999;
-    }
-
-    /* LOVE YOU grid overlay */
-    .love-overlay{
-      position:absolute; inset:0; overflow:hidden;
-      display:grid; place-items:center;
-      background:transparent;
-      opacity:0; animation: loveFade 400ms ease forwards 200ms;
-    }
-    @keyframes loveFade{
-      to{ opacity:0.25; }
-    }
-
-    /* Repeating “Love you!” columns */
+    /* LOVE YOU overlay */
+    .love-overlay{ position:absolute; inset:0; overflow:hidden; display:grid; place-items:center; background:transparent; opacity:0; animation: loveFade 400ms ease forwards 200ms; }
+    @keyframes loveFade{ to{ opacity:0.25; } }
     .love-col{
-      position:absolute; top:-150%; bottom:-150%;
-      width:max(18vw, 220px);
-      color:#ff4d79; opacity:.18; font-weight:700;
-      line-height:1.6; text-align:center;
-      text-shadow: 0 1px 0 rgba(255,255,255,.7);
-      transform:rotate(-12deg);
-      filter: drop-shadow(0 2px 2px rgba(0,0,0,.05));
-      animation: loveDrift 10s linear infinite;
+      position:absolute; top:-150%; bottom:-150%; width:max(18vw, 220px);
+      color:#ff4d79; opacity:.18; font-weight:700; line-height:1.6; text-align:center;
+      text-shadow: 0 1px 0 rgba(255,255,255,.7); transform:rotate(-12deg);
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.05)); animation: loveDrift 10s linear infinite;
       will-change: transform;
     }
     @keyframes loveDrift{
@@ -220,15 +150,10 @@
     }
 
     /* Emoji Rain */
-    .love-rain{
-      position:absolute; inset:0; overflow:hidden;
-    }
+    .love-rain{ position:absolute; inset:0; overflow:hidden; }
     .drop{
-      position:absolute; top:-60px;
-      font-size: clamp(20px, 3.5vw, 34px);
-      animation: fall var(--dur, 6s) linear forwards;
-      will-change: transform, opacity;
-      opacity: .95;
+      position:absolute; top:-60px; font-size: clamp(20px, 3.5vw, 34px);
+      animation: fall var(--dur, 6s) linear forwards; will-change: transform, opacity; opacity:.95;
     }
     @keyframes fall{
       0%{ transform: translateY(-80px) translateX(0) rotate(0deg); opacity:0; }
@@ -237,33 +162,82 @@
     }
 
     /* Big center blast pieces */
-    .blast{
-      position:absolute; left:50%; top:50%;
-      transform: translate(-50%, -50%);
-    }
+    .blast{ position:absolute; left:50%; top:50%; transform: translate(-50%, -50%); }
     .piece{
       position:absolute; font-size: clamp(24px, 4.8vw, 42px);
-      animation: explode 1100ms ease-out forwards, spin 1100ms linear forwards;
-      will-change: transform, opacity;
+      animation: explode 1100ms ease-out forwards, spin 1100ms linear forwards; will-change: transform, opacity;
     }
     @keyframes explode{
       0%{ transform: translate(0,0) scale(.4); opacity:0; }
       18%{ opacity:1; }
       100%{ transform: translate(var(--dx), var(--dy)) scale(1.2); opacity:0; }
     }
-    @keyframes spin{
-      to{ transform: rotate(1turn); }
-    }
+    @keyframes spin{ to{ transform: rotate(1turn); } }
 
-    /* Subtle glow on the summary when finale fires */
+    /* Summary glow on finale */
     .summary.glow{
-      box-shadow: 0 0 0 0 rgba(255,77,121,.55);
-      animation: pulse 1200ms ease-out 2;
+      box-shadow: 0 0 0 0 rgba(255,77,121,.55); animation: pulse 1200ms ease-out 2;
     }
     @keyframes pulse{
       0%{ box-shadow:0 0 0 0 rgba(255,77,121,.55); }
       70%{ box-shadow:0 0 24px 10px rgba(255,77,121,.28); }
       100%{ box-shadow:0 0 0 0 rgba(255,77,121,0); }
+    }
+
+    /* NEW: Balloons */
+    .balloons{ position:absolute; inset:0; overflow:hidden; }
+    .balloon{
+      position:absolute; bottom:-10vh; font-size: clamp(24px, 5vw, 40px);
+      animation: rise var(--dur, 8s) ease-in forwards; filter: drop-shadow(0 6px 10px rgba(0,0,0,.08));
+    }
+    @keyframes rise{
+      0%{ transform: translate(calc(var(--x,0px)), 10vh) rotate(0deg); opacity:.9; }
+      50%{ transform: translate(calc(var(--x,0px) + var(--sway, 0px)), -20vh) rotate(3deg); }
+      100%{ transform: translate(calc(var(--x,0px) + var(--sway, 0px)), -120vh) rotate(-3deg); opacity:0; }
+    }
+
+    /* NEW: Rose garden */
+    .garden{ position:absolute; left:0; right:0; bottom:0; height:35vh; pointer-events:none; display:flex; align-items:flex-end; justify-content:center; gap:10px; }
+    .rose{
+      font-size: clamp(18px, 3.6vw, 30px); transform-origin: bottom center; transform: scaleY(0) translateY(20px);
+      animation: growUp var(--gdur, 2.4s) ease-out forwards;
+      filter: drop-shadow(0 2px 1px rgba(0,0,0,.06));
+    }
+    @keyframes growUp{
+      0%{ transform: scaleY(0) translateY(20px); opacity:.6; }
+      80%{ transform: scaleY(1.05) translateY(0); opacity:1; }
+      100%{ transform: scaleY(1) translateY(0); }
+    }
+
+    /* NEW: Typewriter banner */
+    .typewriter{
+      position:absolute; top:6%; left:50%; transform:translateX(-50%);
+      background: rgba(255,255,255,.65);
+      border:1px solid #ffd3e0; padding:10px 14px; border-radius:14px;
+      font-weight:700; color:#b02a4a; text-align:center;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 6px 20px rgba(226,63,106,.15);
+      opacity:0; animation: twIn .4s ease forwards;
+    }
+    @keyframes twIn{ to{ opacity:1; } }
+    .caret{
+      display:inline-block; width:10px; margin-left:4px; border-right:2px solid #b02a4a;
+      animation: blink 900ms step-end infinite;
+    }
+    @keyframes blink{ 50%{ border-color: transparent; } }
+
+    /* NEW: Cursor trail */
+    .trail{
+      position:fixed; font-size:18px; pointer-events:none; opacity:0;
+      transform: translate(-50%, -50%) scale(.6);
+      animation: trailFade .9s ease-out forwards;
+      will-change: transform, opacity;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,.12));
+      z-index: 10000;
+    }
+    @keyframes trailFade{
+      0%{ opacity:.95; transform: translate(-50%, -50%) scale(.6); }
+      100%{ opacity:0; transform: translate(-50%, -80%) scale(1.2); }
     }
   </style>
 </head>
@@ -355,7 +329,7 @@
   <script>
     // Floating Hearts (background ambient)
     const HEARTS = ['💖','💗','💞','💕','❤️','💓','💜','💚'];
-    const bgHeartsTimer = setInterval(() => {
+    setInterval(() => {
       const h = document.createElement('div');
       h.className = 'heart';
       h.textContent = HEARTS[Math.floor(Math.random()*HEARTS.length)];
@@ -382,10 +356,7 @@
     const answers = { role:null, date:null, promise:null };
 
     // Button Logic
-    btnNo.onclick = () => {
-      alert("No is not allowed 😌 Try again!");
-    };
-
+    btnNo.onclick = () => alert("No is not allowed 😌 Try again!");
     btnYes.onclick = () => {
       overlay.classList.add("show");
       overlay.setAttribute('aria-hidden', 'false');
@@ -395,10 +366,7 @@
     // Progress + Step logic
     function goTo(step){
       current = step;
-      steps.forEach(s => {
-        const isCurrent = Number(s.dataset.step) === step;
-        s.hidden = !isCurrent;
-      });
+      steps.forEach(s => { s.hidden = Number(s.dataset.step) !== step; });
       const pct = Math.round((step-1)/(last-1) * 100);
       progress.style.width = pct + "%";
       const backBtn = steps[step-1].querySelector("[data-prev]");
@@ -415,11 +383,8 @@
       const name = map[step];
       const val = getSelected(name);
       const note = document.getElementById(`note-${step}`);
-      if(!val){
-        if(note){ note.style.display = 'block'; }
-        return false;
-      }
-      if(note){ note.style.display = 'none'; }
+      if(!val){ if(note) note.style.display = 'block'; return false; }
+      if(note) note.style.display = 'none';
       answers[name] = val;
       return true;
     }
@@ -432,12 +397,10 @@
       });
     });
     document.querySelectorAll("[data-prev]").forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        if(current > 1) goTo(current-1);
-      });
+      btn.addEventListener('click', ()=>{ if(current > 1) goTo(current-1); });
     });
 
-    // Finish -> summary + big finale + close
+    // Finish -> summary + grand finale
     finishBtn.onclick = () => {
       if(!validate(3)) return;
 
@@ -457,13 +420,10 @@
 
       closeBtn.hidden = false;
 
-      // Existing tiny burst (kept)
-      miniBurst();
+      miniBurst();      // keep the tiny pop
+      grandFinale();    // new festival mode
+      playChime();      // gentle audio cue
 
-      // ✨ NEW: Grand Finale
-      grandFinale();
-
-      // Optional: prevent double finish
       finishBtn.disabled = true;
     };
 
@@ -478,7 +438,7 @@
       goTo(1);
     };
 
-    // Heart burst animation (existing)
+    // Tiny heart burst (existing)
     function miniBurst(){
       burst.innerHTML = '';
       const N = 24;
@@ -504,29 +464,24 @@
 
     /* ===== GRAND FINALE ===== */
     function grandFinale(){
-      // Create a top-level layer so it stays above modal content
       const layer = document.createElement('div');
       layer.className = 'finale-layer';
       document.body.appendChild(layer);
 
-      // 1) BIG CENTER BLAST
-      bigBlast(layer);
+      bigBlast(layer);                      // 💥 big heart & kiss blast
+      loveRain(layer, { durationMs: 9000, density: 30 }); // 🌧️ emoji rain
+      loveOverlay(layer);                   // 💬 "Love you!" drift
+      balloonsRise(layer, { count: 14 });   // 🎈 balloons
+      roseGarden(layer, { roses: 28 });     // 🌹 roses grow
+      typewriterBanner(layer);              // ⌨️ romantic quotes
+      cursorTrail(6000);                    // ✨ sparkly cursor for 6s
 
-      // 2) EMOJI RAIN
-      loveRain(layer, { durationMs: 8000, density: 28 });
-
-      // 3) “LOVE YOU!” OVERLAY
-      loveOverlay(layer);
-
-      // Cleanup after ~10s
-      setTimeout(()=>{
-        layer.remove();
-      }, 10000);
+      setTimeout(()=>layer.remove(), 11000);
     }
 
     function bigBlast(root){
       const emojis = ['💖','💗','💞','💕','❤️','💓','💘','💋','😘','😚','🥰'];
-      const count = 46; // more than mini burst
+      const count = 52;
       const center = document.createElement('div');
       center.className = 'blast';
       root.appendChild(center);
@@ -536,8 +491,8 @@
         piece.className = 'piece';
         piece.textContent = emojis[Math.floor(Math.random()*emojis.length)];
 
-        const angle = (Math.PI*2) * (i/count) + (Math.random()*0.25);
-        const radius = 220 + Math.random()*160;
+        const angle = (Math.PI*2) * (i/count) + (Math.random()*0.35);
+        const radius = 240 + Math.random()*180;
         const dx = Math.cos(angle)*radius;
         const dy = Math.sin(angle)*radius;
 
@@ -554,36 +509,31 @@
       container.className = 'love-rain';
       root.appendChild(container);
 
-      const drops = Math.min(density * Math.ceil(window.innerWidth/480), 120);
+      const drops = Math.min(density * Math.ceil(window.innerWidth/480), 140);
       const icons = ['💖','💗','💞','💕','❤️','💓','💘','💋','😘','😚','🥰'];
 
       const start = performance.now();
       function spawn(){
         const now = performance.now();
-        if(now - start > durationMs) return; // stop spawning
+        if(now - start > durationMs) return;
 
         const d = document.createElement('div');
         d.className = 'drop';
         d.textContent = icons[Math.floor(Math.random()*icons.length)];
-        const left = Math.random() * 100;
-        d.style.left = left + 'vw';
-        d.style.setProperty('--sx', ((Math.random()*2-1) * (40 + Math.random()*60)) + 'px'); // side drift
-        d.style.setProperty('--rot', (Math.random()*720 - 360) + 'deg'); // spin
-        d.style.setProperty('--dur', (5.5 + Math.random()*3) + 's');
+        d.style.left = (Math.random()*100) + 'vw';
+        d.style.setProperty('--sx', ((Math.random()*2-1) * (40 + Math.random()*80)) + 'px');
+        d.style.setProperty('--rot', (Math.random()*720 - 360) + 'deg');
+        d.style.setProperty('--dur', (5 + Math.random()*3.5) + 's');
         container.appendChild(d);
         setTimeout(()=>d.remove(), 9000);
 
-        // next spawn timing
-        const interval = Math.max(60, 220 - (drops)); // more drops -> faster spawns
+        const interval = Math.max(50, 200 - (drops));
         setTimeout(spawn, Math.random()*interval);
       }
 
-      // Kick off multiple streams
       for(let i=0;i<Math.max(6, Math.floor(drops/6)); i++){
         setTimeout(spawn, i*120);
       }
-
-      // Final cleanup
       setTimeout(()=>container.remove(), durationMs + 9500);
     }
 
@@ -592,29 +542,152 @@
       overlay.className = 'love-overlay';
       root.appendChild(overlay);
 
-      // Create 5–7 columns depending on viewport
       const cols = Math.min(7, Math.max(4, Math.floor(window.innerWidth/260)));
       for(let i=0;i<cols;i++){
         const col = document.createElement('div');
         col.className = 'love-col';
         col.style.left = (i*(100/cols)) + '%';
-
-        // Stagger speeds slightly
         col.style.animationDuration = (9 + Math.random()*4) + 's';
         col.style.opacity = (0.14 + Math.random()*0.12).toFixed(2);
 
-        // Fill column with repeated text
         const block = [];
         const repeats = 18;
-        for(let r=0;r<repeats;r++){
-          block.push('Love you 💖 Love you 💋 Love you 🥰');
-        }
+        for(let r=0;r<repeats;r++){ block.push('Love you 💖 Love you 💋 Love you 🥰'); }
         col.textContent = block.join('  •  ');
         overlay.appendChild(col);
       }
-
-      // Remove overlay after a bit
       setTimeout(()=>overlay.remove(), 9000);
+    }
+
+    // NEW: Balloons rise
+    function balloonsRise(root, { count=12 }={}){
+      const container = document.createElement('div');
+      container.className = 'balloons';
+      root.appendChild(container);
+
+      const icons = ['🎈','🎈','🎈','🎈','🎈','🎈']; // keep it consistent & cute
+      for(let i=0;i<count;i++){
+        const b = document.createElement('div');
+        b.className = 'balloon';
+        b.textContent = icons[Math.floor(Math.random()*icons.length)];
+        b.style.left = (5 + Math.random()*90) + 'vw';
+        b.style.setProperty('--dur', (7 + Math.random()*3) + 's');
+        b.style.setProperty('--x', ((Math.random()*2 - 1) * 20) + 'px');
+        b.style.setProperty('--sway', ((Math.random()*2 - 1) * (40 + Math.random()*30)) + 'px');
+        container.appendChild(b);
+        setTimeout(()=>b.remove(), 11000);
+      }
+      setTimeout(()=>container.remove(), 11000);
+    }
+
+    // NEW: Rose garden grows
+    function roseGarden(root, { roses=24 }={}){
+      const garden = document.createElement('div');
+      garden.className = 'garden';
+      root.appendChild(garden);
+
+      const cols = Math.min(roses, Math.floor(window.innerWidth/28));
+      for(let i=0;i<cols;i++){
+        const r = document.createElement('div');
+        r.className = 'rose';
+        r.textContent = '🌹';
+        r.style.animationDelay = (Math.random()*1.2 + (i%6)*0.05) + 's';
+        r.style.setProperty('--gdur', (2 + Math.random()*1.6) + 's');
+        garden.appendChild(r);
+      }
+      setTimeout(()=>garden.remove(), 10000);
+    }
+
+    // NEW: Typewriter love banner cycling messages
+    function typewriterBanner(root){
+      const el = document.createElement('div');
+      el.className = 'typewriter';
+      root.appendChild(el);
+
+      const caret = document.createElement('span');
+      caret.className = 'caret';
+      el.appendChild(caret);
+
+      const msgs = [
+        "You + Me = Home 🏡❤️",
+        "Every day with you is my favorite day ✨",
+        "Forever is better with you 💘",
+        "My heart chooses you, always 💞"
+      ];
+      let idx = 0;
+
+      function typeMsg(text, cb){
+        el.firstChild && el.removeChild(el.firstChild);
+        const span = document.createElement('span');
+        el.insertBefore(span, caret);
+        let i=0;
+        const t = setInterval(()=>{
+          span.textContent = text.slice(0, ++i);
+          if(i>=text.length){ clearInterval(t); setTimeout(cb, 900); }
+        }, 28);
+      }
+
+      function next(){
+        typeMsg(msgs[idx], ()=>{
+          idx = (idx+1) % msgs.length;
+          if(performance.now() - start < 9000) next();
+          else el.remove();
+        });
+      }
+      const start = performance.now();
+      next();
+    }
+
+    // NEW: Cursor trail of hearts/sparkles for a limited time
+    function cursorTrail(ms=5000){
+      const icons = ['💖','💗','✨','💘','💕','💋'];
+      let active = true;
+      function handler(e){
+        if(!active) return;
+        const t = document.createElement('div');
+        t.className = 'trail';
+        t.textContent = icons[Math.floor(Math.random()*icons.length)];
+        t.style.left = e.clientX + 'px';
+        t.style.top  = e.clientY + 'px';
+        document.body.appendChild(t);
+        setTimeout(()=>t.remove(), 900);
+      }
+      window.addEventListener('mousemove', handler);
+      setTimeout(()=>{ active=false; window.removeEventListener('mousemove', handler); }, ms);
+    }
+
+    // Gentle chime using WebAudio (plays on click)
+    function playChime(){
+      try{
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+
+        function tone(freq, start, dur, gain=0.08){
+          const osc = ctx.createOscillator();
+          const g = ctx.createGain();
+          osc.frequency.value = freq;
+          osc.type = 'sine';
+          osc.connect(g);
+          g.connect(ctx.destination);
+          g.gain.setValueAtTime(0, start);
+          g.gain.linearRampToValueAtTime(gain, start+0.02);
+          g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
+          osc.start(start);
+          osc.stop(start + dur + 0.02);
+        }
+
+        // A sweet little arpeggio (C major-ish)
+        const base = now + 0.02;
+        tone(523.25, base, 0.5);      // C5
+        tone(659.25, base+0.08, 0.5); // E5
+        tone(783.99, base+0.16, 0.6); // G5
+        tone(1046.50, base+0.36, 0.7, 0.06); // C6 sparkle
+
+        // Soft pad under it
+        tone(392.00, base, 1.2, 0.05); // G4
+        setTimeout(()=>ctx.close(), 1600);
+      }catch(e){ /* silently ignore if blocked */ }
     }
   </script>
 
