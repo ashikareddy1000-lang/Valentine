@@ -1,454 +1,173 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Piccolo, will you be mine forever? 💖</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Will You Be Mine Forever? 💖</title>
   <style>
-    :root {
-      --pink:#ff4d79; --rose:#ffe1ea; --text:#522836; --bg:#fff7fb;
-      --box:#ffffff; --line:#ffd2df; --accent:#e23f6a;
+    :root{
+      --bg1:#ffe7ef;
+      --bg2:#ffd1e0;
+      --primary:#ff4d79;
+      --primary-dark:#e23f6a;
+      --text:#5a2a3b;
+      --white:#fff;
     }
-    html,body{margin:0;padding:0;background:var(--bg);font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text)}
-    .wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:18px;position:relative;overflow:hidden}
-    .card{width:min(720px,92vw);background:var(--box);border-radius:16px;border:1px solid var(--line);box-shadow:0 8px 18px rgba(0,0,0,.06);padding:20px;position:relative;z-index:3}
-    h1{margin:.25rem 0 .75rem;font-size:clamp(24px,4.8vw,36px);color:var(--accent);text-align:center}
-    p.sub{text-align:center;opacity:.85;margin:.25rem 0 1rem}
-    .center{display:flex;justify-content:center;gap:10px;margin-bottom:8px}
-    .btn{border:none;border-radius:10px;padding:12px 18px;cursor:pointer;font-size:16px}
-    .btn-yes{background:var(--pink);color:#fff}
-    .btn-no{background:var(--rose);color:#a01e43}
 
-    /* Multi-step form */
-    form{display:none;margin-top:12px;border:1.5px solid var(--line);border-radius:14px;padding:14px;background:#fff}
-    fieldset{border:none;margin:0;padding:0}
-    .legend{font-weight:700;margin-bottom:8px;display:block}
-    label.option{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;cursor:pointer;background:#fff}
-    label.option:has(input:checked){outline:2px solid var(--pink); background:#fff9fb;}
-    label.option input{margin-right:10px}
-    .row{display:flex;gap:10px;align-items:center}
-    .row small{opacity:.7}
-    .actions{display:flex;gap:10px;justify-content:space-between;margin-top:14px}
-    .secondary{background:#ffe1ea;color:#a01e43;border:none;border-radius:10px;padding:10px 14px;cursor:pointer}
-    .primary{background:var(--pink);color:#fff;border:none;border-radius:10px;padding:10px 16px;cursor:pointer}
-
-    /* Steps container */
-    .step{display:none;animation:fade .25s ease}
-    .step.active{display:block}
-    @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-
-    /* Progress */
-    .progress-wrap{display:flex;align-items:center;gap:10px;margin:6px 0 12px}
-    .progress{appearance:none;height:10px;width:100%;border-radius:999px;overflow:hidden;background:#ffe9f0;border:1px solid var(--line)}
-    .progress::-webkit-progress-bar{background:#ffe9f0}
-    .progress::-webkit-progress-value{background:var(--pink);border-radius:999px}
-    .progress-value{font-size:12px;opacity:.75;min-width:48px;text-align:right}
-
-    /* Floating layers (behind the card) */
-    .bg-layer{position:fixed; inset:0; overflow:hidden; pointer-events:none;}
-    .hearts-layer{z-index:1;}
-    .dolls-layer{z-index:2;} /* dolls above hearts, below the card */
-
-    /* Heart/Doll animation (shared) */
-    .sprite{
-      position:absolute; bottom:-60px; will-change: transform, opacity; filter: drop-shadow(0 2px 2px rgba(0,0,0,.06));
-      animation: floatUp var(--dur) linear forwards, sway var(--sway-dur) ease-in-out infinite alternate;
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      color:var(--text);
+      overflow-x:hidden;
+      background: radial-gradient(1200px 1200px at 20% 10%, var(--bg1), transparent),
+                  radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
+                  linear-gradient(160deg, #fff, #ffeef4 60%, #ffe3ed);
     }
-    .sprite.emoji{font-size: clamp(22px, 3.2vw, 34px)}
-    .sprite.img{width: var(--size); height: var(--size)}
-    .sprite img{width:100%; height:100%; object-fit:contain; display:block}
 
+    .wrap{
+      min-height:100dvh;
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
+         width:min(720px, 92vw);
+      background:var(--white);
+      border-radius:24px;
+      box-shadow:0 15px 40px rgba(255, 77, 121, 0.20), 0 6px 18px rgba(0,0,0,0.08);
+      padding: clamp(22px, 4vw, 44px);
+      text-align:center;
+    }
+
+    .title{
+      font-size: clamp(28px, 4.6vw, 44px);
+      margin-bottom: 12px;
+      color:var(--primary-dark);
+    }
+
+    .subtitle{
+      font-size: clamp(14px, 2.8vw, 18px);
+      opacity:0.85;
+      margin-bottom: 22px;
+    }
+
+    .buttons{
+      display:flex; justify-content:center;
+      gap:16px; flex-wrap:wrap;
+    }
+
+    .btn{
+      padding:14px 22px;
+      font-size: clamp(15px, 2.8vw, 18px);
+      border:none; border-radius:12px;
+      cursor:pointer;
+    }
+
+    #yes{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    #no{
+      background:#ffe1ea;
+      color:#b02a4a;
+    }
+
+    /* Floating hearts */
+    .heart{
+      position:fixed;
+      bottom:-30px;
+      font-size: 18px;
+      opacity:0;
+      animation: floatUp 6.5s linear forwards;
+      pointer-events:none;
+    }
     @keyframes floatUp{
-      from{transform:translateY(0) scale(var(--scale)); opacity:0}
-      10%{opacity:0.95}
-      to{transform:translateY(-120vh) scale(var(--scale)); opacity:0}
-    }
-    @keyframes sway{
-      from{transform: translateX(-10px) translateY(0) scale(var(--scale))}
-      to{transform: translateX(10px) translateY(0) scale(var(--scale))}
+      0%{opacity:0; transform:translateY(0);}
+      10%{opacity:1;}
+      100%{opacity:0; transform:translateY(-120vh);}
     }
 
-    /* Toast for final summary */
-    .toast {
-      position: fixed; left: 50%; top: 18px; transform: translateX(-50%);
-      background: #ffffff; border: 1px solid var(--line); border-radius: 12px;
-      padding: 12px 14px; box-shadow: 0 8px 18px rgba(0,0,0,.08);
-      z-index: 99; max-width: min(92vw, 680px);
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(255, 224, 234, 0.85);
+      display:flex; align-items:center; justify-content:center;
+      visibility:hidden; opacity:0;
+      transition:0.3s;
     }
-    .toast h3 { margin: 0 0 6px; color: var(--accent); font-size: 16px; }
-    .toast pre { margin: 0; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 13px; }
-    .toast .close { background: var(--rose); color: #a01e43; border: none; border-radius: 8px; padding: 6px 10px; cursor: pointer; margin-top: 8px; }
-
-    /* Hero sticker (your illustration inside the card) */
-    .hero-wrap{ display:flex; justify-content:center; margin:6px 0 4px; }
-    .hero-sticker{
-      width:min(220px, 36vw);
-      user-select:none; pointer-events:none;
-      filter: drop-shadow(0 6px 14px rgba(0,0,0,.09));
-      animation: bob 4.8s ease-in-out infinite;
-    }
-    @keyframes bob{
-      0%{ transform: translateY(0) }
-      50%{ transform: translateY(-6px) }
-      100%{ transform: translateY(0) }
+    .overlay.show{
+      visibility:visible; opacity:1;
     }
 
-    /* Reduced motion respect */
-    @media (prefers-reduced-motion: reduce){
-      .sprite{animation:none}
-      .hero-sticker{animation:none}
+    .modal{
+      background:#fff;
+      width:min(640px, 92vw);
+      padding:24px;
+      border-radius:20px;
     }
   </style>
 </head>
+
 <body>
-  <!-- Floating background layers -->
-  <div class="bg-layer hearts-layer" aria-hidden="true"></div>
-  <div class="bg-layer dolls-layer" aria-hidden="true"></div>
 
   <div class="wrap">
-    <div class="card" role="dialog" aria-modal="true" aria-labelledby="title">
-      <!-- Hero sticker added here -->
-      <div class="hero-wrap" aria-hidden="true">
-        <img src="./Animae.png" alt="Couple illustration" class="hero-sticker" width="220" height="220>💘</div>
-      <h1 id="title">Piccolo, will you be mine forever?</h1>
-      <p class="sub">I have a strong feeling you’ll pick the right answer 😉</p>
+    <div class="card">
+      <div style="font-size:38px">💘</div>
 
-      <div class="center" id="choiceRow">
-        <button type="button" class="btn btn-yes" id="yesBtn" aria-describedby="startsQuiz">Yes 💖</button>
-        <button type="button" class="btn btn-no"  id="noBtn">No 😅</button>
+      <!-- UPDATED TITLE HERE -->
+      <h1 class="title">Will you be mine forever?</h1>
+
+      <p class="subtitle">I hope you choose the correct answer 😌</p>
+
+      <div class="buttons">
+        <button id="yes" class="btn">Yes 💖</button>
+        <button id="no" class="btn">No 😅</button>
       </div>
-      <span id="startsQuiz" class="sr-only" style="position:absolute;left:-9999px">Starts a cute 5‑question mini‑quiz</span>
+    </div>
+  </div>
 
-      <!-- Multi-step fun quiz -->
-      <form id="quizForm" aria-live="polite" aria-describedby="progressText">
-        <div class="progress-wrap">
-          <progress class="progress" id="progressBar" max="5" value="1"></progress>
-          <div class="progress-value" id="progressText">1 / 5</div>
-        </div>
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h2>Yay! Quick fun questions 😄</h2>
 
-        <!-- Step 1 -->
-        <section class="step active" data-step="1">
-          <fieldset>
-            <span class="legend">1) Our first “forever date” should be:</span>
-            <label class="option"><input type="radio" name="datePlan" value="Candlelight dinner with extra dessert 🍷🍮"> Candlelight dinner with extra dessert 🍷🍮</label>
-            <label class="option"><input type="radio" name="datePlan" value="Street food crawl (chaat war) 🌮🔥"> Street food crawl (chaat war) 🌮🔥</label>
-            <label class="option"><input type="radio" name="datePlan" value="Long drive while we sing off‑key 🚗🎶"> Long drive while we sing off‑key 🚗🎶</label>
-            <label class="option"><input type="radio" name="datePlan" value="Secret surprise planned by me 🎁"> Secret surprise planned by me 🎁</label>
-          </fieldset>
-        </section>
+      <p>Select your future role 😌:</p>
 
-        <!-- Step 2 -->
-        <section class="step" data-step="2">
-          <fieldset>
-            <span class="legend">2) Your official title in my life?</span>
-            <label class="option"><input type="radio" name="title" value="CEO of My Heart 💼❤️"> CEO of My Heart 💼❤️</label>
-            <label class="option"><input type="radio" name="title" value="Chief Cuddle Officer 🧸"> Chief Cuddle Officer 🧸</label>
-            <label class="option"><input type="radio" name="title" value="Director of Surprises 🎁"> Director of Surprises 🎁</label>
-            <label class="option"><input type="radio" name="title" value="Minister of Memes 😂"> Minister of Memes 😂</label>
-          </fieldset>
-        </section>
+      <label><input type="radio" name="role" /> CEO of My Heart ❤️</label><br>
+      <label><input type="radio" name="role" /> Chief Cuddle Officer 🧸</label><br>
+      <label><input type="radio" name="role" /> Permanent Valentine 💘</label><br>
 
-        <!-- Step 3 -->
-        <section class="step" data-step="3">
-          <fieldset>
-            <span class="legend">3) Emergency “keep Ashika happy” kit includes:</span>
-            <label class="option"><input type="radio" name="kit" value="Chocolate therapy + hugs 🍫🤗"> Chocolate therapy + hugs 🍫🤗</label>
-            <label class="option"><input type="radio" name="kit" value="Ice‑cream + bad jokes 🍦😅"> Ice‑cream + bad jokes 🍦😅</label>
-            <label class="option"><input type="radio" name="kit" value="Gulab jamun + cozy movie 🍯🎬"> Gulab jamun + cozy movie 🍯🎬</label>
-            <label class="option"><input type="radio" name="kit" value="Cute selfie + forehead kiss 📸💋"> Cute selfie + forehead kiss 📸💋</label>
-          </fieldset>
-        </section>
-
-        <!-- Step 4 -->
-        <section class="step" data-step="4">
-          <fieldset>
-            <span class="legend">4) Who wins the bill battle?</span>
-            <label class="option"><input type="radio" name="bill" value="We split like champs ⚖️"> We split like champs ⚖️</label>
-            <label class="option"><input type="radio" name="bill" value="You pay (because you’re fancy) ✨"> You pay (because you’re fancy) ✨</label>
-            <label class="option"><input type="radio" name="bill" value="I pay (I’m luckier) 🍀"> I pay (I’m luckier) 🍀</label>
-            <label class="option"><input type="radio" name="bill" value="Rock–Paper–Scissors decides ✊✋✌️"> Rock–Paper–Scissors decides ✊✋✌️</label>
-          </fieldset>
-        </section>
-
-        <!-- Step 5 -->
-        <section class="step" data-step="5">
-          <fieldset>
-            <span class="legend">5) Rate your “forever with me” excitement:</span>
-            <div class="row">
-              <small>Low‑key 😊</small>
-              <input type="range" name="excitement" id="exSlider" min="1" max="10" value="9" style="flex:1" aria-label="Excitement out of 10">
-              <small>Over the moon 🤩</small>
-            </div>
-            <div id="exLabel" style="font-size:12px;opacity:.8;margin-top:4px;">9/10 😍</div>
-          </fieldset>
-        </section>
-
-        <div class="actions">
-          <div>
-            <button type="button" class="secondary" id="backBtn" disabled>Back</button>
-          </div>
-          <div>
-            <button type="button" class="secondary" id="cancelBtn">Cancel</button>
-            <button type="button" class="primary" id="nextBtn">Next ➜</button>
-            <button type="submit" class="primary" id="finishBtn" style="display:none">Finish 🎉</button>
-          </div>
-        </div>
-      </form>
+      <br>
+      <button id="finish" class="btn" style="background:#ff4d79;color:#fff;">
+        Finish 🎉
+      </button>
     </div>
   </div>
 
   <script>
-    // ======= Elements =======
-    const yesBtn = document.getElementById('yesBtn');
-    const noBtn = document.getElementById('noBtn');
-    const form = document.getElementById('quizForm');
-    const exSlider = document.getElementById('exSlider');
-    const exLabel  = document.getElementById('exLabel');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const backBtn = document.getElementById('backBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const finishBtn = document.getElementById('finishBtn');
-    const steps = Array.from(document.querySelectorAll('.step'));
-    const progressBar = document.getElementById('progressBar');
-    const progressText = document.getElementById('progressText');
-    const heartsLayer = document.querySelector('.hearts-layer');
-    const dollsLayer = document.querySelector('.dolls-layer');
+    // Floating Hearts
+    const HEARTS = ['💖','💗','💞','💕','❤️'];
+    setInterval(() => {
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = HEARTS[Math.floor(Math.random()*HEARTS.length)];
+      h.style.left = Math.random() * 100 + "vw";
+      h.style.fontSize = (18 + Math.random()*20) + "px";
+      document.body.appendChild(h);
+      setTimeout(()=>h.remove(), 6500);
+    }, 700);
 
-    // ======= Quiz flow =======
-    let currentStep = 1;
-    const totalSteps = steps.length;
+    // Button Logic
+    document.getElementById("no").onclick = () => {
+      alert("No is not allowed 😌 Try again!");
+    };
 
-    function showForm() {
-      form.style.display = 'block';
-      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      currentStep = 1;
-      updateUI();
-      const firstInput = steps[0].querySelector('input');
-      if (firstInput) firstInput.focus({ preventScroll: true });
-    }
+    document.getElementById("yes").onclick = () => {
+      document.getElementById("overlay").classList.add("show");
+    };
 
-    function hideForm() {
-      form.style.display = 'none';
-    }
-
-    function go(stepDelta) {
-      // Validate required choice for steps 1..4 (radio selection)
-      if (stepDelta > 0 && currentStep >= 1 && currentStep <= 4) {
-        const radios = steps[currentStep-1].querySelectorAll('input[type="radio"]');
-        const oneChecked = Array.from(radios).some(r => r.checked);
-        if (radios.length && !oneChecked) {
-          alert('Pick one option before moving ahead 💕');
-          return;
-        }
-      }
-      currentStep = Math.min(Math.max(1, currentStep + stepDelta), totalSteps);
-      updateUI();
-      const firstInput = steps[currentStep-1].querySelector('input');
-      if (firstInput) firstInput.focus({ preventScroll: true });
-    }
-
-    function updateUI() {
-      steps.forEach((s, idx) => s.classList.toggle('active', idx === currentStep - 1));
-      progressBar.value = currentStep;
-      progressText.textContent = `${currentStep} / ${totalSteps}`;
-      backBtn.disabled = currentStep === 1;
-      nextBtn.style.display = currentStep === totalSteps ? 'none' : '';
-      finishBtn.style.display = currentStep === totalSteps ? '' : 'none';
-    }
-
-    function resetForm() {
-      form.reset();
-      if (exLabel && exSlider) exLabel.textContent = `${exSlider.value}/${exSlider.max} 😍`;
-      currentStep = 1;
-      updateUI();
-    }
-
-    // ======= Floating Hearts (start on load) =======
-    let heartsTimer = null;
-    const heartChars = ['💖','💘','💝','💗','💓','💞'];
-    function spawnHeart() {
-      const el = document.createElement('div');
-      el.className = 'sprite emoji';
-      el.textContent = heartChars[(Math.random()*heartChars.length)|0];
-
-      const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-      const left = Math.random() * vw;
-      const scale = (Math.random() * 0.6 + 0.7).toFixed(2); // 0.7 - 1.3
-      const dur = (Math.random() * 3 + 5).toFixed(2) + 's'; // 5s - 8s
-      const swayDur = (Math.random() * 2 + 2).toFixed(2) + 's'; // 2s - 4s
-
-      el.style.left = `${left}px`;
-      el.style.setProperty('--scale', scale);
-      el.style.setProperty('--dur', dur);
-      el.style.setProperty('--sway-dur', swayDur);
-      heartsLayer.appendChild(el);
-      el.addEventListener('animationend', () => el.remove());
-    }
-    function startHearts() {
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      if (heartsTimer) return;
-      heartsTimer = setInterval(() => {
-        const count = Math.random() < 0.35 ? 2 : 1;
-        for (let i=0;i<count;i++) spawnHeart();
-        const maxHearts = 42;
-        while (heartsLayer.children.length > maxHearts) heartsLayer.removeChild(heartsLayer.firstChild);
-      }, 520);
-    }
-    function stopHearts() {
-      if (!heartsTimer) return;
-      clearInterval(heartsTimer);
-      heartsTimer = null;
-    }
-
-    // ======= Floating Dolls (use your illustration; start on load) =======
-    let dollsTimer = null;
-
-    // Preload your image to avoid first-frame flicker
-    ['.//Animae.png','./Animae.png'].forEach(src => { const im = new Image(); im.src = src; });
-
-    // Use the illustration in different sizes for depth
-    const dollSet = [
-      { type:'img', src:'./Animae.png', size:'56px' },
-      { type:'img', src:'./Animae.png', size:'68px' },
-      { type:'img', src:'./Animae.png', size:'80px' }
-      // You can add more or mix with emoji if you like
-      // { type:'emoji', content:'🧸' }
-    ];
-
-    function spawnDoll() {
-      const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-      const left = Math.random() * vw;
-
-      const scale = (Math.random() * 0.4 + 0.9).toFixed(2); // 0.9 - 1.3
-      const dur = (Math.random() * 5 + 9).toFixed(2) + 's'; // slower: 9s - 14s
-      const swayDur = (Math.random() * 2.5 + 2.5).toFixed(2) + 's'; // 2.5s - 5s
-
-      const choice = dollSet[(Math.random()*dollSet.length)|0];
-
-      let el;
-      if (choice.type === 'img') {
-        el = document.createElement('div');
-        el.className = 'sprite img';
-        el.style.setProperty('--size', choice.size || '52px');
-        const img = document.createElement('img');
-        img.alt = '';
-        img.src = choice.src;
-        el.appendChild(img);
-      } else {
-        el = document.createElement('div');
-        el.className = 'sprite emoji';
-        el.textContent = choice.content;
-      }
-
-      el.style.left = `${left}px`;
-      el.style.setProperty('--scale', scale);
-      el.style.setProperty('--dur', dur);
-      el.style.setProperty('--sway-dur', swayDur);
-      dollsLayer.appendChild(el);
-      el.addEventListener('animationend', () => el.remove());
-    }
-
-    function startDolls() {
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      if (dollsTimer) return;
-      // Spawn a "few" dolls: gentle density
-      dollsTimer = setInterval(() => {
-        const r = Math.random();
-        const count = r < 0.15 ? 2 : (r < 0.6 ? 1 : 0);
-        for (let i=0;i<count;i++) spawnDoll();
-        const maxDolls = 16;
-        while (dollsLayer.children.length > maxDolls) dollsLayer.removeChild(dollsLayer.firstChild);
-      }, 900);
-    }
-    function stopDolls() {
-      if (!dollsTimer) return;
-      clearInterval(dollsTimer);
-      dollsTimer = null;
-    }
-
-    // Pause animations when tab hidden (battery friendly)
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) { stopHearts(); stopDolls(); }
-      else { startHearts(); startDolls(); }
-    });
-
-    // ======= Event bindings =======
-    yesBtn.addEventListener('click', function () {
-      showForm();
-      // keep animations running (they already start on load)
-    });
-
-    noBtn.addEventListener('click', function () {
-      alert('Ahem... “No” is temporarily out of service 😌 Try “Yes”?');
-    });
-
-    exSlider?.addEventListener('input', function () {
-      const v = +exSlider.value, max = +exSlider.max, r = v/max;
-      const mood = r >= .9 ? '🤯💖' : r >= .7 ? '😍' : r >= .5 ? '😊' : r >= .3 ? '🙂' : '🙈';
-      exLabel.textContent = `${v}/${max} ${mood}`;
-    });
-
-    cancelBtn.addEventListener('click', function () {
-      hideForm();
-      resetForm();
-      // keep the ambient hearts & dolls running for vibe ✨
-    });
-
-    backBtn.addEventListener('click', () => go(-1));
-    nextBtn.addEventListener('click', () => go(1));
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      const pick = (name) => {
-        const sel = form.querySelector(`input[name="${name}"]:checked`);
-        return sel ? sel.value : '—';
-      };
-      const summary =
-        `Date plan: ${pick('datePlan')}\n` +
-        `Title: ${pick('title')}\n` +
-        `Happiness kit: ${pick('kit')}\n` +
-        `Bill battle: ${pick('bill')}\n` +
-        `Excitement: ${form.excitement.value}/10\n\n` +
-        `It’s a forever-date! 💖`;
-
-      showToast('Yay! You said YES 💞', summary);
-      hideForm();
-      resetForm();
-      // leave the floating vibe on ✨
-    });
-
-    function showToast(title, text){
-      const t = document.createElement('div');
-      t.className = 'toast';
-      t.innerHTML = `<h3>${title}</h3><pre>${text}</pre>`;
-      const close = document.createElement('button');
-      close.className = 'close';
-      close.textContent = 'Close';
-      close.addEventListener('click', ()=> t.remove());
-      t.appendChild(close);
-      document.body.appendChild(t);
-      setTimeout(()=> t.remove(), 10000);
-    }
-
-    // Accessibility: allow Enter to advance if a radio was just selected
-    form.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        const activeRadios = steps[currentStep-1].querySelectorAll('input[type="radio"]');
-        if (activeRadios.length) {
-          e.preventDefault();
-          nextBtn.click();
-        }
-      }
-    });
-
-    // ======= Start hearts & dolls as soon as the page opens =======
-    window.addEventListener('DOMContentLoaded', () => {
-      startHearts();
-      startDolls();
-      // Small initial burst so you see them instantly
-      for (let i=0;i<8;i++) spawnHeart();
-      for (let i=0;i<3;i++) spawnDoll();
-    });
+    document.getElementById("finish").onclick = () => {
+      alert("Yay! It's official ❤️");
+      document.getElementById("overlay").classList.remove("show");
+    };
   </script>
+
 </body>
 </html>
