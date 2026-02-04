@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Piccolo + Lovecolor-scheme" content="light" />  <title>Piccolo + Love ✨</title>
+  <title>Piccolo + Love ✨</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
   <style>
     :root{
       --bg:#fff7fb; --box:#ffffff; --line:#ffd2df; --text:#522836;
@@ -59,11 +61,28 @@
       background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;box-shadow:0 6px 16px rgba(0,0,0,.08);
       font-weight:600;z-index:50}
 
+    /* Floating hearts (background) */
+    .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+    .heart{
+      position:absolute; color: #ff6b93; font-size: 14px; opacity: 0.9;
+      animation: floatUp linear forwards;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
+      will-change: transform, opacity;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(10vh) scale(.8); opacity:.0; }
+      10%  { opacity:.9; }
+      100% { transform: translateY(-110vh) scale(1.2); opacity:0; }
+    }
+
     /* Accessibility focus */
     .btn:focus, .close:focus, .secondary:focus, .primary:focus { outline:2px solid #ff99b3; outline-offset:2px; }
   </style>
 </head>
 <body>
+  <!-- floating hearts layer -->
+  <div class="hearts" id="hearts"></div>
+
   <div class="wrap">
     <div class="card" role="region" aria-label="Piccolo plus Love">
       <div class="hero">
@@ -71,8 +90,8 @@
         <h1>Hi Piccolo, this one’s just for you ✨</h1>
         <p class="sub">A little romantic, a little fun, and a lot of us.</p>
         <div class="buttons">
-          <button class="btn btn-primary" id="startBtn">Start Surprise 💖</button>
-          <button class="btn btn-ghost" id="openMsg">Open Your Message 💌</button>
+          <button class="btn btn-primary" id="startBtn" type="button">Start Surprise 💖</button>
+          <button class="btn btn-ghost" id="openMsg" type="button">Open Your Message 💌</button>
         </div>
       </div>
 
@@ -81,5 +100,82 @@
         <section class="panel" aria-labelledby="plan-title">
           <h3 id="plan-title">Choose our date vibe</h3>
           <div class="options" id="planOpts">
+            <div class="opt" data-plan="romantic">💐 <strong>Romantic</strong> Rooftop, fairy lights, soft music, handwritten notes.</div>
+            <div class="opt" data-plan="fun">🎯 <strong>Fun</strong> Arcade challenge, loser buys dessert, silly photo quest.</div>
+            <div class="opt" data-plan="creative">🎨 <strong>Creative</strong> Paint each other, clay mugs, build a scrapbook page.</div>
+          </div>
+          <p class="note" id="planOut" aria-live="polite"></p>
+        </section>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- Treat spinner -->
+        <section class="panel" aria-labelledby="treat-title">
+          <h3 id="treat-title">Spin for a treat</h3>
+          <div class="treat">
+            <div class="wheel" id="wheel"><div class="pointer"></div></div>
+            <div>
+              <button class="btn btn-primary" id="spinBtn" type="button">Spin 🎁</button>
+              <div class="result" id="spinResult" aria-live="polite" style="margin-top:6px;"></div>
+            </div>
+          </div>
+          <p class="note">Every spin wins something sweet—because you’re my favourite win.</p>
+        </section>
+
+        <!-- Tiny memory prompts (editable) -->
+        <section class="panel" aria-labelledby="mem-title">
+          <h3 id="mem-title">Tiny memories</h3>
+          <div class="options">
+            <label class="opt" contenteditable="true" aria-label="Memory 1">That time we laughed so hard we forgot the joke 😂</label>
+            <label class="opt" contenteditable="true" aria-label="Memory 2">Your smile when you saw me after a long day ✨</label>
+            <label class="opt" contenteditable="true" aria-label="Memory 3">Our quiet walk that felt like a movie scene 🌙</label>
+          </div>
+          <p class="note">You can click and edit these with your own moments.</p>
+        </section>
+      </div>
+
+      <p class="footer">Made with 💗 by Ashika</p>
+    </div>
+  </div>
+
+  <!-- Message Modal -->
+  <div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="msgTitle">
+    <div class="modal">
+      <button class="close" id="closeMsg" aria-label="Close">Close ✖</button>
+      <h3 id="msgTitle" style="margin:0 0 8px;color:#e23f6a;">Piccolo + Love — A little note</h3>
+      <div class="msg" id="typedMsg"></div>
+      <div class="actions">
+        <button class="secondary" id="copyBtn" type="button">Copy message</button>
+        <button class="primary" id="confettiBtn" type="button">Celebrate 🎉</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="confetti" id="confetti"></div>
+  <div class="toast" id="toast"></div>
+
+  <!-- Use defer so buttons exist before JS runs -->
+  <script defer>
+    // ===== CONFIG =====
+    const LOVER_NAME = "Piccolo";
+    const FROM_NAME  = "Ashika";
+    const SURPRISE_MESSAGE = `My dearest ${LOVER_NAME},
+
+I call this “Piccolo + Love” because it’s the simplest way to name the happiest part of my life.
+
+You make chaos feel like laughter, ordinary days feel like art, and every plan feel like an adventure. I love the way we go from silly to soft in a heartbeat—loud giggles, quiet hugs, and all the creative little mess in between.
+
+Thank you for choosing me, for showing up, and for being the warmest home I’ve ever known. I’ll always be your partner in cozy nights, arcade battles, and handmade memories.
+
+In every timeline, I pick you. Always you.
+
+With all my love,
+${FROM_NAME} 💗`;
+
+    const TREATS = [
+      "One dessert of your choice 🍰",
+      "A big squeeze-hug on demand 🫂",
+      "Your song, my dance—no judging 💃🕺",
+      "A handwritten note from me ✍️",
+      "Photo booth: 5 goofy pics 📸",
+      "You pick our next date vibe 🎟️",
+      "Movie night + snacks bundle 🎬",
+      "Breakfast made by me 🥞"
