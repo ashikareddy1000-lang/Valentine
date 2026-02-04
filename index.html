@@ -24,7 +24,8 @@
     fieldset{border:none;margin:0;padding:0}
     .legend{font-weight:700;margin-bottom:8px;display:block}
     label.option{display:block;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;cursor:pointer;background:#fff}
-    label.option:has(input:checked){outline:2px solid var(--pink); background: #fff9fb;}
+    /* :has is widely supported on modern Chrome/Safari/Edge; safe to keep */
+    label.option:has(input:checked){outline:2px solid var(--pink); background:#fff9fb;}
     label.option input{margin-right:10px}
     .row{display:flex;gap:10px;align-items:center}
     .row small{opacity:.7}
@@ -54,7 +55,7 @@
       position:absolute; bottom:-60px; will-change: transform, opacity; filter: drop-shadow(0 2px 2px rgba(0,0,0,.06));
       animation: floatUp var(--dur) linear forwards, sway var(--sway-dur) ease-in-out infinite alternate;
     }
-    .sprite.emoji{font-size: clamp(20px, 3.2vw, 30px)}
+    .sprite.emoji{font-size: clamp(22px, 3.2vw, 34px)}
     .sprite.img{width: var(--size); height: var(--size)}
     .sprite img{width:100%; height:100%; object-fit:contain; display:block}
 
@@ -79,7 +80,14 @@
     .toast pre { margin: 0; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 13px; }
     .toast .close { background: var(--rose); color: #a01e43; border: none; border-radius: 8px; padding: 6px 10px; cursor: pointer; margin-top: 8px; }
 
-    /* Reduced motion respect */
+    /* Debug pill */
+    .debug-pill {
+      position: fixed; top: 10px; right: 10px; z-index: 100;
+      background: #ffffff; border: 1px dashed var(--line); color:#a01e43;
+      font-size:12px; border-radius: 999px; padding: 6px 10px; cursor: pointer; user-select:none;
+    }
+
+    /* Respect reduced motion by default (can be overridden by force flag) */
     @media (prefers-reduced-motion: reduce){
       .sprite{animation:none}
     }
@@ -180,7 +188,12 @@
     </div>
   </div>
 
+  <!-- Debug pill (optional) -->
+  <button class="debug-pill" id="debugBtn" title="Debug hearts & dolls">Debug 💡</button>
+
   <script>
+    console.log("Build: 2026-02-04 13:05 IST");
+
     // ======= Elements =======
     const yesBtn = document.getElementById('yesBtn');
     const noBtn = document.getElementById('noBtn');
@@ -196,6 +209,7 @@
     const progressText = document.getElementById('progressText');
     const heartsLayer = document.querySelector('.hearts-layer');
     const dollsLayer = document.querySelector('.dolls-layer');
+    const debugBtn = document.getElementById('debugBtn');
 
     // ======= Quiz flow =======
     let currentStep = 1;
@@ -246,9 +260,24 @@
       updateUI();
     }
 
-    // ======= Floating Hearts (start on load) =======
+    // ======= Animations =======
     let heartsTimer = null;
+    let dollsTimer  = null;
+
+    // Force-motion override (ignores prefers-reduced-motion)
+    const params = new URLSearchParams(location.search);
+    const forceMotion = params.get('motion') === 'on' || location.hash.includes('debug');
+
     const heartChars = ['💖','💘','💝','💗','💓','💞'];
+    const dollSet = [
+      { type:'emoji', content:'🧸' },
+      { type:'emoji', content:'👧🏻' },
+      { type:'emoji', content:'👦🏽' },
+      { type:'emoji', content:'🧒🏼' },
+      { type:'emoji', content:'🧚‍♀️' }
+    ];
+    // To use images instead, replace dollSet with {type:'img', src:'url', size:'52px'}
+
     function spawnHeart() {
       const el = document.createElement('div');
       el.className = 'sprite emoji';
@@ -256,9 +285,9 @@
 
       const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
       const left = Math.random() * vw;
-      const scale = (Math.random() * 0.6 + 0.7).toFixed(2); // 0.7 - 1.3
-      const dur = (Math.random() * 3 + 5).toFixed(2) + 's'; // 5s - 8s
-      const swayDur = (Math.random() * 2 + 2).toFixed(2) + 's'; // 2s - 4s
+      const scale = (Math.random() * 0.6 + 0.7).toFixed(2);
+      const dur = (Math.random() * 3 + 5).toFixed(2) + 's';
+      const swayDur = (Math.random() * 2 + 2).toFixed(2) + 's';
 
       el.style.left = `${left}px`;
       el.style.setProperty('--scale', scale);
@@ -267,47 +296,14 @@
       heartsLayer.appendChild(el);
       el.addEventListener('animationend', () => el.remove());
     }
-    function startHearts() {
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-      if (heartsTimer) return;
-      heartsTimer = setInterval(() => {
-        const count = Math.random() < 0.35 ? 2 : 1;
-        for (let i=0;i<count;i++) spawnHeart();
-        const maxHearts = 42;
-        while (heartsLayer.children.length > maxHearts) heartsLayer.removeChild(heartsLayer.firstChild);
-      }, 520);
-    }
-    function stopHearts() {
-      if (!heartsTimer) return;
-      clearInterval(heartsTimer);
-      heartsTimer = null;
-    }
-
-    // ======= Floating Dolls (start on load) =======
-    let dollsTimer = null;
-    // Option A: Emoji dolls (works anywhere)
-    const dollSet = [
-      { type:'emoji', content:'🧸' },
-      { type:'emoji', content:'👧🏻' },
-      { type:'emoji', content:'👦🏽' },
-      { type:'emoji', content:'🧒🏼' },
-      { type:'emoji', content:'🧚‍♀️' }
-    ];
-
-    // Option B (optional): Replace with your PNG/WebP URLs (transparent bg)
-    // const dollSet = [
-    //   { type:'img', src:'./dolls/teddy.png', size:'46px' },
-    //   { type:'img', src:'./dolls/couple.png', size:'54px' },
-    //   { type:'img', src:'./dolls/girl.png', size:'48px' },
-    // ];
 
     function spawnDoll() {
       const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
       const left = Math.random() * vw;
 
-      const scale = (Math.random() * 0.4 + 0.9).toFixed(2); // 0.9 - 1.3
-      const dur = (Math.random() * 5 + 9).toFixed(2) + 's'; // slower: 9s - 14s
-      const swayDur = (Math.random() * 2.5 + 2.5).toFixed(2) + 's'; // 2.5s - 5s
+      const scale = (Math.random() * 0.4 + 0.9).toFixed(2);
+      const dur = (Math.random() * 5 + 9).toFixed(2) + 's';
+      const swayDur = (Math.random() * 2.5 + 2.5).toFixed(2) + 's';
 
       const choice = dollSet[(Math.random()*dollSet.length)|0];
 
@@ -334,12 +330,29 @@
       el.addEventListener('animationend', () => el.remove());
     }
 
-    function startDolls() {
-      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    function motionAllowed() {
+      if (forceMotion) return true;
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
+      return true;
+    }
+
+    function startHearts(initialBurst = false) {
+      if (!motionAllowed()) { console.warn('Hearts disabled by reduced-motion'); return; }
+      if (heartsTimer) return;
+      if (initialBurst) { for (let i=0;i<12;i++) spawnHeart(); }
+      heartsTimer = setInterval(() => {
+        const count = Math.random() < 0.35 ? 2 : 1;
+        for (let i=0;i<count;i++) spawnHeart();
+        const maxHearts = 42;
+        while (heartsLayer.children.length > maxHearts) heartsLayer.removeChild(heartsLayer.firstChild);
+      }, 520);
+    }
+
+    function startDolls(initialBurst = false) {
+      if (!motionAllowed()) { console.warn('Dolls disabled by reduced-motion'); return; }
       if (dollsTimer) return;
-      // Spawn a "few" dolls: gentle density
+      if (initialBurst) { for (let i=0;i<4;i++) spawnDoll(); }
       dollsTimer = setInterval(() => {
-        // 0,1 or sometimes 2 dolls
         const r = Math.random();
         const count = r < 0.15 ? 2 : (r < 0.6 ? 1 : 0);
         for (let i=0;i<count;i++) spawnDoll();
@@ -347,13 +360,11 @@
         while (dollsLayer.children.length > maxDolls) dollsLayer.removeChild(dollsLayer.firstChild);
       }, 900);
     }
-    function stopDolls() {
-      if (!dollsTimer) return;
-      clearInterval(dollsTimer);
-      dollsTimer = null;
-    }
 
-    // Pause animations when tab hidden (battery friendly)
+    function stopHearts(){ if (!heartsTimer) return; clearInterval(heartsTimer); heartsTimer=null; }
+    function stopDolls(){ if (!dollsTimer) return; clearInterval(dollsTimer); dollsTimer=null; }
+
+    // Battery-friendly: pause when hidden
     document.addEventListener('visibilitychange', () => {
       if (document.hidden) { stopHearts(); stopDolls(); }
       else { startHearts(); startDolls(); }
@@ -362,7 +373,7 @@
     // ======= Event bindings =======
     yesBtn.addEventListener('click', function () {
       showForm();
-      // keep animations running (they already start on load)
+      // animations already running
     });
 
     noBtn.addEventListener('click', function () {
@@ -378,7 +389,6 @@
     cancelBtn.addEventListener('click', function () {
       hideForm();
       resetForm();
-      // keep the ambient hearts & dolls running for vibe ✨
     });
 
     backBtn.addEventListener('click', () => go(-1));
@@ -401,7 +411,6 @@
       showToast('Yay! You said YES 💞', summary);
       hideForm();
       resetForm();
-      // leave the floating vibe on ✨
     });
 
     function showToast(title, text){
@@ -428,11 +437,31 @@
       }
     });
 
-    // ======= Start hearts & dolls as soon as the page opens =======
+    // ======= Start hearts & dolls on open (with initial burst) =======
+    // Start immediately (in case DOMContentLoaded timing is odd in some webviews)
+    startHearts(true);
+    startDolls(true);
+
+    // Also start on DOM ready (harmless if already started)
     window.addEventListener('DOMContentLoaded', () => {
       startHearts();
       startDolls();
+      console.log('Floating hearts & dolls started ✅ (DOMContentLoaded)');
     });
+
+    // Debug helper
+    debugBtn.addEventListener('click', () => {
+      console.log('DEBUG pressed');
+      // Outline layers for 3s
+      [heartsLayer, dollsLayer].forEach(el => {
+        el.style.outline = '1px dashed #f48';
+        setTimeout(()=> el.style.outline = '', 3000);
+      });
+      // Burst
+      for (let i=0;i<10;i++) spawnHeart();
+      for (let i=0;i<3;i++) spawnDoll();
+    });
+
   </script>
 </body>
 </html>
