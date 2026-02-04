@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Will You Be Mine Forever? 💖</title>
+  <title>Will You Be My Boobie Piccolo Forever? 💖</title>
   <style>
     :root{
       --bg1:#ffe7ef;
@@ -12,6 +12,9 @@
       --primary-dark:#e23f6a;
       --text:#5a2a3b;
       --white:#fff;
+      --soft:#ffe1ea;
+      --ok:#14b8a6;
+      --warn:#f59e0b;
     }
 
     html,body{
@@ -20,16 +23,22 @@
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
       color:var(--text);
       overflow-x:hidden;
-      background: radial-gradient(1200px 1200px at 20% 10%, var(--bg1), transparent),
-                  radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
-                  linear-gradient(160deg, #fff, #ffeef4 60%, #ffe3ed);
+      background:
+        radial-gradient(1200px 1200px at 20% 10%, var(--bg1), transparent),
+        radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
+        linear-gradient(160deg, #fff, #ffeef4 60%, #ffe3ed);
     }
 
     .wrap{
       min-height:100dvh;
       display:flex; align-items:center; justify-content:center;
       padding:24px;
-         width:min(720px, 92vw);
+      width:min(720px, 92vw);
+      margin-inline:auto;
+    }
+
+    .card{
+      width:100%;
       background:var(--white);
       border-radius:24px;
       box-shadow:0 15px 40px rgba(255, 77, 121, 0.20), 0 6px 18px rgba(0,0,0,0.08);
@@ -39,13 +48,13 @@
 
     .title{
       font-size: clamp(28px, 4.6vw, 44px);
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color:var(--primary-dark);
     }
 
     .subtitle{
       font-size: clamp(14px, 2.8vw, 18px);
-      opacity:0.85;
+      opacity:0.9;
       margin-bottom: 22px;
     }
 
@@ -58,18 +67,12 @@
       padding:14px 22px;
       font-size: clamp(15px, 2.8vw, 18px);
       border:none; border-radius:12px;
-      cursor:pointer;
+      cursor:pointer; transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
     }
+    .btn:active { transform: translateY(1px); }
 
-    #yes{
-      background:var(--primary);
-      color:#fff;
-    }
-
-    #no{
-      background:#ffe1ea;
-      color:#b02a4a;
-    }
+    #yes{ background:var(--primary); color:#fff; box-shadow:0 6px 14px rgba(226,63,106,.28); }
+    #no{ background:#ffe1ea; color:#b02a4a; }
 
     /* Floating hearts */
     .heart{
@@ -79,6 +82,7 @@
       opacity:0;
       animation: floatUp 6.5s linear forwards;
       pointer-events:none;
+      will-change: transform, opacity;
     }
     @keyframes floatUp{
       0%{opacity:0; transform:translateY(0);}
@@ -86,22 +90,98 @@
       100%{opacity:0; transform:translateY(-120vh);}
     }
 
+    /* Overlay & modal */
     .overlay{
       position:fixed; inset:0;
       background:rgba(255, 224, 234, 0.85);
       display:flex; align-items:center; justify-content:center;
       visibility:hidden; opacity:0;
       transition:0.3s;
+      padding:20px;
     }
-    .overlay.show{
-      visibility:visible; opacity:1;
-    }
+    .overlay.show{ visibility:visible; opacity:1; }
 
     .modal{
       background:#fff;
-      width:min(640px, 92vw);
+      width:min(720px, 94vw);
       padding:24px;
       border-radius:20px;
+      box-shadow:0 10px 28px rgba(0,0,0,.08);
+    }
+
+    .modal h2{
+      margin: 0 0 6px 0;
+    }
+    .lead{
+      margin:0 0 14px 0; opacity:.85;
+    }
+
+    .progress-wrap{
+      background:#ffeaf1;
+      border-radius:12px;
+      height:10px;
+      overflow:hidden;
+      margin:14px 0 20px 0;
+    }
+    .progress-bar{
+      height:100%;
+      background:linear-gradient(90deg, var(--primary), #ff7aa1);
+      width:0%;
+      transition:width .25s ease;
+    }
+
+    .q{
+      padding:14px 0 8px 0;
+      font-weight:600;
+      color:#9a3553;
+    }
+
+    .options{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+      margin: 4px 0 8px 0;
+    }
+    .opt{
+      display:flex; align-items:flex-start; gap:10px;
+      padding:12px;
+      border-radius:12px;
+      background:#fff7fa;
+      border:1px solid #ffd3e0;
+      cursor:pointer;
+    }
+    .opt input{ margin-top:3px; }
+    .nav{
+      display:flex; justify-content:space-between; gap:12px; margin-top:18px; flex-wrap:wrap;
+    }
+    .link-quiet{
+      background:transparent; border:none; color:#b02a4a; cursor:pointer; padding:10px 12px;
+    }
+    .btn-next{ background:var(--primary); color:#fff; }
+    .btn-back{ background:#ffe1ea; color:#b02a4a; }
+    .btn-finish{ background:var(--ok); color:#fff; }
+
+    .note{ font-size:14px; color:#b02a4a; margin-top:10px; display:none; }
+    .summary{
+      background:#fff7fa; border:1px solid #ffd3e0; border-radius:12px; padding:12px; margin:12px 0 0;
+      font-size:15px;
+    }
+
+    /* Small confetti hearts burst */
+    .burst{
+      position:fixed; inset:0; pointer-events:none;
+    }
+    .burst .p{
+      position:absolute; font-size:20px; opacity:0; animation:pop 1000ms ease forwards;
+    }
+    @keyframes pop{
+      0% { transform: translate(0,0) scale(.6); opacity:0; }
+      20% { opacity:1; }
+      100% { transform: translate(var(--dx), var(--dy)) scale(1.4); opacity:0; }
+    }
+
+    @media (min-width: 560px){
+      .options{ grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -111,11 +191,8 @@
   <div class="wrap">
     <div class="card">
       <div style="font-size:38px">💘</div>
-
-      <!-- UPDATED TITLE HERE -->
-      <h1 class="title">Will you be mine forever?</h1>
-
-      <p class="subtitle">I hope you choose the correct answer 😌</p>
+      <h1 class="title">Will you be my Piccolo forever?</h1>
+      <p class="subtitle">Choose wisely… destiny (and cuddles) await 😌</p>
 
       <div class="buttons">
         <button id="yes" class="btn">Yes 💖</button>
@@ -124,27 +201,79 @@
     </div>
   </div>
 
-  <div class="overlay" id="overlay">
-    <div class="modal">
-      <h2>Yay! Quick fun questions 😄</h2>
+  <!-- Modal / Quiz -->
+  <div class="overlay" id="overlay" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="quizTitle">
+      <h2 id="quizTitle">Yay! Quick fun questions 😄</h2>
+      <p class="lead">Pick what speaks to your heart:</p>
 
-      <p>Select your future role 😌:</p>
+      <div class="progress-wrap" aria-hidden="true">
+        <div class="progress-bar" id="progress"></div>
+      </div>
 
-      <label><input type="radio" name="role" /> CEO of My Heart ❤️</label><br>
-      <label><input type="radio" name="role" /> Chief Cuddle Officer 🧸</label><br>
-      <label><input type="radio" name="role" /> Permanent Valentine 💘</label><br>
+      <!-- Step 1 -->
+      <section class="step" data-step="1">
+        <div class="q">1) Select your future role 😌</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="role" value="CEO of My Heart ❤️" /> CEO of My Heart ❤️</label>
+          <label class="opt"><input type="radio" name="role" value="Chief Cuddle Officer 🧸" /> Chief Cuddle Officer 🧸</label>
+          <label class="opt"><input type="radio" name="role" value="Permanent Valentine 💘" /> Permanent Valentine 💘</label>
+          <label class="opt"><input type="radio" name="role" value="Piccolo’s Favorite Human 🌱💚" /> Piccolo’s Favorite Human 🌱💚</label>
+        </div>
+        <div class="note" id="note-1">Please select one option to continue.</div>
+        <div class="nav">
+          <button class="btn btn-back" data-prev disabled>Back</button>
+          <button class="btn btn-next" data-next>Next →</button>
+        </div>
+      </section>
 
-      <br>
-      <button id="finish" class="btn" style="background:#ff4d79;color:#fff;">
-        Finish 🎉
-      </button>
+      <!-- Step 2 -->
+      <section class="step" data-step="2" hidden>
+        <div class="q">2) Our perfect date night is… ✨</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="date" value="Stargazing + Hot Chocolate 🌌☕" /> Stargazing + Hot Chocolate 🌌☕</label>
+          <label class="opt"><input type="radio" name="date" value="Cozy movie & blanket fort 🎬🛋️" /> Cozy movie & blanket fort 🎬🛋️</label>
+          <label class="opt"><input type="radio" name="date" value="Long drive + late-night talks 🚗💬" /> Long drive + late-night talks 🚗💬</label>
+          <label class="opt"><input type="radio" name="date" value="Training with Piccolo, then ramen 🥋🍜" /> Training with Piccolo, then ramen 🥋🍜</label>
+        </div>
+        <div class="note" id="note-2">Please select one option to continue.</div>
+        <div class="nav">
+          <button class="btn btn-back" data-prev>← Back</button>
+          <button class="btn btn-next" data-next>Next →</button>
+        </div>
+      </section>
+
+      <!-- Step 3 -->
+      <section class="step" data-step="3" hidden>
+        <div class="q">3) Pinky promise: What do you want forever? 🥹</div>
+        <div class="options">
+          <label class="opt"><input type="radio" name="promise" value="Morning texts & warm hugs 🌞🤗" /> Morning texts & warm hugs 🌞🤗</label>
+          <label class="opt"><input type="radio" name="promise" value="Adventures & inside jokes ✈️😂" /> Adventures & inside jokes ✈️😂</label>
+          <label class="opt"><input type="radio" name="promise" value="Unwavering support & patience 💪💞" /> Unwavering support & patience 💪💞</label>
+          <label class="opt"><input type="radio" name="promise" value="Training arcs together like Piccolo & Gohan 💚" /> Training arcs together like Piccolo & Gohan 💚</label>
+        </div>
+        <div class="note" id="note-3">Please select one option to finish.</div>
+        <div class="nav">
+          <button class="btn btn-back" data-prev>← Back</button>
+          <button class="btn btn-finish" id="finish">Finish 🎉</button>
+        </div>
+
+        <!-- Summary appears only after finish -->
+        <div id="summary" class="summary" hidden></div>
+        <div class="buttons" style="margin-top:12px;">
+          <button id="close" class="btn link-quiet" hidden>Close</button>
+        </div>
+      </section>
     </div>
   </div>
 
+  <!-- Hearts Burst Container -->
+  <div class="burst" id="burst" aria-hidden="true"></div>
+
   <script>
-    // Floating Hearts
-    const HEARTS = ['💖','💗','💞','💕','❤️'];
-    setInterval(() => {
+    // Floating Hearts (background ambient)
+    const HEARTS = ['💖','💗','💞','💕','❤️','💓','💜','💚'];
+    const bgHeartsTimer = setInterval(() => {
       const h = document.createElement('div');
       h.className = 'heart';
       h.textContent = HEARTS[Math.floor(Math.random()*HEARTS.length)];
@@ -154,19 +283,139 @@
       setTimeout(()=>h.remove(), 6500);
     }, 700);
 
+    // UI Elements
+    const btnNo = document.getElementById("no");
+    const btnYes = document.getElementById("yes");
+    const overlay = document.getElementById("overlay");
+    const progress = document.getElementById("progress");
+    const steps = Array.from(document.querySelectorAll(".step"));
+    const finishBtn = document.getElementById("finish");
+    const summaryBox = document.getElementById("summary");
+    const closeBtn = document.getElementById("close");
+    const burst = document.getElementById("burst");
+
+    // State
+    let current = 1;
+    const last = steps.length;
+    const answers = { role:null, date:null, promise:null };
+
     // Button Logic
-    document.getElementById("no").onclick = () => {
+    btnNo.onclick = () => {
       alert("No is not allowed 😌 Try again!");
     };
 
-    document.getElementById("yes").onclick = () => {
-      document.getElementById("overlay").classList.add("show");
+    btnYes.onclick = () => {
+      overlay.classList.add("show");
+      overlay.setAttribute('aria-hidden', 'false');
+      goTo(1);
     };
 
-    document.getElementById("finish").onclick = () => {
-      alert("Yay! It's official ❤️");
-      document.getElementById("overlay").classList.remove("show");
+    // Progress + Step logic
+    function goTo(step){
+      current = step;
+      steps.forEach(s => {
+        const isCurrent = Number(s.dataset.step) === step;
+        s.hidden = !isCurrent;
+      });
+      const pct = Math.round((step-1)/(last-1) * 100);
+      progress.style.width = pct + "%";
+      // Manage back button disabled on first
+      const backBtn = steps[step-1].querySelector("[data-prev]");
+      if(backBtn) backBtn.disabled = (step === 1);
+    }
+
+    function getSelected(name){
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : null;
+    }
+
+    function validate(step){
+      const map = {1:'role', 2:'date', 3:'promise'};
+      const name = map[step];
+      const val = getSelected(name);
+      const note = document.getElementById(`note-${step}`);
+      if(!val){
+        if(note){ note.style.display = 'block'; }
+        return false;
+      }
+      if(note){ note.style.display = 'none'; }
+      answers[name] = val;
+      return true;
+    }
+
+    // Attach next/back listeners
+    document.querySelectorAll("[data-next]").forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(!validate(current)) return;
+        if(current < last) goTo(current+1);
+      });
+    });
+    document.querySelectorAll("[data-prev]").forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        if(current > 1) goTo(current-1);
+      });
+    });
+
+    // Finish -> summary + burst + close
+    finishBtn.onclick = () => {
+      if(!validate(3)) return;
+
+      const lines = [
+        `Role chosen: <b>${answers.role}</b>`,
+        `Perfect date: <b>${answers.date}</b>`,
+        `Forever promise: <b>${answers.promise}</b>`
+      ];
+      summaryBox.innerHTML = `
+        <h3 style="margin:4px 0 6px 0;">It’s official ❤️</h3>
+        <p style="margin:0 0 8px 0;">You said <b>Yes</b>—and I’m keeping this forever! 🥰</p>
+        <div>${lines.map(l=>`<div>• ${l}</div>`).join('')}</div>
+      `;
+      summaryBox.hidden = false;
+      closeBtn.hidden = false;
+
+      // Pop a small heart burst
+      miniBurst();
+
+      // Optional: collapse nav
+      finishBtn.disabled = true;
     };
+
+    closeBtn.onclick = () => {
+      overlay.classList.remove("show");
+      overlay.setAttribute('aria-hidden', 'true');
+      // Reset for replay (optional)
+      document.querySelectorAll('input[type="radio"]').forEach(i=>i.checked=false);
+      summaryBox.hidden = true;
+      summaryBox.innerHTML = '';
+      finishBtn.disabled = false;
+      closeBtn.hidden = true;
+      goTo(1);
+    };
+
+    // Heart burst animation
+    function miniBurst(){
+      burst.innerHTML = '';
+      const N = 24;
+      const icons = ['💖','💗','💞','💕','❤️','💓','💘','💚'];
+      for(let i=0;i<N;i++){
+        const p = document.createElement('div');
+        p.className = 'p';
+        p.textContent = icons[Math.floor(Math.random()*icons.length)];
+        const angle = (Math.PI*2) * (i/N);
+        const radius = 160 + Math.random()*80;
+        const dx = Math.cos(angle)*radius;
+        const dy = Math.sin(angle)*radius;
+        p.style.setProperty('--dx', dx + 'px');
+        p.style.setProperty('--dy', dy + 'px');
+        // center-ish
+        const cx = window.innerWidth/2;
+        const cy = window.innerHeight/2;
+        p.style.left = (cx - 10) + 'px';
+        p.style.top  = (cy - 10) + 'px';
+        burst.appendChild(p);
+        setTimeout(()=>p.remove(), 1100);
+      }
+    }
   </script>
 
 </body>
