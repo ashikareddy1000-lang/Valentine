@@ -165,7 +165,7 @@
     /* === NEW: Page-Open Surprises Styles === */
 
     /* Curtains */
-    .intro-layer{ position:fixed; inset:0; z-index:10000; pointer-events:none; display:block; }
+    .intro-layer{ position:fixed; inset:0; z-index:10010; pointer-events:none; display:block; }
     .curtain{ position:absolute; top:0; bottom:0; width:52%; background: linear-gradient(120deg,#ffccde,#ffb4cd 40%,#ffa3c2); box-shadow: inset 0 0 40px rgba(255,255,255,.4); }
     .curtain.left{ left:0; animation: curtainLeft 1400ms ease forwards 1000ms; }
     .curtain.right{ right:0; animation: curtainRight 1400ms ease forwards 1000ms; }
@@ -207,7 +207,7 @@
     .sunrise{ position:fixed; inset:0; background: radial-gradient(60% 30% at 50% 100%, rgba(255,200,160,.65), rgba(255, 105, 150, .35), transparent 70%); opacity:0; animation: sunriseUp 2200ms ease-out forwards; z-index:9997; pointer-events:none; }
     @keyframes sunriseUp{ 0%{ transform: translateY(20%); opacity:0; } 30%{ opacity:.8; } 100%{ transform: translateY(0); opacity:0; } }
 
-    /* Ribbon unwrap */
+    /* Ribbon unwrap (optional quick pass) */
     .ribbon-layer{ position:fixed; inset:0; z-index:10002; pointer-events:none; display:grid; place-items:center; }
     .ribbon{
       position:relative; background: linear-gradient(90deg,#ff6a95,#ff4d79);
@@ -296,17 +296,29 @@
     @keyframes handIn{ to{ opacity:1; transform: translateX(-50%) scale(1); } }
     @keyframes handOut{ to{ opacity:0; transform: translateX(-50%) translateY(-10px) scale(.95); } }
 
-    /* NEW: Emoji storyboard overlay (cute PG opener) */
-    .intro-overlay{
+    /* === NEW: Cute Video Opener (PG) === */
+    .cute-video-overlay{
       position:fixed; inset:0; display:grid; place-items:center;
-      background: rgba(255,224,234,.85);
-      backdrop-filter: blur(4px);
-      z-index:10011; pointer-events:none;
-      animation: introFade 900ms ease forwards 2600ms; /* fades out after ~2.6s */
+      background: rgba(255,224,234,.85); backdrop-filter: blur(4px);
+      z-index:10005;  /* Below curtains (10010) so it's revealed as curtains open */
+      opacity:1; transition: opacity .6s ease, visibility .6s ease;
     }
-    @keyframes introFade{
-      to{ opacity:0; visibility:hidden; }
+    .cute-video-box{
+      position:relative; border-radius:20px; overflow:hidden;
+      box-shadow:0 18px 60px rgba(226,63,106,.25), 0 10px 24px rgba(0,0,0,.08);
+      background:#fff;
     }
+    .cute-video{
+      width:min(84vw, 520px); max-height:70vh; display:block; background:#000; object-fit:cover; border-radius:20px;
+    }
+    .cute-video-ctrl{
+      position:absolute; inset:auto 8px 8px auto; display:flex; gap:8px;
+    }
+    .skip-btn, .play-btn{
+      pointer-events:auto; cursor:pointer; border:none; border-radius:999px; padding:8px 12px; font-weight:800;
+      color:#fff; background: linear-gradient(135deg,#ff6a95,#ff4d79); box-shadow:0 6px 16px rgba(226,63,106,.25);
+    }
+    .play-btn{ display:none; }
   </style>
 </head>
 
@@ -325,10 +337,20 @@
     </div>
   </div>
 
-  <!-- 💟 Cute emoji storyboard opener (PG) -->
-  <div id="emojiStoryboard" class="intro-overlay" aria-hidden="true">
-    <div id="emojiScene" style="font-size: clamp(48px, 12vw, 92px); filter: drop-shadow(0 6px 20px rgba(226,63,106,.25));">
-      🤗
+  <!-- 💟 Cute video opener (PG) -->
+  <div id="cuteVideoOverlay" class="cute-video-overlay" aria-hidden="false">
+    <div class="cute-video-box">
+      <video id="cuteVideo" class="cute-video"
+        autoplay muted playsinline preload="auto" loop
+        poster=""
+      >
+        <!-- ⬇️ Replace these with your wholesome clip paths -->
+        assets/dudu-bubu-cute.webm
+        <source src="assets/dudu-bubu-cute.mp4" 
+      <div class="cute-video-ctrl">
+        <button id="playBtn" class="play-btn">Play ▶️</button>
+        <button id="skipBtn" class="skip-btn">Skip ✨</button>
+      </div>
     </div>
   </div>
 
@@ -438,7 +460,8 @@
       balloonCount: 14,
       roseCount: 28,
       openPetalsMs: 8000,      // petals duration on open
-      glowTrailMs: 5000        // glowing heart path on open
+      glowTrailMs: 5000,       // glowing heart path on open
+      videoAutoHideMs: 5200    // how long the cute video overlay stays (auto)
     };
 
     /* =========================================================
@@ -469,6 +492,12 @@
     const burst = document.getElementById("burst");
     const giftBtn = document.getElementById("giftBtn");
     const mainCard = document.getElementById("mainCard");
+
+    // Video elements
+    const videoLayer = document.getElementById('cuteVideoOverlay');
+    const videoEl = document.getElementById('cuteVideo');
+    const playBtn = document.getElementById('playBtn');
+    const skipBtn = document.getElementById('skipBtn');
 
     let current = 1;
     const last = steps.length;
@@ -554,8 +583,7 @@
         p.className = 'p';
         p.textContent = icons[Math.floor(Math.random()*icons.length)];
         const angle = (Math.PI*2) * (i/N);
-        aconst_radius = 160 + Math.random()*80; // variable renamed to avoid accidental global
-        const radius = aconst_radius;
+        const radius = 160 + Math.random()*80;
         const dx = Math.cos(angle)*radius;
         const dy = Math.sin(angle)*radius;
         p.style.setProperty('--dx', dx + 'px');
@@ -752,7 +780,7 @@
       setTimeout(()=>{ active=false; window.removeEventListener('mousemove', handler); }, ms);
     }
 
-    // Soft chime used on Finish (and on welcome below—may be blocked by autoplay policies)
+    // Soft chime used on Finish (and welcome; may be blocked on autoplay)
     function playChime(volume=0.08){
       try{
         const AudioCtx = window.AudioContext || window.webkitAudioContext;
@@ -779,7 +807,7 @@
     }
 
     /* =========================================================
-       NEW: Page-Open Surprises — Sequencing
+       NEW: Page-Open Sequence (curtains + video + extras)
        ========================================================= */
     document.addEventListener('DOMContentLoaded', () => {
       // Gift button appears slightly later
@@ -789,34 +817,26 @@
       mainCard.classList.add('glow');
       setTimeout(()=> mainCard.classList.remove('glow'), 1600);
 
-      // Kick off main open sequence (curtains + countdown + petals)
+      // Start curtains + countdown + petals
       startWelcomeSequence();
 
-      // Extra open animations (staggered so it feels polished)
-      setTimeout(sunriseGlow, 200);                                     // sunrise
-      setTimeout(()=>glowingHeartPathOpen(CONFIG.glowTrailMs), 1200);   // cursor heart lights
-      setTimeout(()=>bigHeartPulseBehindCard(), 1200);                  // big heart pulse
-      setTimeout(()=>magicCircleUnderCard(), 1200);                     // magic circle
-      setTimeout(()=>rainbowAuraBurst(), 1400);                         // aura
-      setTimeout(()=>shootingStars(), 1300);                            // stars
-      setTimeout(()=>butterflies(8), 1600);                             // butterflies
-      setTimeout(()=>floatingLoveNotes(), 1700);                        // love notes
-      setTimeout(()=>handWave(), 1600);                                 // hand wave
-      setTimeout(()=>ribbonUnwrap(), 400);                              // gift ribbon (quick)
+      // Extra open animations (staggered)
+      setTimeout(sunriseGlow, 200);
+      setTimeout(()=>cursorTrail(CONFIG.glowTrailMs, true), 1200);
+      setTimeout(()=>bigHeartPulseBehindCard(), 1200);
+      setTimeout(()=>magicCircleUnderCard(), 1200);
+      setTimeout(()=>rainbowAuraBurst(), 1400);
+      setTimeout(()=>shootingStars(), 1300);
+      setTimeout(()=>butterflies(8), 1600);
+      setTimeout(()=>floatingLoveNotes(), 1700);
 
-      // Start cute emoji storyboard (PG opener)
-      startEmojiStoryboard();
-
-      // Tiny welcome bell (may be blocked on autoplay; harmless if so)
-      setTimeout(()=>playChime(0.05), 1000);
+      // Try to autoplay cute video (PG)
+      initCuteVideoOpener();
+      // Small welcome chime (may be blocked)
+      setTimeout(()=>playChime(0.05), 1200);
     });
 
-    giftBtn.addEventListener('click', () => {
-      grandFinaleFestival();
-      playChime();
-    });
-
-    // Main welcome (curtains + countdown + petals)
+    // Curtains + Countdown + Petals
     function startWelcomeSequence(){
       const layer = document.createElement('div');
       layer.className = 'intro-layer';
@@ -842,7 +862,7 @@
       setTimeout(()=> layer.remove(), 2600);
     }
 
-    // Petal shower generator (re-usable)
+    // Petal shower generator
     function petalShower({ durationMs = 8000 }={}){
       const petals = ['🌸','💮','🌺','🌷','🌹'];
       const start = performance.now();
@@ -862,22 +882,11 @@
       for(let i=0;i<6;i++) setTimeout(spawn, i*120);
     }
 
-    /* === Individual new effects === */
+    /* === Individual open effects === */
     function sunriseGlow(){
       const s = document.createElement('div'); s.className='sunrise';
       document.body.appendChild(s);
       setTimeout(()=>s.remove(), 2300);
-    }
-
-    function glowingHeartPathOpen(ms=5000){
-      cursorTrail(ms, true);
-    }
-
-    function ribbonUnwrap(){
-      const layer = document.createElement('div'); layer.className='ribbon-layer';
-      const rb = document.createElement('div'); rb.className='ribbon';
-      layer.appendChild(rb); document.body.appendChild(layer);
-      setTimeout(()=>layer.remove(), 1600);
     }
 
     function bigHeartPulseBehindCard(){
@@ -944,31 +953,43 @@
       }
     }
 
-    function handWave(){
-      const h = document.createElement('div'); h.className='hand-wave'; h.textContent='👋🫶';
-      document.body.appendChild(h);
-      setTimeout(()=>h.remove(), 2400);
+    /* === Cute video opener logic === */
+    function initCuteVideoOpener(){
+      if(!videoLayer || !videoEl) return;
+
+      // Autoplay attempt
+      const playPromise = videoEl.play?.();
+      if(playPromise && typeof playPromise.then === 'function'){
+        playPromise.then(()=> {
+          // autoplay worked
+        }).catch(()=>{
+          // Show play button if blocked
+          playBtn.style.display = 'inline-flex';
+        });
+      }
+
+      // Auto hide after duration
+      const autoTimer = setTimeout(hideCuteVideo, CONFIG.videoAutoHideMs);
+
+      // Controls
+      playBtn.addEventListener('click', ()=>{
+        videoEl.muted = true; // keep muted for autoplay policies
+        videoEl.play();
+        playBtn.style.display = 'none';
+      });
+      skipBtn.addEventListener('click', ()=> {
+        clearTimeout(autoTimer);
+        hideCuteVideo();
+      });
     }
 
-    /* === Cute emoji storyboard logic === */
-    function startEmojiStoryboard(){
-      const el = document.getElementById('emojiScene');
-      if(!el) return;
-      const seq = ['🤗','😘','🥰','💞'];
-      let i = 0;
-      const t = setInterval(()=>{
-        i = (i+1) % seq.length;
-        el.textContent = seq[i];
-        el.style.transition = 'transform 140ms ease';
-        el.style.transform = 'scale(1.08)';
-        setTimeout(()=> el.style.transform='scale(1)', 140);
-      }, 520);
-      // Cleanup after overlay fades (about 2.6s + fade)
-      setTimeout(()=>{
-        clearInterval(t);
-        const overlay = document.getElementById('emojiStoryboard');
-        overlay && setTimeout(()=> overlay.remove(), 1200);
-      }, 2600);
+    function hideCuteVideo(){
+      if(!videoLayer) return;
+      videoLayer.style.opacity = '0';
+      videoLayer.style.visibility = 'hidden';
+      // Stop & cleanup
+      try{ videoEl.pause(); }catch(e){}
+      setTimeout(()=> videoLayer.remove(), 900);
     }
 
     /* === Easter egg keys === */
