@@ -87,7 +87,7 @@
       font-size:15px;
     }
 
-    /* Tiny confetti hearts burst (existing) */
+    /* Small confetti hearts burst */
     .burst{ position:fixed; inset:0; pointer-events:none; }
     .burst .p{ position:absolute; font-size:20px; opacity:0; animation:pop 1000ms ease forwards; }
     @keyframes pop{ 0% { transform: translate(0,0) scale(.6); opacity:0; } 20% { opacity:1; } 100% { transform: translate(var(--dx), var(--dy)) scale(1.4); opacity:0; } }
@@ -161,8 +161,6 @@
     }
     .trail.heart { text-shadow: 0 0 10px rgba(255,77,121,.5), 0 0 18px rgba(255,77,121,.3); }
     @keyframes trailFade{ 0%{ opacity:.95; transform: translate(-50%, -50%) scale(.6); } 100%{ opacity:0; transform: translate(-50%, -80%) scale(1.2); } }
-
-    /* Photo frame styles REMOVED per your request */
 
     /* === NEW: Page-Open Surprises Styles === */
 
@@ -297,6 +295,29 @@
     }
     @keyframes handIn{ to{ opacity:1; transform: translateX(-50%) scale(1); } }
     @keyframes handOut{ to{ opacity:0; transform: translateX(-50%) translateY(-10px) scale(.95); } }
+
+    /* === NEW: Photo frame (opening) === */
+    .photo-wrap{
+      position:fixed; left:50%; top:50%; transform:translate(-50%,-50%) scale(.6) rotate(-2deg);
+      background:#fff; border:8px solid #fff; border-radius:18px; overflow:hidden;
+      box-shadow: 0 18px 60px rgba(226,63,106,.25), 0 10px 24px rgba(0,0,0,.08);
+      opacity:0; animation: photoIn .8s cubic-bezier(.18,.89,.32,1.28) forwards;
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      pointer-events:none; max-width:min(86vw, 440px); z-index:10005;
+    }
+    .photo{ width:100%; aspect-ratio: 4/5; object-fit: cover; background:#ffe6ef; }
+    .caption{
+      width:100%; text-align:center; padding:8px 10px; font-weight:800; color:#b02a4a;
+      background:linear-gradient(180deg, #fff, #fff6f9); border-top:1px solid #ffe3ed;
+    }
+    @keyframes photoIn{ to{ opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0deg); } }
+
+    .sparkle{ position:fixed; font-size:18px; opacity:0; animation: sparklePop 1200ms ease-out forwards; z-index:10006; pointer-events:none; }
+    @keyframes sparklePop{
+      0%{ transform: scale(.2) translateY(0); opacity:0; }
+      30%{ opacity:1; }
+      100%{ transform: scale(1.2) translateY(-14px); opacity:0; }
+    }
   </style>
 </head>
 
@@ -785,6 +806,9 @@
       setTimeout(()=>floatingLoveNotes(), 1700);                        // love notes
       setTimeout(()=>handWave(), 1600);                                 // hand wave
       setTimeout(()=>ribbonUnwrap(), 400);                              // gift ribbon (quick)
+
+      // 💟 Show photo frame (uses your uploaded image)
+      setTimeout(photoRevealOpen, 600);
       // Tiny welcome bell (may be blocked on autoplay; harmless if so)
       setTimeout(()=>playChime(0.05), 1000);
     });
@@ -927,6 +951,52 @@
       const h = document.createElement('div'); h.className='hand-wave'; h.textContent='👋🫶';
       document.body.appendChild(h);
       setTimeout(()=>h.remove(), 2400);
+    }
+
+    /* === NEW: Opening Photo Frame === */
+    function photoRevealOpen(){
+      const frame = document.createElement('div');
+      frame.className = 'photo-wrap';
+
+      const img = document.createElement('img');
+      img.className = 'photo';
+      // 👉 If your image is in another folder, change the path below.
+      img.src = 'IMG-20260204-WA0001.jpg';
+      img.alt = `${CONFIG.names.left} & ${CONFIG.names.right}`;
+
+      const cap = document.createElement('div');
+      cap.className = 'caption';
+      cap.textContent = `${CONFIG.names.left}  ♥  ${CONFIG.names.right}`;
+
+      frame.appendChild(img);
+      frame.appendChild(cap);
+      document.body.appendChild(frame);
+
+      // Sparkles around the frame
+      const icons = ['✨','💖','💫','🫶'];
+      const spots = [
+        {x:-120,y:-140},{x:120,y:-140},{x:-130,y:140},{x:120,y:140},
+        {x:0,y:-170},{x:0,y:170}
+      ];
+      spots.forEach((c,i)=>{
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.textContent = icons[i%icons.length];
+        s.style.left = '50%';
+        s.style.top = '50%';
+        s.style.transform = `translate(calc(-50% + ${c.x}px), calc(-50% + ${c.y}px))`;
+        s.style.animationDelay = (0.15 * i) + 's';
+        document.body.appendChild(s);
+        setTimeout(()=>s.remove(), 1300 + i*40);
+      });
+
+      // Keep it visible for a bit, then fade out
+      setTimeout(()=>{
+        frame.style.transition = 'opacity .7s ease, transform .7s ease';
+        frame.style.opacity = '0';
+        frame.style.transform = 'translate(-50%,-50%) scale(.96)';
+        setTimeout(()=>frame.remove(), 800);
+      }, 9000); // ⏱️ visible time (ms) — adjust as you like
     }
 
     /* === Easter egg keys === */
