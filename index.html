@@ -2,41 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Test — Buttons & Hearts</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body{font-family:system-ui;display:grid;place-items:center;height:100vh;margin:0;background:#fff7fb}
-    button{padding:12px 16px;border:0;border-radius:10px;background:#ff4d79;color:#fff;font-weight:700;cursor:pointer}
-    .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
-    .heart{position:absolute;font-size:18px;color:#ff6b93;animation:float 5s linear forwards;filter: drop-shadow(0 2px 4px rgba(0,0,0,.15))}
-    @keyframes float{0%{transform:translateY(10vh);opacity:0}10%{opacity:1}100%{transform:translateY(-110vh);opacity:0}}
-  </style>
+  <title>Test Page</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 </head>
-<body>
-  <div class="hearts" id="hearts"></div>
-  <button id="btn" type="button">Click me — should alert + hearts</button>
-
-  <script defer>
-    const btn = document.getElementById('btn');
-    const hearts = document.getElementById('hearts');
-
-    function spawnHeart(){
-      const h = document.createElement('div');
-      h.className = 'heart';
-      h.textContent = ['💗','💖','💞','💘'][Math.floor(Math.random()*4)];
-      h.style.left = (Math.random()*100) + 'vw';
-      h.style.bottom = '-10vh';
-      h.style.animationDuration = (4 + Math.random()*3) + 's';
-      hearts.appendChild(h);
-      setTimeout(()=>h.remove(), 7000);
-    }
-    // gentle continuous hearts
-    setInterval(spawnHeart, 800);
-
-    btn.addEventListener('click', ()=>{
-      alert('JS works ✅');
-      for(let i=0;i<20;i++) setTimeout(spawnHeart, i*40);
-    });
-  </script>
+<body style="font-family: Arial; background:#fff0f6; color:#b0003a; padding:2rem;">
+  <h1>It works! 💖</h1>
+  <p>If you can see this, GitHub Pages is configured correctly.</p>
+  <p>Next: paste back the Valentine page code.</p>
 </body>
-</html>
+</html>This is working but I need to change from Tharkesh will you be my valentine to - Will you be mine forever
