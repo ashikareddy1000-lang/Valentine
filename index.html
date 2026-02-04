@@ -1,181 +1,42 @@
 <!doctype html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8" />
-  <title>Piccolo + Love ✨</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light" />
+  <meta charset="utf-8">
+  <title>Test — Buttons & Hearts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    :root{
-      --bg:#fff7fb; --box:#ffffff; --line:#ffd2df; --text:#522836;
-      --accent:#ff4d79; --accent-2:#ff86a3; --muted:#a01e43;
-    }
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
-      font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;}
-    .wrap{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:22px}
-    .card{width:min(860px,94vw);background:var(--box);border:1px solid var(--line);
-      border-radius:18px;box-shadow:0 10px 24px rgba(0,0,0,.07);padding:22px;position:relative;overflow:hidden}
-    .hero{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;margin-top:4px}
-    .badge{font-size:14px;color:var(--muted);background:#ffe9f0;border:1px solid var(--line);
-      padding:6px 10px;border-radius:999px}
-    h1{margin:6px 0 4px;font-size:clamp(26px,5.8vw,40px);color:#e23f6a;letter-spacing:.3px}
-    p.sub{margin:0 0 8px;opacity:.9}
-    .buttons{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:12px 0 8px}
-    .btn{border:none;border-radius:12px;padding:12px 16px;font-weight:600;cursor:pointer;font-size:16px}
-    .btn-primary{background:var(--accent);color:#fff}
-    .btn-ghost{background:#ffe1ea;color:var(--muted)}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:16px}
-    .panel{border:1px solid var(--line);border-radius:14px;padding:14px;background:#fff}
-    .panel h3{margin:0 0 6px;font-size:18px;color:#e23f6a}
-    .options{display:grid;gap:8px}
-    .opt{border:1px solid var(--line);border-radius:12px;padding:10px;cursor:pointer;background:#fff}
-    .opt:hover{border-color:#ffb3c6}
-    .opt strong{display:block;margin-bottom:4px}
-    .treat{display:flex;align-items:center;gap:10px}
-    .treat .wheel{width:70px;height:70px;border-radius:50%;
-      background: conic-gradient(#ff4d79, #ffb3c6, #ffdbe6, #ff86a3, #ffc2d2);
-      border:3px solid #ffd2df; position:relative; animation:spin 0s ease-out forwards}
-    .pointer{position:absolute;top:-10px;left:50%;transform:translateX(-50%);
-      border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:12px solid #e23f6a}
-    @keyframes spin { to { transform: rotate(0turn); } }
-    .result{font-weight:700;color:#a01e43}
-    .note{font-size:14px;opacity:.85}
-    .footer{margin-top:16px;text-align:center;font-size:13px;opacity:.7}
-
-    /* Modal */
-    .scrim{position:fixed;inset:0;background:rgba(0,0,0,.25);display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
-    .modal{width:min(680px,94vw);background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 18px 20px;position:relative}
-    .close{position:absolute;top:8px;right:8px;border:none;background:#ffe1ea;color:#a01e43;border-radius:10px;padding:8px 10px;cursor:pointer}
-    .msg{white-space:pre-wrap;line-height:1.55;font-size:16px;min-height:160px}
-    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:12px}
-    .secondary{background:#ffe1ea;color:#a01e43;border:none;border-radius:10px;padding:10px 14px;cursor:pointer}
-    .primary{background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 16px;cursor:pointer}
-
-    /* Confetti */
-    .confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:40}
-    .piece{position:absolute;width:8px;height:12px;opacity:.9;border-radius:2px;animation:fall linear forwards}
-    @keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity:1 } }
-
-    /* Toast */
-    .toast{display:none;position:fixed;left:50%;bottom:22px;transform:translateX(-50%);
-      background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;box-shadow:0 6px 16px rgba(0,0,0,.08);
-      font-weight:600;z-index:50}
-
-    /* Floating hearts (background) */
-    .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5}
-    .heart{
-      position:absolute; color: #ff6b93; font-size: 14px; opacity: 0.9;
-      animation: floatUp linear forwards;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,.15));
-      will-change: transform, opacity;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(10vh) scale(.8); opacity:.0; }
-      10%  { opacity:.9; }
-      100% { transform: translateY(-110vh) scale(1.2); opacity:0; }
-    }
-
-    /* Accessibility focus */
-    .btn:focus, .close:focus, .secondary:focus, .primary:focus { outline:2px solid #ff99b3; outline-offset:2px; }
+    body{font-family:system-ui;display:grid;place-items:center;height:100vh;margin:0;background:#fff7fb}
+    button{padding:12px 16px;border:0;border-radius:10px;background:#ff4d79;color:#fff;font-weight:700;cursor:pointer}
+    .hearts{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+    .heart{position:absolute;font-size:18px;color:#ff6b93;animation:float 5s linear forwards;filter: drop-shadow(0 2px 4px rgba(0,0,0,.15))}
+    @keyframes float{0%{transform:translateY(10vh);opacity:0}10%{opacity:1}100%{transform:translateY(-110vh);opacity:0}}
   </style>
 </head>
 <body>
-  <!-- floating hearts layer -->
   <div class="hearts" id="hearts"></div>
+  <button id="btn" type="button">Click me — should alert + hearts</button>
 
-  <div class="wrap">
-    <div class="card" role="region" aria-label="Piccolo plus Love">
-      <div class="hero">
-        <span class="badge">PICCOLO + LOVE</span>
-        <h1>Hi Piccolo, this one’s just for you ✨</h1>
-        <p class="sub">A little romantic, a little fun, and a lot of us.</p>
-        <div class="buttons">
-          <button class="btn btn-primary" id="startBtn" type="button">Start Surprise 💖</button>
-          <button class="btn btn-ghost" id="openMsg" type="button">Open Your Message 💌</button>
-        </div>
-      </div>
-
-      <div class="grid" id="surpriseArea" hidden>
-        <!-- Date picker -->
-        <section class="panel" aria-labelledby="plan-title">
-          <h3 id="plan-title">Choose our date vibe</h3>
-          <div class="options" id="planOpts">
-            <div class="opt" data-plan="romantic">💐 <strong>Romantic</strong> Rooftop, fairy lights, soft music, handwritten notes.</div>
-            <div class="opt" data-plan="fun">🎯 <strong>Fun</strong> Arcade challenge, loser buys dessert, silly photo quest.</div>
-            <div class="opt" data-plan="creative">🎨 <strong>Creative</strong> Paint each other, clay mugs, build a scrapbook page.</div>
-          </div>
-          <p class="note" id="planOut" aria-live="polite"></p>
-        </section>
-
-        <!-- Treat spinner -->
-        <section class="panel" aria-labelledby="treat-title">
-          <h3 id="treat-title">Spin for a treat</h3>
-          <div class="treat">
-            <div class="wheel" id="wheel"><div class="pointer"></div></div>
-            <div>
-              <button class="btn btn-primary" id="spinBtn" type="button">Spin 🎁</button>
-              <div class="result" id="spinResult" aria-live="polite" style="margin-top:6px;"></div>
-            </div>
-          </div>
-          <p class="note">Every spin wins something sweet—because you’re my favourite win.</p>
-        </section>
-
-        <!-- Tiny memory prompts (editable) -->
-        <section class="panel" aria-labelledby="mem-title">
-          <h3 id="mem-title">Tiny memories</h3>
-          <div class="options">
-            <label class="opt" contenteditable="true" aria-label="Memory 1">That time we laughed so hard we forgot the joke 😂</label>
-            <label class="opt" contenteditable="true" aria-label="Memory 2">Your smile when you saw me after a long day ✨</label>
-            <label class="opt" contenteditable="true" aria-label="Memory 3">Our quiet walk that felt like a movie scene 🌙</label>
-          </div>
-          <p class="note">You can click and edit these with your own moments.</p>
-        </section>
-      </div>
-
-      <p class="footer">Made with 💗 by Ashika</p>
-    </div>
-  </div>
-
-  <!-- Message Modal -->
-  <div class="scrim" id="scrim" role="dialog" aria-modal="true" aria-labelledby="msgTitle">
-    <div class="modal">
-      <button class="close" id="closeMsg" aria-label="Close">Close ✖</button>
-      <h3 id="msgTitle" style="margin:0 0 8px;color:#e23f6a;">Piccolo + Love — A little note</h3>
-      <div class="msg" id="typedMsg"></div>
-      <div class="actions">
-        <button class="secondary" id="copyBtn" type="button">Copy message</button>
-        <button class="primary" id="confettiBtn" type="button">Celebrate 🎉</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="confetti" id="confetti"></div>
-  <div class="toast" id="toast"></div>
-
-  <!-- Use defer so buttons exist before JS runs -->
   <script defer>
-    // ===== CONFIG =====
-    const LOVER_NAME = "Piccolo";
-    const FROM_NAME  = "Ashika";
-    const SURPRISE_MESSAGE = `My dearest ${LOVER_NAME},
+    const btn = document.getElementById('btn');
+    const hearts = document.getElementById('hearts');
 
-I call this “Piccolo + Love” because it’s the simplest way to name the happiest part of my life.
+    function spawnHeart(){
+      const h = document.createElement('div');
+      h.className = 'heart';
+      h.textContent = ['💗','💖','💞','💘'][Math.floor(Math.random()*4)];
+      h.style.left = (Math.random()*100) + 'vw';
+      h.style.bottom = '-10vh';
+      h.style.animationDuration = (4 + Math.random()*3) + 's';
+      hearts.appendChild(h);
+      setTimeout(()=>h.remove(), 7000);
+    }
+    // gentle continuous hearts
+    setInterval(spawnHeart, 800);
 
-You make chaos feel like laughter, ordinary days feel like art, and every plan feel like an adventure. I love the way we go from silly to soft in a heartbeat—loud giggles, quiet hugs, and all the creative little mess in between.
-
-Thank you for choosing me, for showing up, and for being the warmest home I’ve ever known. I’ll always be your partner in cozy nights, arcade battles, and handmade memories.
-
-In every timeline, I pick you. Always you.
-
-With all my love,
-${FROM_NAME} 💗`;
-
-    const TREATS = [
-      "One dessert of your choice 🍰",
-      "A big squeeze-hug on demand 🫂",
-      "Your song, my dance—no judging 💃🕺",
-      "A handwritten note from me ✍️",
-      "Photo booth: 5 goofy pics 📸",
-      "You pick our next date vibe 🎟️",
-      "Movie night + snacks bundle 🎬",
-      "Breakfast made by me 🥞"
+    btn.addEventListener('click', ()=>{
+      alert('JS works ✅');
+      for(let i=0;i<20;i++) setTimeout(spawnHeart, i*40);
+    });
+  </script>
+</body>
+</html>
