@@ -6,21 +6,14 @@
   <title>Will You Be My Boobie Piccolo Forever? 💖</title>
   <style>
     :root{
-      --bg1:#ffe7ef;
-      --bg2:#ffd1e0;
-      --primary:#ff4d79;
-      --primary-dark:#e23f6a;
-      --text:#5a2a3b;
-      --white:#fff;
-      --ok:#14b8a6;
+      --bg1:#ffe7ef; --bg2:#ffd1e0; --primary:#ff4d79; --primary-dark:#e23f6a;
+      --text:#5a2a3b; --white:#fff; --ok:#14b8a6;
     }
 
     html,body{
-      height:100%;
-      margin:0;
+      height:100%; margin:0;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-      color:var(--text);
-      overflow-x:hidden;
+      color:var(--text); overflow-x:hidden;
       background:
         radial-gradient(1200px 1200px at 20% 10%, var(--bg1), transparent),
         radial-gradient(1200px 1200px at 80% 0%, var(--bg2), transparent),
@@ -28,51 +21,32 @@
     }
 
     .wrap{
-      min-height:100dvh;
-      display:flex; align-items:center; justify-content:center;
-      padding:24px;
-      width:min(720px, 92vw);
-      margin-inline:auto;
+      min-height:100dvh; display:flex; align-items:center; justify-content:center;
+      padding:24px; width:min(720px, 92vw); margin-inline:auto;
     }
 
     .card{
-      width:100%;
-      background:var(--white);
-      border-radius:24px;
+      width:100%; background:var(--white); border-radius:24px;
       box-shadow:0 15px 40px rgba(255, 77, 121, 0.20), 0 6px 18px rgba(0,0,0,0.08);
-      padding: clamp(22px, 4vw, 44px);
-      text-align:center;
+      padding: clamp(22px, 4vw, 44px); text-align:center;
     }
 
-    .title{
-      font-size: clamp(28px, 4.6vw, 44px);
-      margin-bottom: 10px;
-      color:var(--primary-dark);
-    }
-
-    .subtitle{
-      font-size: clamp(14px, 2.8vw, 18px);
-      opacity:0.9;
-      margin-bottom: 22px;
-    }
-
+    .title{ font-size: clamp(28px, 4.6vw, 44px); margin-bottom: 10px; color:var(--primary-dark); }
+    .subtitle{ font-size: clamp(14px, 2.8vw, 18px); opacity:0.9; margin-bottom: 22px; }
     .buttons{ display:flex; justify-content:center; gap:16px; flex-wrap:wrap; }
 
     .btn{
-      padding:14px 22px;
-      font-size: clamp(15px, 2.8vw, 18px);
-      border:none; border-radius:12px;
+      padding:14px 22px; font-size: clamp(15px, 2.8vw, 18px); border:none; border-radius:12px;
       cursor:pointer; transition: transform .05s ease, box-shadow .2s ease, background .2s ease;
     }
     .btn:active { transform: translateY(1px); }
     #yes{ background:var(--primary); color:#fff; box-shadow:0 6px 14px rgba(226,63,106,.28); }
     #no{ background:#ffe1ea; color:#b02a4a; }
 
-    /* Floating hearts (background ambient) */
+    /* Floating hearts (ambient) */
     .heart{
       position:fixed; bottom:-30px; font-size: 18px; opacity:0;
-      animation: floatUp 6.5s linear forwards;
-      pointer-events:none; will-change: transform, opacity;
+      animation: floatUp 6.5s linear forwards; pointer-events:none; will-change: transform, opacity;
     }
     @keyframes floatUp{
       0%{opacity:0; transform:translateY(0);}
@@ -120,7 +94,7 @@
       font-size:15px;
     }
 
-    /* Small confetti hearts burst (existing) */
+    /* Tiny confetti hearts burst (existing) */
     .burst{ position:fixed; inset:0; pointer-events:none; }
     .burst .p{ position:absolute; font-size:20px; opacity:0; animation:pop 1000ms ease forwards; }
     @keyframes pop{
@@ -131,7 +105,7 @@
 
     @media (min-width: 560px){ .options{ grid-template-columns: 1fr 1fr; } }
 
-    /* === GRAND FINALE STYLES === */
+    /* === FESTIVAL FINALE STYLES === */
     .finale-layer{ position:fixed; inset:0; pointer-events:none; z-index:9999; }
 
     /* LOVE YOU overlay */
@@ -144,10 +118,7 @@
       filter: drop-shadow(0 2px 2px rgba(0,0,0,.05)); animation: loveDrift 10s linear infinite;
       will-change: transform;
     }
-    @keyframes loveDrift{
-      0%{ transform: translateY(0) rotate(-12deg); }
-      100%{ transform: translateY(40%) rotate(-12deg); }
-    }
+    @keyframes loveDrift{ 0%{ transform: translateY(0) rotate(-12deg); } 100%{ transform: translateY(40%) rotate(-12deg); } }
 
     /* Emoji Rain */
     .love-rain{ position:absolute; inset:0; overflow:hidden; }
@@ -167,49 +138,46 @@
       position:absolute; font-size: clamp(24px, 4.8vw, 42px);
       animation: explode 1100ms ease-out forwards, spin 1100ms linear forwards; will-change: transform, opacity;
     }
-    @keyframes explode{
-      0%{ transform: translate(0,0) scale(.4); opacity:0; }
-      18%{ opacity:1; }
-      100%{ transform: translate(var(--dx), var(--dy)) scale(1.2); opacity:0; }
-    }
+    @keyframes explode{ 0%{ transform: translate(0,0) scale(.4); opacity:0; } 18%{ opacity:1; } 100%{ transform: translate(var(--dx), var(--dy)) scale(1.2); opacity:0; } }
     @keyframes spin{ to{ transform: rotate(1turn); } }
 
     /* Summary glow on finale */
-    .summary.glow{
-      box-shadow: 0 0 0 0 rgba(255,77,121,.55); animation: pulse 1200ms ease-out 2;
-    }
+    .summary.glow{ box-shadow: 0 0 0 0 rgba(255,77,121,.55); animation: pulse 1200ms ease-out 2; }
     @keyframes pulse{
       0%{ box-shadow:0 0 0 0 rgba(255,77,121,.55); }
       70%{ box-shadow:0 0 24px 10px rgba(255,77,121,.28); }
       100%{ box-shadow:0 0 0 0 rgba(255,77,121,0); }
     }
 
-    /* NEW: Balloons */
+    /* Balloons with labels */
     .balloons{ position:absolute; inset:0; overflow:hidden; }
     .balloon{
-      position:absolute; bottom:-10vh; font-size: clamp(24px, 5vw, 40px);
+      position:absolute; bottom:-10vh; font-size: clamp(26px, 5vw, 44px);
       animation: rise var(--dur, 8s) ease-in forwards; filter: drop-shadow(0 6px 10px rgba(0,0,0,.08));
+      display:flex; flex-direction:column; align-items:center; gap:2px;
+    }
+    .balloon .label{
+      font-size: clamp(10px, 2.6vw, 14px);
+      background: rgba(255,255,255,.75); color:#b02a4a;
+      border:1px solid #ffd3e0; border-radius:999px; padding:2px 8px;
+      transform: translateY(-6px); backdrop-filter: blur(2px);
+      box-shadow: 0 2px 6px rgba(226,63,106,.15);
     }
     @keyframes rise{
-      0%{ transform: translate(calc(var(--x,0px)), 10vh) rotate(0deg); opacity:.9; }
-      50%{ transform: translate(calc(var(--x,0px) + var(--sway, 0px)), -20vh) rotate(3deg); }
-      100%{ transform: translate(calc(var(--x,0px) + var(--sway, 0px)), -120vh) rotate(-3deg); opacity:0; }
+      0%{ transform: translate(calc(var(--x,0px)), 10vh) rotate(0deg); opacity:.95; }
+      45%{ transform: translate(calc(var(--x,0px) + var(--sway, 0px)), -10vh) rotate(2deg); }
+      100%{ transform: translate(calc(var(--x,0px) + var(--sway, 0px)), -120vh) rotate(-2deg); opacity:0; }
     }
 
-    /* NEW: Rose garden */
+    /* Rose garden */
     .garden{ position:absolute; left:0; right:0; bottom:0; height:35vh; pointer-events:none; display:flex; align-items:flex-end; justify-content:center; gap:10px; }
     .rose{
       font-size: clamp(18px, 3.6vw, 30px); transform-origin: bottom center; transform: scaleY(0) translateY(20px);
-      animation: growUp var(--gdur, 2.4s) ease-out forwards;
-      filter: drop-shadow(0 2px 1px rgba(0,0,0,.06));
+      animation: growUp var(--gdur, 2.4s) ease-out forwards; filter: drop-shadow(0 2px 1px rgba(0,0,0,.06));
     }
-    @keyframes growUp{
-      0%{ transform: scaleY(0) translateY(20px); opacity:.6; }
-      80%{ transform: scaleY(1.05) translateY(0); opacity:1; }
-      100%{ transform: scaleY(1) translateY(0); }
-    }
+    @keyframes growUp{ 0%{ transform: scaleY(0) translateY(20px); opacity:.6; } 80%{ transform: scaleY(1.05) translateY(0); opacity:1; } 100%{ transform: scaleY(1) translateY(0); } }
 
-    /* NEW: Typewriter banner */
+    /* Typewriter banner */
     .typewriter{
       position:absolute; top:6%; left:50%; transform:translateX(-50%);
       background: rgba(255,255,255,.65);
@@ -218,26 +186,45 @@
       backdrop-filter: blur(4px);
       box-shadow: 0 6px 20px rgba(226,63,106,.15);
       opacity:0; animation: twIn .4s ease forwards;
+      max-width:min(94vw, 720px);
     }
     @keyframes twIn{ to{ opacity:1; } }
-    .caret{
-      display:inline-block; width:10px; margin-left:4px; border-right:2px solid #b02a4a;
-      animation: blink 900ms step-end infinite;
-    }
+    .caret{ display:inline-block; width:10px; margin-left:4px; border-right:2px solid #b02a4a; animation: blink 900ms step-end infinite; }
     @keyframes blink{ 50%{ border-color: transparent; } }
 
-    /* NEW: Cursor trail */
+    /* Cursor trail */
     .trail{
       position:fixed; font-size:18px; pointer-events:none; opacity:0;
       transform: translate(-50%, -50%) scale(.6);
-      animation: trailFade .9s ease-out forwards;
-      will-change: transform, opacity;
+      animation: trailFade .9s ease-out forwards; will-change: transform, opacity;
       filter: drop-shadow(0 1px 2px rgba(0,0,0,.12));
       z-index: 10000;
     }
-    @keyframes trailFade{
-      0%{ opacity:.95; transform: translate(-50%, -50%) scale(.6); }
-      100%{ opacity:0; transform: translate(-50%, -80%) scale(1.2); }
+    @keyframes trailFade{ 0%{ opacity:.95; transform: translate(-50%, -50%) scale(.6); } 100%{ opacity:0; transform: translate(-50%, -80%) scale(1.2); } }
+
+    /* Photo frame reveal */
+    .photo-wrap{
+      position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(.6) rotate(-2deg);
+      background:#fff; border:6px solid #fff; border-radius:18px; overflow:hidden;
+      box-shadow: 0 18px 60px rgba(226,63,106,.25), 0 10px 24px rgba(0,0,0,.08);
+      opacity:0; animation: photoIn .8s cubic-bezier(.18,.89,.32,1.28) forwards;
+      display:flex; flex-direction:column; align-items:center; gap:8px;
+      pointer-events:none; max-width:min(84vw, 420px);
+    }
+    .photo{ width:100%; aspect-ratio: 4/5; object-fit: cover; background:#ffe6ef; }
+    .caption{
+      width:100%; text-align:center; padding:8px 10px; font-weight:700; color:#b02a4a;
+      background:linear-gradient(180deg, #fff, #fff6f9);
+      border-top:1px solid #ffe3ed;
+    }
+    @keyframes photoIn{ to{ opacity:1; transform:translate(-50%,-50%) scale(1) rotate(0deg); } }
+
+    /* Frame sparkles */
+    .sparkle{ position:absolute; font-size:18px; opacity:0; animation: sparklePop 1200ms ease-out forwards; }
+    @keyframes sparklePop{
+      0%{ transform: scale(.2) translateY(0); opacity:0; }
+      30%{ opacity:1; }
+      100%{ transform: scale(1.2) translateY(-14px); opacity:0; }
     }
   </style>
 </head>
@@ -327,7 +314,29 @@
   <div class="burst" id="burst" aria-hidden="true"></div>
 
   <script>
-    // Floating Hearts (background ambient)
+    /* =========================================================
+       ✨ CONFIG: Edit these to personalize!
+       ========================================================= */
+    const CONFIG = {
+      names: { left: "Ashika", right: "Tharkesh", initials: "A ♥ T" },
+      photoUrl: "", // e.g., "images/us.jpg" — leave empty to show a cute placeholder
+      quotes: [
+        "You + Me = Home 🏡❤️",
+        "Every day with you is my favorite day ✨",
+        "Forever is better with you 💘",
+        "My heart chooses you, always 💞",
+        "From this moment, always us 💍"
+      ],
+      finaleMs: 12000,          // total time the big finale layer stays
+      rainDurationMs: 9500,     // emoji rain duration
+      cursorTrailMs: 6000,      // how long the cursor trail is active
+      balloonCount: 14,
+      roseCount: 28
+    };
+
+    /* =========================================================
+       Floating Hearts (ambient)
+       ========================================================= */
     const HEARTS = ['💖','💗','💞','💕','❤️','💓','💜','💚'];
     setInterval(() => {
       const h = document.createElement('div');
@@ -339,7 +348,9 @@
       setTimeout(()=>h.remove(), 6500);
     }, 700);
 
-    // UI Elements
+    /* =========================================================
+       Basic UI wiring
+       ========================================================= */
     const btnNo = document.getElementById("no");
     const btnYes = document.getElementById("yes");
     const overlay = document.getElementById("overlay");
@@ -350,33 +361,23 @@
     const closeBtn = document.getElementById("close");
     const burst = document.getElementById("burst");
 
-    // State
     let current = 1;
     const last = steps.length;
     const answers = { role:null, date:null, promise:null };
 
-    // Button Logic
     btnNo.onclick = () => alert("No is not allowed 😌 Try again!");
-    btnYes.onclick = () => {
-      overlay.classList.add("show");
-      overlay.setAttribute('aria-hidden', 'false');
-      goTo(1);
-    };
+    btnYes.onclick = () => { overlay.classList.add("show"); overlay.setAttribute('aria-hidden', 'false'); goTo(1); };
 
-    // Progress + Step logic
     function goTo(step){
       current = step;
-      steps.forEach(s => { s.hidden = Number(s.dataset.step) !== step; });
+      steps.forEach(s => s.hidden = Number(s.dataset.step) !== step);
       const pct = Math.round((step-1)/(last-1) * 100);
       progress.style.width = pct + "%";
       const backBtn = steps[step-1].querySelector("[data-prev]");
       if(backBtn) backBtn.disabled = (step === 1);
     }
 
-    function getSelected(name){
-      const el = document.querySelector(`input[name="${name}"]:checked`);
-      return el ? el.value : null;
-    }
+    function getSelected(name){ const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : null; }
 
     function validate(step){
       const map = {1:'role', 2:'date', 3:'promise'};
@@ -389,21 +390,15 @@
       return true;
     }
 
-    // Attach next/back listeners
     document.querySelectorAll("[data-next]").forEach(btn=>{
-      btn.addEventListener('click', ()=>{
-        if(!validate(current)) return;
-        if(current < last) goTo(current+1);
-      });
+      btn.addEventListener('click', ()=>{ if(!validate(current)) return; if(current < last) goTo(current+1); });
     });
     document.querySelectorAll("[data-prev]").forEach(btn=>{
       btn.addEventListener('click', ()=>{ if(current > 1) goTo(current-1); });
     });
 
-    // Finish -> summary + grand finale
     finishBtn.onclick = () => {
       if(!validate(3)) return;
-
       const lines = [
         `Role chosen: <b>${answers.role}</b>`,
         `Perfect date: <b>${answers.date}</b>`,
@@ -420,9 +415,9 @@
 
       closeBtn.hidden = false;
 
-      miniBurst();      // keep the tiny pop
-      grandFinale();    // new festival mode
-      playChime();      // gentle audio cue
+      miniBurst();            // keep the tiny pop
+      grandFinaleFestival();  // new festival mode
+      playChime();            // gentle audio cue
 
       finishBtn.disabled = true;
     };
@@ -438,7 +433,7 @@
       goTo(1);
     };
 
-    // Tiny heart burst (existing)
+    /* Tiny heart burst (existing) */
     function miniBurst(){
       burst.innerHTML = '';
       const N = 24;
@@ -462,21 +457,40 @@
       }
     }
 
-    /* ===== GRAND FINALE ===== */
-    function grandFinale(){
+    /* =========================================================
+       FESTIVAL FINALE: Everything romantic & extra 🥰
+       ========================================================= */
+    function grandFinaleFestival(){
       const layer = document.createElement('div');
       layer.className = 'finale-layer';
       document.body.appendChild(layer);
 
-      bigBlast(layer);                      // 💥 big heart & kiss blast
-      loveRain(layer, { durationMs: 9000, density: 30 }); // 🌧️ emoji rain
-      loveOverlay(layer);                   // 💬 "Love you!" drift
-      balloonsRise(layer, { count: 14 });   // 🎈 balloons
-      roseGarden(layer, { roses: 28 });     // 🌹 roses grow
-      typewriterBanner(layer);              // ⌨️ romantic quotes
-      cursorTrail(6000);                    // ✨ sparkly cursor for 6s
+      // 1) BIG CENTER BLAST
+      bigBlast(layer);
 
-      setTimeout(()=>layer.remove(), 11000);
+      // 2) EMOJI RAIN
+      loveRain(layer, { durationMs: CONFIG.rainDurationMs, density: 30 });
+
+      // 3) “LOVE YOU!” OVERLAY
+      loveOverlay(layer);
+
+      // 4) BALLOONS with initials/names
+      balloonsRise(layer, { count: CONFIG.balloonCount, label: CONFIG.names.initials });
+
+      // 5) ROSE GARDEN
+      roseGarden(layer, { roses: CONFIG.roseCount });
+
+      // 6) TYPEWRITER QUOTES
+      typewriterBanner(layer, CONFIG.quotes);
+
+      // 7) CURSOR SPARKLE TRAIL
+      cursorTrail(CONFIG.cursorTrailMs);
+
+      // 8) PHOTO REVEAL
+      photoReveal(layer, CONFIG);
+
+      // Cleanup the layer after the finale
+      setTimeout(()=>layer.remove(), CONFIG.finaleMs);
     }
 
     function bigBlast(root){
@@ -559,28 +573,27 @@
       setTimeout(()=>overlay.remove(), 9000);
     }
 
-    // NEW: Balloons rise
-    function balloonsRise(root, { count=12 }={}){
+    function balloonsRise(root, { count=12, label="A ♥ T" }={}){
       const container = document.createElement('div');
       container.className = 'balloons';
       root.appendChild(container);
 
-      const icons = ['🎈','🎈','🎈','🎈','🎈','🎈']; // keep it consistent & cute
+      const icons = ['🎈','🎈','🎈','🎈','🎈','🎈'];
       for(let i=0;i<count;i++){
         const b = document.createElement('div');
         b.className = 'balloon';
-        b.textContent = icons[Math.floor(Math.random()*icons.length)];
+        b.innerHTML = `<div class="emoji">${icons[Math.floor(Math.random()*icons.length)]}</div>
+                       <div class="label">${Math.random()<0.6 ? label : 'Forever 💞'}</div>`;
         b.style.left = (5 + Math.random()*90) + 'vw';
         b.style.setProperty('--dur', (7 + Math.random()*3) + 's');
         b.style.setProperty('--x', ((Math.random()*2 - 1) * 20) + 'px');
         b.style.setProperty('--sway', ((Math.random()*2 - 1) * (40 + Math.random()*30)) + 'px');
         container.appendChild(b);
-        setTimeout(()=>b.remove(), 11000);
+        setTimeout(()=>b.remove(), CONFIG.finaleMs);
       }
-      setTimeout(()=>container.remove(), 11000);
+      setTimeout(()=>container.remove(), CONFIG.finaleMs);
     }
 
-    // NEW: Rose garden grows
     function roseGarden(root, { roses=24 }={}){
       const garden = document.createElement('div');
       garden.className = 'garden';
@@ -595,11 +608,10 @@
         r.style.setProperty('--gdur', (2 + Math.random()*1.6) + 's');
         garden.appendChild(r);
       }
-      setTimeout(()=>garden.remove(), 10000);
+      setTimeout(()=>garden.remove(), CONFIG.finaleMs);
     }
 
-    // NEW: Typewriter love banner cycling messages
-    function typewriterBanner(root){
+    function typewriterBanner(root, msgs){
       const el = document.createElement('div');
       el.className = 'typewriter';
       root.appendChild(el);
@@ -608,13 +620,8 @@
       caret.className = 'caret';
       el.appendChild(caret);
 
-      const msgs = [
-        "You + Me = Home 🏡❤️",
-        "Every day with you is my favorite day ✨",
-        "Forever is better with you 💘",
-        "My heart chooses you, always 💞"
-      ];
       let idx = 0;
+      const endAt = performance.now() + Math.min(CONFIG.finaleMs - 2000, 9500);
 
       function typeMsg(text, cb){
         el.firstChild && el.removeChild(el.firstChild);
@@ -628,17 +635,13 @@
       }
 
       function next(){
-        typeMsg(msgs[idx], ()=>{
-          idx = (idx+1) % msgs.length;
-          if(performance.now() - start < 9000) next();
-          else el.remove();
-        });
+        const now = performance.now();
+        if(now > endAt){ el.remove(); return; }
+        typeMsg(msgs[idx], ()=>{ idx = (idx+1) % msgs.length; next(); });
       }
-      const start = performance.now();
       next();
     }
 
-    // NEW: Cursor trail of hearts/sparkles for a limited time
     function cursorTrail(ms=5000){
       const icons = ['💖','💗','✨','💘','💕','💋'];
       let active = true;
@@ -656,6 +659,63 @@
       setTimeout(()=>{ active=false; window.removeEventListener('mousemove', handler); }, ms);
     }
 
+    function photoReveal(root, cfg){
+      const frame = document.createElement('div');
+      frame.className = 'photo-wrap';
+      const img = document.createElement('img');
+      img.className = 'photo';
+      if(cfg.photoUrl && cfg.photoUrl.trim()){
+        img.src = cfg.photoUrl;
+        img.alt = `${cfg.names.left} & ${cfg.names.right}`;
+      }else{
+        // Cute placeholder with gradient + initials
+        img.style.background = 'linear-gradient(135deg,#ffd1e0,#ffe7ef)';
+        img.alt = 'Our photo';
+      }
+      const cap = document.createElement('div');
+      cap.className = 'caption';
+      cap.textContent = `${cfg.names.left}  ♥  ${cfg.names.right}`;
+
+      frame.appendChild(img);
+      frame.appendChild(cap);
+      root.appendChild(frame);
+
+      // If placeholder, overlay initials
+      if(!cfg.photoUrl){
+        const overlay = document.createElement('div');
+        overlay.style.position='absolute';
+        overlay.style.inset='0';
+        overlay.style.display='grid';
+        overlay.style.placeItems='center';
+        overlay.style.color='#b02a4a';
+        overlay.style.fontWeight='800';
+        overlay.style.fontSize='clamp(28px,6vw,42px)';
+        overlay.style.textShadow='0 2px 8px rgba(255,255,255,.7)';
+        overlay.textContent = cfg.names.initials;
+        frame.appendChild(overlay);
+        setTimeout(()=>overlay.remove(), 3500);
+      }
+
+      // Sparkles around frame corners
+      const spr = ['✨','💖','💫','🫶'];
+      const corners = [
+        {x:-16,y:-16},{x:16,y:-16},{x:-16,y:16},{x:16,y:16}
+      ];
+      corners.forEach((c,i)=>{
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.textContent = spr[i%spr.length];
+        s.style.left = '50%'; s.style.top = '50%';
+        s.style.transform = `translate(calc(-50% + ${c.x}px), calc(-50% + ${c.y}px))`;
+        s.style.animationDelay = (0.2 * i) + 's';
+        frame.appendChild(s);
+        setTimeout(()=>s.remove(), 1300);
+      });
+
+      // Remove frame near finale end to keep DOM light
+      setTimeout(()=>frame.remove(), Math.min(CONFIG.finaleMs - 600, 11000));
+    }
+
     // Gentle chime using WebAudio (plays on click)
     function playChime(){
       try{
@@ -666,28 +726,23 @@
         function tone(freq, start, dur, gain=0.08){
           const osc = ctx.createOscillator();
           const g = ctx.createGain();
-          osc.frequency.value = freq;
-          osc.type = 'sine';
-          osc.connect(g);
-          g.connect(ctx.destination);
+          osc.frequency.value = freq; osc.type = 'sine';
+          osc.connect(g); g.connect(ctx.destination);
           g.gain.setValueAtTime(0, start);
           g.gain.linearRampToValueAtTime(gain, start+0.02);
           g.gain.exponentialRampToValueAtTime(0.0001, start + dur);
-          osc.start(start);
-          osc.stop(start + dur + 0.02);
+          osc.start(start); osc.stop(start + dur + 0.02);
         }
 
-        // A sweet little arpeggio (C major-ish)
         const base = now + 0.02;
         tone(523.25, base, 0.5);      // C5
         tone(659.25, base+0.08, 0.5); // E5
         tone(783.99, base+0.16, 0.6); // G5
         tone(1046.50, base+0.36, 0.7, 0.06); // C6 sparkle
+        tone(392.00, base, 1.2, 0.05); // G4 pad
 
-        // Soft pad under it
-        tone(392.00, base, 1.2, 0.05); // G4
         setTimeout(()=>ctx.close(), 1600);
-      }catch(e){ /* silently ignore if blocked */ }
+      }catch(e){ /* ignore if blocked */ }
     }
   </script>
 
