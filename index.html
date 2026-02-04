@@ -74,7 +74,7 @@
     #yes{ background:var(--primary); color:#fff; box-shadow:0 6px 14px rgba(226,63,106,.28); }
     #no{ background:#ffe1ea; color:#b02a4a; }
 
-    /* Floating hearts */
+    /* Floating hearts (background ambient) */
     .heart{
       position:fixed;
       bottom:-30px;
@@ -167,7 +167,7 @@
       font-size:15px;
     }
 
-    /* Small confetti hearts burst */
+    /* Small confetti hearts burst (existing) */
     .burst{
       position:fixed; inset:0; pointer-events:none;
     }
@@ -182,6 +182,88 @@
 
     @media (min-width: 560px){
       .options{ grid-template-columns: 1fr 1fr; }
+    }
+
+    /* === GRAND FINALE STYLES === */
+
+    /* Fullscreen layer for finale elements */
+    .finale-layer{
+      position:fixed; inset:0; pointer-events:none; z-index:9999;
+    }
+
+    /* LOVE YOU grid overlay */
+    .love-overlay{
+      position:absolute; inset:0; overflow:hidden;
+      display:grid; place-items:center;
+      background:transparent;
+      opacity:0; animation: loveFade 400ms ease forwards 200ms;
+    }
+    @keyframes loveFade{
+      to{ opacity:0.25; }
+    }
+
+    /* Repeating “Love you!” columns */
+    .love-col{
+      position:absolute; top:-150%; bottom:-150%;
+      width:max(18vw, 220px);
+      color:#ff4d79; opacity:.18; font-weight:700;
+      line-height:1.6; text-align:center;
+      text-shadow: 0 1px 0 rgba(255,255,255,.7);
+      transform:rotate(-12deg);
+      filter: drop-shadow(0 2px 2px rgba(0,0,0,.05));
+      animation: loveDrift 10s linear infinite;
+      will-change: transform;
+    }
+    @keyframes loveDrift{
+      0%{ transform: translateY(0) rotate(-12deg); }
+      100%{ transform: translateY(40%) rotate(-12deg); }
+    }
+
+    /* Emoji Rain */
+    .love-rain{
+      position:absolute; inset:0; overflow:hidden;
+    }
+    .drop{
+      position:absolute; top:-60px;
+      font-size: clamp(20px, 3.5vw, 34px);
+      animation: fall var(--dur, 6s) linear forwards;
+      will-change: transform, opacity;
+      opacity: .95;
+    }
+    @keyframes fall{
+      0%{ transform: translateY(-80px) translateX(0) rotate(0deg); opacity:0; }
+      8%{ opacity:1; }
+      100%{ transform: translateY(110vh) translateX(var(--sx, 0px)) rotate(var(--rot, 0deg)); opacity:0.85; }
+    }
+
+    /* Big center blast pieces */
+    .blast{
+      position:absolute; left:50%; top:50%;
+      transform: translate(-50%, -50%);
+    }
+    .piece{
+      position:absolute; font-size: clamp(24px, 4.8vw, 42px);
+      animation: explode 1100ms ease-out forwards, spin 1100ms linear forwards;
+      will-change: transform, opacity;
+    }
+    @keyframes explode{
+      0%{ transform: translate(0,0) scale(.4); opacity:0; }
+      18%{ opacity:1; }
+      100%{ transform: translate(var(--dx), var(--dy)) scale(1.2); opacity:0; }
+    }
+    @keyframes spin{
+      to{ transform: rotate(1turn); }
+    }
+
+    /* Subtle glow on the summary when finale fires */
+    .summary.glow{
+      box-shadow: 0 0 0 0 rgba(255,77,121,.55);
+      animation: pulse 1200ms ease-out 2;
+    }
+    @keyframes pulse{
+      0%{ box-shadow:0 0 0 0 rgba(255,77,121,.55); }
+      70%{ box-shadow:0 0 24px 10px rgba(255,77,121,.28); }
+      100%{ box-shadow:0 0 0 0 rgba(255,77,121,0); }
     }
   </style>
 </head>
@@ -215,8 +297,8 @@
       <section class="step" data-step="1">
         <div class="q">1) Select your future role 😌</div>
         <div class="options">
-          <label class="opt"><input type="radio" name="role" value="CEO of My Heart ❤️" /> Having Kids before marraige ❤️</label>
-          <label class="opt"><input type="radio" name="role" value="Chief Cuddle Officer 🧸" /> Having Kids after marraige 🧸</label>
+          <label class="opt"><input type="radio" name="role" value="CEO of My Heart ❤️" /> Having Kids before marriage ❤️</label>
+          <label class="opt"><input type="radio" name="role" value="Chief Cuddle Officer 🧸" /> Having Kids after marriage 🧸</label>
           <label class="opt"><input type="radio" name="role" value="Permanent Valentine 💘" /> Well Romantic Husband 💘</label>
           <label class="opt"><input type="radio" name="role" value="Piccolo’s Favorite Human 🌱💚" /> All of the above 🌱💚</label>
         </div>
@@ -232,7 +314,7 @@
         <div class="q">2) Our perfect date night is… ✨</div>
         <div class="options">
           <label class="opt"><input type="radio" name="date" value="Stargazing + Hot Chocolate 🌌☕" /> Stargazing + Hot Chocolate 🌌☕</label>
-          <label class="opt"><input type="radio" name="date" value="Cozy movie & blanket fort 🎬🛋️" /> Cozy movie & blanket fort + F..k 🎬🛋️</label>
+          <label class="opt"><input type="radio" name="date" value="Cozy movie & blanket fort 🎬🛋️" /> Cozy movie & blanket fort 🎬🛋️</label>
           <label class="opt"><input type="radio" name="date" value="Long drive + late-night talks 🚗💬" /> Long drive + late-night talks 🚗💬</label>
           <label class="opt"><input type="radio" name="date" value="Training with Piccolo, then ramen 🥋🍜" /> Training with Piccolo, then ramen 🥋🍜</label>
         </div>
@@ -319,7 +401,6 @@
       });
       const pct = Math.round((step-1)/(last-1) * 100);
       progress.style.width = pct + "%";
-      // Manage back button disabled on first
       const backBtn = steps[step-1].querySelector("[data-prev]");
       if(backBtn) backBtn.disabled = (step === 1);
     }
@@ -356,7 +437,7 @@
       });
     });
 
-    // Finish -> summary + burst + close
+    // Finish -> summary + big finale + close
     finishBtn.onclick = () => {
       if(!validate(3)) return;
 
@@ -371,19 +452,24 @@
         <div>${lines.map(l=>`<div>• ${l}</div>`).join('')}</div>
       `;
       summaryBox.hidden = false;
+      summaryBox.classList.add('glow');
+      setTimeout(()=>summaryBox.classList.remove('glow'), 2400);
+
       closeBtn.hidden = false;
 
-      // Pop a small heart burst
+      // Existing tiny burst (kept)
       miniBurst();
 
-      // Optional: collapse nav
+      // ✨ NEW: Grand Finale
+      grandFinale();
+
+      // Optional: prevent double finish
       finishBtn.disabled = true;
     };
 
     closeBtn.onclick = () => {
       overlay.classList.remove("show");
       overlay.setAttribute('aria-hidden', 'true');
-      // Reset for replay (optional)
       document.querySelectorAll('input[type="radio"]').forEach(i=>i.checked=false);
       summaryBox.hidden = true;
       summaryBox.innerHTML = '';
@@ -392,7 +478,7 @@
       goTo(1);
     };
 
-    // Heart burst animation
+    // Heart burst animation (existing)
     function miniBurst(){
       burst.innerHTML = '';
       const N = 24;
@@ -407,7 +493,6 @@
         const dy = Math.sin(angle)*radius;
         p.style.setProperty('--dx', dx + 'px');
         p.style.setProperty('--dy', dy + 'px');
-        // center-ish
         const cx = window.innerWidth/2;
         const cy = window.innerHeight/2;
         p.style.left = (cx - 10) + 'px';
@@ -415,6 +500,121 @@
         burst.appendChild(p);
         setTimeout(()=>p.remove(), 1100);
       }
+    }
+
+    /* ===== GRAND FINALE ===== */
+    function grandFinale(){
+      // Create a top-level layer so it stays above modal content
+      const layer = document.createElement('div');
+      layer.className = 'finale-layer';
+      document.body.appendChild(layer);
+
+      // 1) BIG CENTER BLAST
+      bigBlast(layer);
+
+      // 2) EMOJI RAIN
+      loveRain(layer, { durationMs: 8000, density: 28 });
+
+      // 3) “LOVE YOU!” OVERLAY
+      loveOverlay(layer);
+
+      // Cleanup after ~10s
+      setTimeout(()=>{
+        layer.remove();
+      }, 10000);
+    }
+
+    function bigBlast(root){
+      const emojis = ['💖','💗','💞','💕','❤️','💓','💘','💋','😘','😚','🥰'];
+      const count = 46; // more than mini burst
+      const center = document.createElement('div');
+      center.className = 'blast';
+      root.appendChild(center);
+
+      for(let i=0;i<count;i++){
+        const piece = document.createElement('div');
+        piece.className = 'piece';
+        piece.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+
+        const angle = (Math.PI*2) * (i/count) + (Math.random()*0.25);
+        const radius = 220 + Math.random()*160;
+        const dx = Math.cos(angle)*radius;
+        const dy = Math.sin(angle)*radius;
+
+        piece.style.setProperty('--dx', dx + 'px');
+        piece.style.setProperty('--dy', dy + 'px');
+        center.appendChild(piece);
+        setTimeout(()=>piece.remove(), 1200);
+      }
+      setTimeout(()=>center.remove(), 1300);
+    }
+
+    function loveRain(root, { durationMs=8000, density=24 }={}){
+      const container = document.createElement('div');
+      container.className = 'love-rain';
+      root.appendChild(container);
+
+      const drops = Math.min(density * Math.ceil(window.innerWidth/480), 120);
+      const icons = ['💖','💗','💞','💕','❤️','💓','💘','💋','😘','😚','🥰'];
+
+      const start = performance.now();
+      function spawn(){
+        const now = performance.now();
+        if(now - start > durationMs) return; // stop spawning
+
+        const d = document.createElement('div');
+        d.className = 'drop';
+        d.textContent = icons[Math.floor(Math.random()*icons.length)];
+        const left = Math.random() * 100;
+        d.style.left = left + 'vw';
+        d.style.setProperty('--sx', ((Math.random()*2-1) * (40 + Math.random()*60)) + 'px'); // side drift
+        d.style.setProperty('--rot', (Math.random()*720 - 360) + 'deg'); // spin
+        d.style.setProperty('--dur', (5.5 + Math.random()*3) + 's');
+        container.appendChild(d);
+        setTimeout(()=>d.remove(), 9000);
+
+        // next spawn timing
+        const interval = Math.max(60, 220 - (drops)); // more drops -> faster spawns
+        setTimeout(spawn, Math.random()*interval);
+      }
+
+      // Kick off multiple streams
+      for(let i=0;i<Math.max(6, Math.floor(drops/6)); i++){
+        setTimeout(spawn, i*120);
+      }
+
+      // Final cleanup
+      setTimeout(()=>container.remove(), durationMs + 9500);
+    }
+
+    function loveOverlay(root){
+      const overlay = document.createElement('div');
+      overlay.className = 'love-overlay';
+      root.appendChild(overlay);
+
+      // Create 5–7 columns depending on viewport
+      const cols = Math.min(7, Math.max(4, Math.floor(window.innerWidth/260)));
+      for(let i=0;i<cols;i++){
+        const col = document.createElement('div');
+        col.className = 'love-col';
+        col.style.left = (i*(100/cols)) + '%';
+
+        // Stagger speeds slightly
+        col.style.animationDuration = (9 + Math.random()*4) + 's';
+        col.style.opacity = (0.14 + Math.random()*0.12).toFixed(2);
+
+        // Fill column with repeated text
+        const block = [];
+        const repeats = 18;
+        for(let r=0;r<repeats;r++){
+          block.push('Love you 💖 Love you 💋 Love you 🥰');
+        }
+        col.textContent = block.join('  •  ');
+        overlay.appendChild(col);
+      }
+
+      // Remove overlay after a bit
+      setTimeout(()=>overlay.remove(), 9000);
     }
   </script>
 
